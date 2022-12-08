@@ -1,8 +1,16 @@
-package rs.ac.uns.ftn.informatika.jpa.model;
+package rs.ac.uns.ftn.informatika.jpa.dto;
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+public class CreatePassengerDTO {
 
-public class Passenger1 {
-
-    private Long id;
+    //    {
+//        "name": "Pera",
+//            "surname": "Perić",
+//            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
+//            "telephoneNumber": "+381123123",
+//            "email": "pera.peric@email.com",
+//            "address": "Bulevar Oslobodjenja 74",
+//            "password": "Pasword123"
+//    }
     private String name;
     private String surname;
     private String profilePicture;
@@ -10,13 +18,11 @@ public class Passenger1 {
     private String email;
     private String address;
     private String password;
-    private boolean active;
 
-    public Passenger1() {
+    public CreatePassengerDTO() {
     }
 
-    public Passenger1(Long id, String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
-        this.id = id;
+    public CreatePassengerDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
@@ -24,16 +30,6 @@ public class Passenger1 {
         this.email = email;
         this.address = address;
         this.password = password;
-        this.active = false;
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -92,23 +88,14 @@ public class Passenger1 {
         this.password = password;
     }
 
-    public boolean isActive() {
-        return active;
+    public PassengerResponseDTO parseToResponse(Long id){
+        PassengerResponseDTO passengerResponse = new PassengerResponseDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
+        passengerResponse.setId(id);
+        return passengerResponse;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public Passenger parseToPassenger(Long id){
+        return new Passenger(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
     }
 
-    public void copyValues(Passenger1 passenger) {
-
-        this.name = passenger.getName();
-        this.surname = passenger.getSurname();
-        this.profilePicture = passenger.getProfilePicture();
-        this.telephoneNumber = passenger.getTelephoneNumber();
-        this.email = passenger.getEmail();
-        this.address = passenger.getAddress();
-        this.password = passenger.getPassword();
-        this.active = passenger.isActive();
-    }
 }
