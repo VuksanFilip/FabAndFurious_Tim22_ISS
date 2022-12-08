@@ -8,12 +8,16 @@ public class Driver extends User{
     ArrayList<Ride> rides;
     Vehicle vehicle;
 
-    public Driver(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
-        super(firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
+    public Driver(int id, String email) {
+        super(id, email);
     }
 
-    public Driver(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Document> documents, ArrayList<Ride> rides, Vehicle vehicle) {
-        super(firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
+    public Driver(int id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
+        super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
+    }
+
+    public Driver(int id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Document> documents, ArrayList<Ride> rides, Vehicle vehicle) {
+        super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
         this.documents = documents;
         this.rides = rides;
         this.vehicle = vehicle;

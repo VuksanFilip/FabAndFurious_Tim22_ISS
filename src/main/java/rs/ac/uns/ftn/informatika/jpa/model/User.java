@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 public class User {
+
+    private int id;
     private String firstName;
     private String lastName;
     private String picture;
@@ -14,9 +16,15 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String picture, String phoneNumber, String email, String address,
+    public User(int id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
+    public User(int id, String firstName, String lastName, String picture, String phoneNumber, String email, String address,
                 String password, boolean blocked, boolean active) {
 
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.picture = picture;
@@ -26,6 +34,14 @@ public class User {
         this.password = password;
         this.blocked = blocked;
         this.active = active;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
