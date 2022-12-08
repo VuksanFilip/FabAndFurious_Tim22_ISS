@@ -1,12 +1,28 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 public class Review {
+
+     private Long id;
      float rating;
      String comment;
      Ride ride;
      Passenger passenger;
 
      public Review() {
+     }
+
+     public Review(Long id, float rating, String comment, Passenger passenger) {
+          this.id = id;
+          this.rating = rating;
+          this.comment = comment;
+          this.passenger = passenger;
+     }
+
+     public Review(Long id, float rating, String comment) {
+          this.id = id;
+          this.rating = rating;
+          this.comment = comment;
+          this.passenger = null;
      }
 
      public Review(float rating, Ride ride, Passenger passenger) {
