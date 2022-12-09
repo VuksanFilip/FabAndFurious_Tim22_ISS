@@ -1,9 +1,11 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+
 import java.util.ArrayList;
 
 public class Vehicle {
-    int id;
+    Long id;
     Driver driver;
     String vehicleModel;
     VehicleType type;
@@ -17,7 +19,7 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(int id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
+    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
         this.id = id;
         this.driver = driver;
         this.vehicleModel = vehicleModel;
@@ -42,11 +44,11 @@ public class Vehicle {
         this.reviews = reviews;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -121,4 +123,6 @@ public class Vehicle {
     public void setReviews(ArrayList<Review> reviews) {
         this.reviews = reviews;
     }
+
+
 }
