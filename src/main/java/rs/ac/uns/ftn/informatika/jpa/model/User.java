@@ -28,6 +28,19 @@ public class User {
         this.active = active;
     }
 
+    public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = false;
+        this.active = false;
+    }
+
     public Long getId() {
         return id;
     }
