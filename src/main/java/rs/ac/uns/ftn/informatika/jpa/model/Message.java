@@ -11,24 +11,35 @@ public class Message {
     User reciever;
     String message;
     Date sendingtime;
+    MessageType type;
     int driveID;
 
     public Message() {
     }
 
-    public Message(User sender, User reciever, String message, Date sendingtime) {
+    public Message(User sender, User reciever, MessageType type, String message, Date sendingtime) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
+        this.type = type;
         this.sendingtime = sendingtime;
     }
 
-    public Message(User sender, User reciever, String message, Date sendingtime, int driveID) {
+    public Message(User sender, User reciever, MessageType type, String message, Date sendingtime, int driveID) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
+        this.type = type;
         this.sendingtime = sendingtime;
         this.driveID = driveID;
+    }
+
+    public MessageType getType() {
+        return type;
+    }
+
+    public void setType(MessageType type) {
+        this.type = type;
     }
 
     public User getSender() {
