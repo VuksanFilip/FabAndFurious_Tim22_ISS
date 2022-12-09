@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-enum Type{
+public enum Type{
     STANDARD, LUXURY, VAN
 }
 
