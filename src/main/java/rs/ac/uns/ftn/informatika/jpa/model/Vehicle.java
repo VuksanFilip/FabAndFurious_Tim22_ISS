@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import java.util.ArrayList;
 
 public class Vehicle {
+    int id;
     Driver driver;
     String vehicleModel;
     VehicleType type;
@@ -16,6 +17,19 @@ public class Vehicle {
     public Vehicle() {
     }
 
+    public Vehicle(int id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
+        this.id = id;
+        this.driver = driver;
+        this.vehicleModel = vehicleModel;
+        this.type = type;
+        this.registarskeTablice = registarskeTablice;
+        this.seats = seats;
+        this.currentLocation = currentLocation;
+        this.babyFriendly = babyFriendly;
+        this.petFriendly = petFriendly;
+        this.reviews = reviews;
+    }
+
     public Vehicle(Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
         this.driver = driver;
         this.vehicleModel = vehicleModel;
@@ -26,6 +40,14 @@ public class Vehicle {
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
         this.reviews = reviews;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Driver getDriver() {
