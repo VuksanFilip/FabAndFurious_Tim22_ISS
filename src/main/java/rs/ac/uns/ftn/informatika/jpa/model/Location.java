@@ -3,13 +3,13 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 public class Location {
 
     String address;
-    float longitude;
-    float latitude;
+    double longitude;
+    double latitude;
 
     public Location() {
     }
 
-    public Location(String address, float longitude, float latitude) {
+    public Location(String address, double longitude, double latitude) {
         this.address = address;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -23,7 +23,7 @@ public class Location {
         this.address = address;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -31,7 +31,7 @@ public class Location {
         this.longitude = longitude;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
