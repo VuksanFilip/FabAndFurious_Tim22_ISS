@@ -8,7 +8,7 @@ public class Vehicle {
     VehicleType type;
     String registarskeTablice;
     int seats;
-    String currentLocation;
+    Location currentLocation;
     boolean babyFriendly;
     boolean petFriendly;
     ArrayList<Review> reviews;
@@ -16,7 +16,7 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, String currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
+    public Vehicle(Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
         this.driver = driver;
         this.vehicleModel = vehicleModel;
         this.type = type;
@@ -68,11 +68,11 @@ public class Vehicle {
         this.seats = seats;
     }
 
-    public String getCurrentLocation() {
+    public Location getCurrentLocation() {
         return currentLocation;
     }
 
-    public void setCurrentLocation(String currentLocation) {
+    public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
     }
 
