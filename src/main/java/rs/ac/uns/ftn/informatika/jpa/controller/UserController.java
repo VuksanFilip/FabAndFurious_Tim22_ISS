@@ -24,7 +24,16 @@ public class UserController {
         User user = userDummy.users.get(id);
         user.setBlocked(true);
 
-        return new ResponseEntity<String>("User is successfully blocked", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>("User is successfully blocked", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/unblock")
+    public ResponseEntity<String> unblockUser(@PathVariable Long id) throws Exception {
+        addUser();
+        User user = userDummy.users.get(id);
+        user.setBlocked(false);
+
+        return new ResponseEntity<String>("User is successfully unblocked", HttpStatus.OK);
     }
 
 }
