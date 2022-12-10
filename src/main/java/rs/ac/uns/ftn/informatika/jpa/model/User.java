@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 public class User {
 
-    private int id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String picture;
@@ -16,12 +16,12 @@ public class User {
     public User() {
     }
 
-    public User(int id, String email) {
+    public User(Long id, String email) {
         this.id = id;
         this.email = email;
     }
 
-    public User(int id, String firstName, String lastName, String picture, String phoneNumber, String email, String address,
+    public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address,
                 String password, boolean blocked, boolean active) {
 
         this.id = id;
@@ -36,11 +36,11 @@ public class User {
         this.active = active;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

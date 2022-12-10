@@ -45,7 +45,7 @@ public class RideResponseDTO {
         this.startTime = null;
         this.endTime = null;
         totalCost = 0;
-        this.driver = new Driver(0, null);
+        this.driver = new Driver(0L, null);
         this.estimatedTimeInMinutes = 0;
         this.status = null;
     }
