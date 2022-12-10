@@ -2,16 +2,6 @@ package rs.ac.uns.ftn.informatika.jpa.dto;
 
 public class PassengerResponseDTO {
 
-//    {
-//        "id": 123,
-//            "name": "Pera",
-//            "surname": "Perić",
-//            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
-//            "telephoneNumber": "+381123123",
-//            "email": "pera.peric@email.com",
-//            "address": "Bulevar Oslobodjenja 74"
-//    }
-
     private Long id;
     private String name;
     private String surname;

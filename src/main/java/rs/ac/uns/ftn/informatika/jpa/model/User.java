@@ -19,6 +19,11 @@ public class User {
         this.id = id;
     }
 
+    public User(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
     public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         this.id = id;
         this.firstName = firstName;
@@ -30,6 +35,19 @@ public class User {
         this.password = password;
         this.blocked = blocked;
         this.active = active;
+    }
+
+    public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = false;
+        this.active = false;
     }
 
     public Long getId() {

@@ -13,6 +13,17 @@ public class Driver extends User{
     ArrayList<Ride> rides;
     Vehicle vehicle;
 
+    public Driver() {
+    }
+
+    public Driver(Long id) {
+        super(id);
+    }
+
+    public Driver(Long id, String email) {
+        super(id, email);
+    }
+
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }
@@ -24,16 +35,13 @@ public class Driver extends User{
         this.vehicle = vehicle;
     }
 
-    public Driver(Long id) {
-        super(id);
-    }
-
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password){
         this.setBlocked(false);
         this.setActive(false);
         this.documents = new ArrayList<Document>();
         this.rides = new ArrayList<Ride>();
         this.vehicle = null;
+
     }
 
     public ArrayList<Document> getDocuments() {
