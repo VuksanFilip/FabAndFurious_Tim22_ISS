@@ -27,7 +27,8 @@ public class Review {
           this.passenger = passenger;
           this.ride = new Ride();
           this.ride.setId(rideId);
-          this.vehicleId = vehicleId;
+          this.ride.driver = new Driver();
+          this.ride.driver.vehicle = new Vehicle(vehicleId);
      }
 
      public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, String str, Long driverId) {
@@ -37,7 +38,7 @@ public class Review {
           this.passenger = passenger;
           this.ride = new Ride();
           this.ride.setId(rideId);
-          this.driverId = driverId;
+          ride.driver = new Driver(driverId);
      }
 
      public Review(Long id, float rating, String comment) {
