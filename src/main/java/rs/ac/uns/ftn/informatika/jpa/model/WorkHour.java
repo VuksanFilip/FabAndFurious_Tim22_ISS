@@ -3,33 +3,36 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import java.util.Date;
 
 public class WorkHour {
-
-    Date start;
-    Date end;
+    Long id;
+    String start;
+    String end;
     Driver driver;
 
     public WorkHour() {
     }
 
-    public WorkHour(Date start, Date end, Driver driver) {
+
+
+    public WorkHour(Long id, Long driverId, String start, String end) {
+        this.id = id;
         this.start = start;
         this.end = end;
-        this.driver = driver;
+        this.driver = new Driver(driverId);
     }
 
-    public Date getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 

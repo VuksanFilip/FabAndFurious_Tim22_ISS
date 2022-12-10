@@ -12,7 +12,7 @@ public class Vehicle {
     VehicleType type;
     String registarskeTablice;
     int seats;
-    String currentLocation;
+    Location currentLocation;
     Location location;
     boolean babyFriendly;
     boolean petFriendly;
@@ -29,7 +29,7 @@ public class Vehicle {
         this.type = type;
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
-        this.currentLocation = currentLocation;
+        this.location = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
         this.reviews = reviews;
@@ -54,7 +54,7 @@ public class Vehicle {
         this.type = type;
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
-        this.currentLocation = currentLocation;
+        this.location = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
         this.reviews = reviews;
