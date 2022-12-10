@@ -43,13 +43,12 @@ public class CreateReviewDTO {
         return reviewResponse;
     }
 
-    public ReviewResponseDTO parseToResponseVehicle(Long id){
-        ReviewResponseDTO reviewResponse = new ReviewResponseDTO(this.rating, this.comment);
-        reviewResponse.setId(id);
-        return reviewResponse;
+
+    public Review parseToReviewVehicle(Long id, Long rideId, Long vehicleId){
+        return new Review(id, this.rating, this.comment, null, rideId, vehicleId,null);
     }
 
-    public Review parseToReview(Long id, Long rideId, Long vehicleId){
-        return new Review(id, this.rating, this.comment, null, rideId, vehicleId);
+    public Review parseToReviewDriver(Long id, Long rideId, Long driverId){
+        return new Review(id, this.rating, this.comment, null, rideId, null,driverId);
     }
 }

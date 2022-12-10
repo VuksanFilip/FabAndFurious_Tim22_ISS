@@ -6,6 +6,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
 import java.util.ArrayList;
 
 public class Driver extends User{
+    Long id;
 
     ArrayList<Document> documents;
     ArrayList<Ride> rides;
@@ -22,12 +23,14 @@ public class Driver extends User{
         this.vehicle = vehicle;
     }
 
+
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password){
         this.setBlocked(false);
-        this.setActive(false);
+        this.setActive(false); 
         this.documents = new ArrayList<Document>();
         this.rides = new ArrayList<Ride>();
         this.vehicle = null;
+
     }
 
     public ArrayList<Document> getDocuments() {

@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.ReviewResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.ReviewResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.ReviewResponseVehicleDTO;
 
 public class Review {
@@ -14,11 +15,12 @@ public class Review {
      Passenger passenger;
 
      Long vehicleId;
+     Long driverId;
 
      public Review() {
      }
 
-     public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, Long vehicleId) {
+     public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, Long vehicleId, String str) {
           this.id = id;
           this.rating = rating;
           this.comment = comment;
@@ -28,12 +30,24 @@ public class Review {
           this.vehicleId = vehicleId;
      }
 
+     public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, String str, Long driverId) {
+          this.id = id;
+          this.rating = rating;
+          this.comment = comment;
+          this.passenger = passenger;
+          this.ride = new Ride();
+          this.ride.setId(rideId);
+          this.driverId = driverId;
+     }
+
      public Review(Long id, float rating, String comment) {
           this.id = id;
           this.rating = rating;
           this.comment = comment;
           this.passenger = null;
      }
+
+
 
      public Review(float rating, Ride ride, Passenger passenger) {
           this.rating = rating;
@@ -54,6 +68,14 @@ public class Review {
 
      public void setRating(float rating) {
           this.rating = rating;
+     }
+
+     public Long getDriverId() {
+          return driverId;
+     }
+
+     public void setDriverId(Long driverId) {
+          this.driverId = driverId;
      }
 
      public String getComment() {
@@ -94,6 +116,10 @@ public class Review {
 
      public ReviewResponseVehicleDTO parseToResponseVehicle(int totalCount, Long id){
           return new ReviewResponseVehicleDTO(totalCount, id, this.rating, this.comment);
+     }
+
+     public ReviewResponseDriverDTO parseToResponseDriver(int totalCount, Long id){
+          return new ReviewResponseDriverDTO(totalCount, id, this.rating, this.comment);
      }
 
 }
