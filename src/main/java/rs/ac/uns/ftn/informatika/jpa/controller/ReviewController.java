@@ -27,4 +27,12 @@ public class ReviewController {
         return new ResponseEntity<ReviewResponseDTO>(reviewResponse, HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "{rideId}/driver/{driverId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ReviewResponseDTO> createDriverReview(@RequestBody CreateReviewDTO review) throws Exception {
+        Long id = reviewDummy.counter.incrementAndGet();
+        ReviewResponseDTO reviewResponse = review.parseToResponse(id);
+        reviewDummy.reviews.put(id, review.parseToReview(id));
+        return new ResponseEntity<ReviewResponseDTO>(reviewResponse, HttpStatus.CREATED);
+    }
+
 }
