@@ -22,19 +22,6 @@ public class Vehicle {
         this.id = id;
     }
 
-    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
-        this.id = id;
-        this.driver = driver;
-        this.vehicleModel = vehicleModel;
-        this.type = type;
-        this.registarskeTablice = registarskeTablice;
-        this.seats = seats;
-        this.currentLocation = currentLocation;
-        this.babyFriendly = babyFriendly;
-        this.petFriendly = petFriendly;
-        this.reviews = reviews;
-    }
-
     public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location currentLocation, int seats,  boolean babyFriendly, boolean petFriendly) {
         this.id = id;
         this.driver = new Driver(driverId);
@@ -45,19 +32,6 @@ public class Vehicle {
         this.location = new Location(currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
-    }
-
-    public Vehicle(Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
-
-        this.driver = driver;
-        this.vehicleModel = vehicleModel;
-        this.type = type;
-        this.registarskeTablice = registarskeTablice;
-        this.seats = seats;
-        this.currentLocation = currentLocation;
-        this.babyFriendly = babyFriendly;
-        this.petFriendly = petFriendly;
-        this.reviews = reviews;
     }
 
     public Long getId() {
@@ -116,11 +90,11 @@ public class Vehicle {
         this.seats = seats;
     }
 
-    public Location getCurrentLocation() {
+    public String getCurrentLocation() {
         return currentLocation;
     }
 
-    public void setCurrentLocation(Location currentLocation) {
+    public void setCurrentLocation(String currentLocation) {
         this.currentLocation = currentLocation;
     }
 
