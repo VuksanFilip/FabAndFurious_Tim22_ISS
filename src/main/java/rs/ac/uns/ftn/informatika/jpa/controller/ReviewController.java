@@ -14,13 +14,13 @@ import rs.ac.uns.ftn.informatika.jpa.dummy.ReviewDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/api/review")
 public class ReviewController {
 
     private ReviewDummy reviewDummy = new ReviewDummy();
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReviewResponseDTO> createRewview(@RequestBody CreateReviewDTO review) throws Exception {
+    @PostMapping(value = "{rideId}/vehicle/{vehicleId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ReviewResponseDTO> createVehicleReview(@RequestBody CreateReviewDTO review) throws Exception {
         Long id = reviewDummy.counter.incrementAndGet();
         ReviewResponseDTO reviewResponse = review.parseToResponse(id);
         reviewDummy.reviews.put(id, review.parseToReview(id));
