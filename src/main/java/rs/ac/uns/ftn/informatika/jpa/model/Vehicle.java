@@ -1,19 +1,35 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.CreateDriverVehicleDTO;
+
 import java.util.ArrayList;
 
 public class Vehicle {
+    Long id;
     Driver driver;
     String vehicleModel;
     VehicleType type;
     String registarskeTablice;
     int seats;
     String currentLocation;
+    Location location;
     boolean babyFriendly;
     boolean petFriendly;
     ArrayList<Review> reviews;
 
     public Vehicle() {
+    }
+
+    public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location currentLocation, int seats,  boolean babyFriendly, boolean petFriendly) {
+        this.id = id;
+        this.driver = new Driver(driverId);
+        this.vehicleModel = vehicleModel;
+        this.type = type;
+        this.registarskeTablice = registarskeTablice;
+        this.seats = seats;
+        this.location = new Location(currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
+        this.babyFriendly = babyFriendly;
+        this.petFriendly = petFriendly;
     }
 
     public Vehicle(Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, String currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
@@ -26,6 +42,23 @@ public class Vehicle {
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
         this.reviews = reviews;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public Driver getDriver() {
