@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import java.util.ArrayList;
 
 public class Driver extends User{
+    Long id;
 
     ArrayList<Document> documents;
     ArrayList<Ride> rides;
@@ -17,6 +18,15 @@ public class Driver extends User{
         this.documents = documents;
         this.rides = rides;
         this.vehicle = vehicle;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public ArrayList<Document> getDocuments() {

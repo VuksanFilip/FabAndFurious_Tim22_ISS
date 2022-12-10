@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import java.util.ArrayList;
 
 public class Vehicle {
+    Long id;
     Driver driver;
     String vehicleModel;
     VehicleType type;
@@ -26,6 +27,14 @@ public class Vehicle {
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
         this.reviews = reviews;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Driver getDriver() {
