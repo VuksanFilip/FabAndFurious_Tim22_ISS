@@ -24,10 +24,11 @@ public class Panic {
         this.reason = reason;
     }
 
-    public Panic(Long id, Ride ride, Date time, String reason) {
+    public Panic(Long id, Date time, String reason, User user, Ride ride) {
         this.id = id;
         this.ride = ride;
         this.time = time;
+        this.user = user;
         this.reason = reason;
     }
 
@@ -70,7 +71,7 @@ public class Panic {
         this.reason = reason;
     }
 
-    public PanicResponseDTO parseToResponse(){
-        return new PanicResponseDTO(this.id, 0, this.time, this.reason);
+    public PanicResponseDTO parseToResponse(int numberOfPanics){
+        return new PanicResponseDTO(numberOfPanics,this.id, this.time, this.reason, this.user, this.ride);
     }
 }
