@@ -12,6 +12,13 @@ public class Driver extends User{
     ArrayList<Ride> rides;
     Vehicle vehicle;
 
+    public Driver(Long id) {
+        super(id);
+    }
+
+    public Driver() {
+    }
+
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }

@@ -36,13 +36,14 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseVehicleDTO> getVehicleReviews(@PathVariable("id") Long id) {
 
         Review review = new Review();
+        int totalCount = 0;
         for (Review r: reviewDummy.reviewsForVehicles.values()){
             if (r.getVehicleId() == id){
+                totalCount += 1;
                 review = r;
 
             }
         }
-        int totalCount = reviewDummy.reviewsForVehicles.size();
         if (review == null) {
             return new ResponseEntity<ReviewResponseVehicleDTO>(HttpStatus.NOT_FOUND);
         }

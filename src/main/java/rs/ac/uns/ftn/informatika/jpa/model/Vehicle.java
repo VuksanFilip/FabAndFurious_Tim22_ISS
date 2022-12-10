@@ -16,7 +16,8 @@ public class Vehicle {
     boolean petFriendly;
     ArrayList<Review> reviews;
 
-    public Vehicle() {
+    public Vehicle(Long id) {
+        this.id = id;
     }
 
     public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
