@@ -4,7 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDocumentDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DriverDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 
@@ -32,7 +35,7 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverDocumentResponseDTO> createDriverDocument(@PathVariable("id") Long driverId,@RequestBody CreateDriverDocumentDTO document) throws Exception {
+    public ResponseEntity<DriverDocumentResponseDTO> createDriverDocument(@PathVariable("id") Long driverId, @RequestBody CreateDriverDocumentDTO document) throws Exception {
         Long id = driverDummy.counter.incrementAndGet();
         DriverDocumentResponseDTO driverDocumentResponse = document.parseToResponse(id,driverId);
 

@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseRejectionDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseRejectionDTO;
 
 import java.util.ArrayList;
 import java.util.Date;

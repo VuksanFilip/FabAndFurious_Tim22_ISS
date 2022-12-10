@@ -1,9 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.ReviewResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.ReviewResponseDriverDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.ReviewResponseVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseVehicleDTO;
 
 public class Review {
 

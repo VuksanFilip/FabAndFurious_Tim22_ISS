@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.CreateRideDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseRejectionDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseRejectionDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 

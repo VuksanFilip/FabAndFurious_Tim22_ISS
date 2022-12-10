@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.CreatePassengerDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreatePassengerDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PassengerDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 

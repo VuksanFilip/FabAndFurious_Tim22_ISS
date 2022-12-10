@@ -1,55 +1,39 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+public class CreatePassengerDTO {
 
-public class DriverResponseDTO {
-
-//    {
-//        "id": 123,
-//            "name": "Pera",
+    //    {
+//        "name": "Pera",
 //            "surname": "Perić",
 //            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
 //            "telephoneNumber": "+381123123",
 //            "email": "pera.peric@email.com",
-//            "address": "Bulevar Oslobodjenja 74"
+//            "address": "Bulevar Oslobodjenja 74",
+//            "password": "Pasword123"
 //    }
-
-    private Long id;
     private String name;
     private String surname;
     private String profilePicture;
     private String telephoneNumber;
     private String email;
     private String address;
+    private String password;
 
-    public DriverResponseDTO() {
+    public CreatePassengerDTO() {
     }
 
-    public DriverResponseDTO(Long id, String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
-        this.id = id;
+    public CreatePassengerDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
         this.telephoneNumber = telephoneNumber;
         this.email = email;
         this.address = address;
+        this.password = password;
     }
 
-    public DriverResponseDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
-        this.id = null;
-        this.name = name;
-        this.surname = surname;
-        this.profilePicture = profilePicture;
-        this.telephoneNumber = telephoneNumber;
-        this.email = email;
-        this.address = address;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -98,4 +82,23 @@ public class DriverResponseDTO {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public PassengerResponseDTO parseToResponse(Long id){
+        PassengerResponseDTO passengerResponse = new PassengerResponseDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
+        passengerResponse.setId(id);
+        return passengerResponse;
+    }
+
+    public Passenger parseToPassenger(Long id){
+        return new Passenger(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
+    }
+
 }

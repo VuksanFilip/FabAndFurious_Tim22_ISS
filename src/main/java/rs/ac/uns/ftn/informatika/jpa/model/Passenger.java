@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
 
 public class Passenger {
 

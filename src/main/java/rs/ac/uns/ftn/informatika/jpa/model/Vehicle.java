@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
-
 import java.util.ArrayList;
 
 public class Vehicle {

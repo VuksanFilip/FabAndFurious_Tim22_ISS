@@ -1,6 +1,16 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-public class PassengerResponseDTO {
+public class DriverResponseDTO {
+
+//    {
+//        "id": 123,
+//            "name": "Pera",
+//            "surname": "Perić",
+//            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
+//            "telephoneNumber": "+381123123",
+//            "email": "pera.peric@email.com",
+//            "address": "Bulevar Oslobodjenja 74"
+//    }
 
     private Long id;
     private String name;
@@ -10,11 +20,11 @@ public class PassengerResponseDTO {
     private String email;
     private String address;
 
-    public PassengerResponseDTO() {
+    public DriverResponseDTO() {
     }
 
-    public PassengerResponseDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
-        this.id = null;
+    public DriverResponseDTO(Long id, String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
@@ -23,8 +33,8 @@ public class PassengerResponseDTO {
         this.address = address;
     }
 
-    public PassengerResponseDTO(Long id, String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
-        this.id = id;
+    public DriverResponseDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
+        this.id = null;
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
