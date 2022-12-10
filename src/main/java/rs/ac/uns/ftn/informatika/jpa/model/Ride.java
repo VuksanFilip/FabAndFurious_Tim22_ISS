@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Ride {
 
+    Long id;
     Date startTime;
     Date endTime;
     int totalCost;
@@ -160,5 +161,13 @@ public class Ride {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -22,7 +22,6 @@ public class Driver extends User{
         super(id, email);
     }
 
-
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }
