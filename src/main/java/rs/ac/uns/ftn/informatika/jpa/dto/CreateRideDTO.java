@@ -1,9 +1,9 @@
 package rs.ac.uns.ftn.informatika.jpa.dto;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Location;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CreateRideDTO {
 
@@ -67,5 +67,9 @@ public class CreateRideDTO {
     public RideResponseDTO parseToResponse(){
         RideResponseDTO rideResponse = new RideResponseDTO(this.passengers, this.vehicleType, this.babyTransport, this.petTransport, this.locations);
         return rideResponse;
+    }
+
+    public Ride parseToRide(Long id){
+        return new Ride(id, this.locations, this.passengers, this.vehicleType, this.babyTransport, this.petTransport);
     }
 }

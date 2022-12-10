@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseDTO;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -24,6 +27,16 @@ public class Ride {
 
     public Ride() {
     }
+
+    public Ride(Long id, ArrayList<Location> locations, ArrayList<Passenger> passengers, String vehicleType, boolean babyTransport, boolean petFriendly) {
+        this.id = id;
+        this.passengers = passengers;
+        this.locations = locations;
+        this.babyTransport = babyTransport;
+        this.petFriendly = petFriendly;
+        this.vehicleType = vehicleType;
+    }
+
 
     public Ride(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, ArrayList<Location> locations, ArrayList<Path> paths, int estimatedTimeInMinutes, ArrayList<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petFriendly, String vehicleType, String status) {
         this.startTime = startTime;
@@ -169,5 +182,33 @@ public class Ride {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+//    Long id;
+//    Date startTime;
+//    Date endTime;
+//    int totalCost;
+//    Driver driver;
+//    ArrayList<Passenger> passengers;
+//    ArrayList<Location> locations;
+//    ArrayList<Path> paths;
+//    int estimatedTimeInMinutes;
+//    ArrayList<Review> reviews;
+//    RejectionLetter letter;
+//    boolean panic;
+//    boolean babyTransport;
+//    boolean petFriendly;
+//    String vehicleType;
+//    String status;
+//    public PassengerResponseDTO parseToResponse(){
+//        return new PassengerResponseDTO(this.id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email,
+//                this.address);
+//
+//
+//    }
+
+    public RideResponseDTO parseToResponse(){
+        RideResponseDTO rideResponse = new RideResponseDTO(this.passengers, this.vehicleType, this.babyTransport, this.petFriendly, this.locations);
+        return rideResponse;
     }
 }
