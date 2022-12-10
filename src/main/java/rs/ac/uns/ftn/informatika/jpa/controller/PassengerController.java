@@ -17,7 +17,7 @@ public class PassengerController{
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PassengerResponseDTO> createPassenger(@RequestBody CreatePassengerDTO passenger) throws Exception {
-        Long id = passengerDummy.counter.incrementAndGet();
+        Long id = passengerDummy.passengerCounter.incrementAndGet();
         PassengerResponseDTO passengerResponse = passenger.parseToResponse(id);
         passengerDummy.passengers.put(id, passenger.parseToPassenger(id));
         return new ResponseEntity<PassengerResponseDTO>(passengerResponse, HttpStatus.CREATED);

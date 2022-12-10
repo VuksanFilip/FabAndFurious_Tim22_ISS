@@ -32,6 +32,8 @@ public class CreatePassengerDTO {
         this.password = password;
     }
 
+
+
     public String getName() {
         return name;
     }

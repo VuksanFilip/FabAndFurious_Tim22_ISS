@@ -6,11 +6,11 @@ import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
 public class PassengerDummy {
 
-    public static AtomicLong counter;
+    public static AtomicLong passengerCounter;
     public ConcurrentHashMap<Long, Passenger> passengers;
 
     public PassengerDummy() {
-        this.counter = new AtomicLong();
+        this.passengerCounter = new AtomicLong();
         this.passengers = new ConcurrentHashMap<Long, Passenger>();
     }
 }
