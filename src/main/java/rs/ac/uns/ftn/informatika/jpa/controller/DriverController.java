@@ -38,4 +38,12 @@ public class DriverController {
 
         return new ResponseEntity<DriverDocumentResponseDTO>(driverDocumentResponse, HttpStatus.CREATED);
     }
+
+    @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DriverVehicleResponseDTO> createDriverVehicle(@PathVariable("id") Long driverId,@RequestBody CreateDriverVehicleDTO vehicle) throws Exception {
+        Long id = driverDummy.counter.incrementAndGet();
+        DriverVehicleResponseDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
+
+        return new ResponseEntity<DriverVehicleResponseDTO>(driverVehicleResponse, HttpStatus.CREATED);
+    }
 }

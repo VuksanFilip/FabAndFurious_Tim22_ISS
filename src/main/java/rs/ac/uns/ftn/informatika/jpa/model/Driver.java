@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class Driver extends User{
 
+    Long id;
+
     ArrayList<Document> documents;
     ArrayList<Ride> rides;
     Vehicle vehicle;
@@ -32,7 +34,6 @@ public class Driver extends User{
         this.rides = rides;
         this.vehicle = vehicle;
     }
-
 
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password){
         this.setBlocked(false);
