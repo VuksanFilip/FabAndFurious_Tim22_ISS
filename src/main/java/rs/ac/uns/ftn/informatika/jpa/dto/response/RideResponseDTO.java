@@ -71,6 +71,22 @@ public class RideResponseDTO {
         this.status = status;
     }
 
+    public RideResponseDTO(Long id, ArrayList<PassengerIdEmailResponse> passengers, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, RideStatus status, RejectionReasonTimeOfDetectionDTO rejection) {
+        this.id = id;
+        this.passengers = passengers;
+        this.vehicleType = vehicleType;
+        this.babyTransport = babyTransport;
+        this.petFriendly = petFriendly;
+        this.locations = locations;
+        this.startTime = null;
+        this.endTime = null;
+        this.totalCost = 0;
+        this.driver = new DriverIdEmailResponse(123L, null);
+        this.rejection = rejection;
+        this.estimatedTimeInMinutes = 0;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }

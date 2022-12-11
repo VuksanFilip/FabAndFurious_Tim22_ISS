@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateRejectionLetterDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
@@ -99,10 +100,11 @@ public class RideController{
     }
 
     @PutMapping(value = "/{id}/cancel")
-    public ResponseEntity<RideResponseDTO> cancelRide(@PathVariable Long id) throws Exception {
+    public ResponseEntity<RideResponseDTO> cancelRide(@RequestBody CreateRejectionLetterDTO letter, @PathVariable Long id) throws Exception {
         Ride ride = rideDummy.rides.get(id);
-        ride.setStatus(RideStatus.REJECTED);
-        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatus();
+        RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
+        ride.setLetter(rejectionLetter);
+        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatusAndReason();
         rideDummy.rides.put(id, ride);
 
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
