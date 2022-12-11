@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class RejectionReasonTimeOfDetectionDTO {
     String reason;
-    Date time;
+    Date timeOfRejection;
 
     public RejectionReasonTimeOfDetectionDTO() {
     }
@@ -13,9 +13,9 @@ public class RejectionReasonTimeOfDetectionDTO {
         this.reason = reason;
     }
 
-    public RejectionReasonTimeOfDetectionDTO(String reason, Date time) {
+    public RejectionReasonTimeOfDetectionDTO(String reason, Date timeOfRejection) {
         this.reason = reason;
-        this.time = time;
+        this.timeOfRejection = timeOfRejection;
     }
 
     public String getReason() {
@@ -26,11 +26,11 @@ public class RejectionReasonTimeOfDetectionDTO {
         this.reason = reason;
     }
 
-    public Date getTime() {
-        return time;
+    public Date getTimeOfRejection() {
+        return timeOfRejection;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setTimeOfRejection(Date time) {
+        this.timeOfRejection = timeOfRejection;
     }
 }

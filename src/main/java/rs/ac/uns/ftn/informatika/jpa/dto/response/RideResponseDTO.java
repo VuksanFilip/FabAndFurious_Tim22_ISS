@@ -17,14 +17,14 @@ public class RideResponseDTO {
     private Type vehicleType;
     private boolean babyTransport;
     private boolean petFriendly;
+    private RejectionReasonTimeOfDetectionDTO rejection;
     private ArrayList<Location> locations;
     private String status;
-    private RejectionReasonTimeOfDetectionDTO reason;
 
     public RideResponseDTO() {
     }
 
-    public RideResponseDTO(Date startTime, Date endTime, int totalCost, DriverIdEmailResponse driver, ArrayList<PassengerIdEmailResponse> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status, RejectionReasonTimeOfDetectionDTO reason) {
+    public RideResponseDTO(Date startTime, Date endTime, int totalCost, DriverIdEmailResponse driver, ArrayList<PassengerIdEmailResponse> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status, RejectionReasonTimeOfDetectionDTO rejection) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -36,7 +36,7 @@ public class RideResponseDTO {
         this.petFriendly = petFriendly;
         this.locations = locations;
         this.status = status;
-        this.reason = reason;
+        this.rejection = rejection;
     }
 
     public RideResponseDTO(Long id, ArrayList<PassengerIdEmailResponse> passengers, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
@@ -49,8 +49,8 @@ public class RideResponseDTO {
         this.startTime = null;
         this.endTime = null;
         this.totalCost = 0;
-        this.driver = new DriverIdEmailResponse(0L, null);
-        this.reason = new RejectionReasonTimeOfDetectionDTO();
+        this.driver = new DriverIdEmailResponse(123L, null);
+        this.rejection = new RejectionReasonTimeOfDetectionDTO();
         this.estimatedTimeInMinutes = 0;
         this.status = null;
     }
@@ -151,11 +151,11 @@ public class RideResponseDTO {
         this.status = status;
     }
 
-    public RejectionReasonTimeOfDetectionDTO getReason() {
-        return reason;
+    public RejectionReasonTimeOfDetectionDTO getRejection() {
+        return rejection;
     }
 
-    public void setReason(RejectionReasonTimeOfDetectionDTO reason) {
-        this.reason = reason;
+    public void setRejection(RejectionReasonTimeOfDetectionDTO rejection) {
+        this.rejection = rejection;
     }
 }
