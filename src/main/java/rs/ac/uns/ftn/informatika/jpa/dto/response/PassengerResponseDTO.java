@@ -1,38 +1,44 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Driver;
+public class PassengerResponseDTO {
 
-public class CreateDriverDTO {
-
-//    {
-//        "name": "Pera",
-//            "surname": "Perić",
-//            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
-//            "telephoneNumber": "+381123123",
-//            "email": "pera.peric@email.com",
-//            "address": "Bulevar Oslobodjenja 74",
-//            "password": "Pasword123"
-//    }
-
+    private Long id;
     private String name;
     private String surname;
     private String profilePicture;
     private String telephoneNumber;
     private String email;
     private String address;
-    private String password;
 
-    public CreateDriverDTO() {
+    public PassengerResponseDTO() {
     }
 
-    public CreateDriverDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
+    public PassengerResponseDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
+        this.id = null;
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
         this.telephoneNumber = telephoneNumber;
         this.email = email;
         this.address = address;
-        this.password = password;
+    }
+
+    public PassengerResponseDTO(Long id, String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.profilePicture = profilePicture;
+        this.telephoneNumber = telephoneNumber;
+        this.email = email;
+        this.address = address;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -81,23 +87,5 @@ public class CreateDriverDTO {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public DriverResponseDTO parseToResponse(Long id){
-        DriverResponseDTO driverResponse = new DriverResponseDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
-        driverResponse.setId(id);
-        return driverResponse;
-    }
-
-    public Driver parseToDriver(Long id){
-        return new Driver(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
     }
 }

@@ -5,13 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.MessageResponseDTO;
 import java.util.Date;
 
 public class Message {
-<<<<<<< Updated upstream
-    User sender;
-    User reciever;
-    String message;
-    Date sendingtime;
-    int driveID;
-=======
+
     private Long id;
     private User sender;
     private User reciever;
@@ -19,21 +13,18 @@ public class Message {
     private Date sendingtime;
     private MessageType type;
     private int driveID;
->>>>>>> Stashed changes
 
     public Message() {
     }
 
-    public Message(User sender, User reciever, String message, Date sendingtime) {
+    public Message(User sender, User reciever, MessageType type, String message, Date sendingtime) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
+        this.type = type;
         this.sendingtime = sendingtime;
     }
 
-<<<<<<< Updated upstream
-    public Message(User sender, User reciever, String message, Date sendingtime, int driveID) {
-=======
     public Message(Long id, User sender, User reciever, String message, Date sendingtime, MessageType type, int driveID) {
         this.id = id;
         this.sender = sender;
@@ -45,16 +36,14 @@ public class Message {
     }
 
     public Message(User sender, User reciever, MessageType type, String message, Date sendingtime, int driveID) {
->>>>>>> Stashed changes
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
+        this.type = type;
         this.sendingtime = sendingtime;
         this.driveID = driveID;
     }
 
-<<<<<<< Updated upstream
-=======
     public Long getId() {
         return id;
     }
@@ -71,7 +60,6 @@ public class Message {
         this.type = type;
     }
 
->>>>>>> Stashed changes
     public User getSender() {
         return sender;
     }

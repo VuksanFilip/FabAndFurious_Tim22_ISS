@@ -9,10 +9,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ReviewDummy {
 
     public static AtomicLong counter;
-    public ConcurrentHashMap<Long, Review> reviews;
+    public ConcurrentHashMap<Long, Review> reviewsForDrivers;
+    public ConcurrentHashMap<Long, Review> reviewsForVehicles;
 
     public ReviewDummy() {
         this.counter = new AtomicLong();
-        this.reviews = new ConcurrentHashMap<Long, Review>();
+        this.reviewsForDrivers = new ConcurrentHashMap<Long, Review>();
+        this.reviewsForVehicles = new ConcurrentHashMap<Long, Review>();
     }
 }

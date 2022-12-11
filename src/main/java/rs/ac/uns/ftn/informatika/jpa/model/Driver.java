@@ -1,15 +1,27 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.DriverResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
 
 import java.util.ArrayList;
 
 public class Driver extends User{
 
+//    Long id;
+
     ArrayList<Document> documents;
     ArrayList<Ride> rides;
     Vehicle vehicle;
+
+    public Driver() {
+    }
+
+    public Driver(Long id) {
+        super(id);
+    }
+
+    public Driver(Long id, String email) {
+        super(id, email);
+    }
 
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
@@ -28,6 +40,7 @@ public class Driver extends User{
         this.documents = new ArrayList<Document>();
         this.rides = new ArrayList<Ride>();
         this.vehicle = null;
+
     }
 
     public ArrayList<Document> getDocuments() {

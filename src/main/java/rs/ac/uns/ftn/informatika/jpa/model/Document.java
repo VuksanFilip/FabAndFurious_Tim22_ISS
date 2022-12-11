@@ -1,7 +1,10 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
+
 public class Document {
 
+    Long id;
     String name;
     String image;
     Driver driver;
@@ -9,10 +12,18 @@ public class Document {
     public Document() {
     }
 
-    public Document(String name, String image, Driver driver) {
+    public Document(Long id, String name, String image, Long driverId) {
         this.name = name;
         this.image = image;
-        this.driver = driver;
+        this.driver = new Driver(driverId);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -37,5 +48,9 @@ public class Document {
 
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+    public DriverDocumentResponseDTO parseToResponse(){
+        return new DriverDocumentResponseDTO(this.getId(), this.getName(), this.getImage(), this.getDriver().getId());
     }
 }

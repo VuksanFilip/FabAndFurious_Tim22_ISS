@@ -15,6 +15,15 @@ public class User {
     public User() {
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public User(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
     public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         this.id = id;
         this.firstName = firstName;

@@ -1,6 +1,6 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
 
 public class CreateReviewDTO {
@@ -43,7 +43,12 @@ public class CreateReviewDTO {
         return reviewResponse;
     }
 
-    public Review parseToReview(Long id){
-        return new Review(id, this.rating, this.comment, null);
+
+    public Review parseToReviewVehicle(Long id, Long rideId, Long vehicleId){
+        return new Review(id, this.rating, this.comment, null, rideId, vehicleId,null);
+    }
+
+    public Review parseToReviewDriver(Long id, Long rideId, Long driverId){
+        return new Review(id, this.rating, this.comment, null, rideId, null,driverId);
     }
 }
