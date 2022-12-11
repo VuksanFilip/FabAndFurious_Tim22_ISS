@@ -1,14 +1,14 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
+import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
 
-public class DriverVehicleResponseDTO {
+public class CreateDriverVehicleDTO {
 
 //    {
-//        "id": 123,
-//            "driverId": 123,
-//            "vehicleType": "STANDARDNO",
+//        "vehicleType": "STANDARDNO",
 //            "model": "VW Golf 2",
 //            "licenseNumber": "NS 123-AB",
 //            "currentLocation": {
@@ -21,7 +21,6 @@ public class DriverVehicleResponseDTO {
 //            "petTransport": true
 //    }
     private Long id;
-    private Long driverId;
     private VehicleType type;
     private String model;
     private String licenseNumber;
@@ -30,16 +29,12 @@ public class DriverVehicleResponseDTO {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public DriverVehicleResponseDTO(Long id, Long driverId, VehicleType type, String model, String licenseNumber, Location location, int passengerSeats, boolean babyTransport, boolean petTransport) {
-        this.id = id;
-        this.driverId = driverId;
+    public VehicleType getType() {
+        return type;
+    }
+
+    public void setType(VehicleType type) {
         this.type = type;
-        this.model = model;
-        this.licenseNumber = licenseNumber;
-        this.location = location;
-        this.passengerSeats = passengerSeats;
-        this.babyTransport = babyTransport;
-        this.petTransport = petTransport;
     }
 
     public Long getId() {
@@ -48,22 +43,6 @@ public class DriverVehicleResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getDriverId() {
-        return driverId;
-    }
-
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
-    }
-
-    public VehicleType getType() {
-        return type;
-    }
-
-    public void setType(VehicleType type) {
-        this.type = type;
     }
 
     public String getModel() {
@@ -114,5 +93,13 @@ public class DriverVehicleResponseDTO {
         this.petTransport = petTransport;
     }
 
+    public DriverVehicleResponseDTO parseToResponse(Long id, Long driverId){
+        DriverVehicleResponseDTO driverVehicleResponse = new DriverVehicleResponseDTO(id, driverId, this.type, this.model, this.licenseNumber, new Location(), this.passengerSeats, this.babyTransport, this.petTransport);
+        driverVehicleResponse.setId(id);
+        return driverVehicleResponse;
+    }
 
+    public Vehicle parseToVehicle(Long id, Long driverId){
+        return new Vehicle(id, driverId, this.type, this.model, this.licenseNumber, new Location(), this.passengerSeats, this.babyTransport, this.petTransport);
+    }
 }
