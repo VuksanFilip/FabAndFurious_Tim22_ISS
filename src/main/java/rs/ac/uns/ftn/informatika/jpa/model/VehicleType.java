@@ -1,15 +1,14 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-enum Type{
-    STANDARD, LUXURY, VAN
-}
-
-
 public class VehicleType {
     Type type;
     float pricePerKm;
 
     public VehicleType() {
+    }
+
+    public VehicleType(Type type){
+        this.type = type;
     }
 
     public VehicleType(Type type, float pricePerKm) {

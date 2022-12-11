@@ -25,7 +25,7 @@ public class RideController{
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RideResponseDTO> createRide(@RequestBody CreateRideDTO ride) throws Exception {
         Long id = rideDummy.rideCounter.incrementAndGet();
-        RideResponseDTO rideResponseDTO = ride.parseToResponse();
+        RideResponseDTO rideResponseDTO = ride.parseToResponse(id);
         rideDummy.rides.put(id, ride.parseToRide(id));
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.CREATED);
     }
