@@ -1,17 +1,9 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Document;
-import rs.ac.uns.ftn.informatika.jpa.model.Driver;
-import rs.ac.uns.ftn.informatika.jpa.model.Review;
-
-import java.util.Date;
 
 public class CreateDriverDocumentDTO {
-
-//    {
-//        "name": "Vozačka dozvola",
-//            "documentImage": "U3dhZ2dlciByb2Nrcw="
-//    }
 
     private String name;
     private String documentImage;

@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
 public class UnregisteredUserReponseDTO {
 

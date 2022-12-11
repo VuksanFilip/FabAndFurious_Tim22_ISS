@@ -1,11 +1,11 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class RideResponseDTO {
+public class RideResponseRejectionDTO {
 
     private Date startTime;
     private Date endTime;
@@ -18,11 +18,12 @@ public class RideResponseDTO {
     private boolean petFriendly;
     private ArrayList<Location> locations;
     private String status;
+    private RejectionLetter rejection;
 
-    public RideResponseDTO() {
+    public RideResponseRejectionDTO() {
     }
 
-    public RideResponseDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, String vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status) {
+    public RideResponseRejectionDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, String vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status, RejectionLetter rejection) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -34,20 +35,7 @@ public class RideResponseDTO {
         this.petFriendly = petFriendly;
         this.locations = locations;
         this.status = status;
-    }
-
-    public RideResponseDTO(ArrayList<Passenger> passengers, String vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
-        this.passengers = passengers;
-        this.vehicleType = vehicleType;
-        this.babyTransport = babyTransport;
-        this.petFriendly = petFriendly;
-        this.locations = locations;
-        this.startTime = null;
-        this.endTime = null;
-        totalCost = 0;
-        this.driver = new Driver(0L, null);
-        this.estimatedTimeInMinutes = 0;
-        this.status = null;
+        this.rejection = rejection;
     }
 
     public Date getStartTime() {
@@ -136,5 +124,13 @@ public class RideResponseDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public RejectionLetter getRejection() {
+        return rejection;
+    }
+
+    public void setRejection(RejectionLetter rejection) {
+        this.rejection = rejection;
     }
 }

@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseRejectionDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,31 +184,38 @@ public class Ride {
         this.id = id;
     }
 
-//    Long id;
-//    Date startTime;
-//    Date endTime;
-//    int totalCost;
-//    Driver driver;
-//    ArrayList<Passenger> passengers;
-//    ArrayList<Location> locations;
-//    ArrayList<Path> paths;
-//    int estimatedTimeInMinutes;
-//    ArrayList<Review> reviews;
-//    RejectionLetter letter;
-//    boolean panic;
-//    boolean babyTransport;
-//    boolean petFriendly;
-//    String vehicleType;
-//    String status;
-//    public PassengerResponseDTO parseToResponse(){
-//        return new PassengerResponseDTO(this.id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email,
-//                this.address);
-//
-//
-//    }
+
+
+    public void copyValues(Ride ride) {
+        this.startTime = ride.getStartTime();
+        this.endTime = ride.getEndTime();
+        this.totalCost = (int) ride.getTotalCost();
+        this.driver = ride.getDriver();
+        this.passengers = ride.getPassengers();
+        this.locations = ride.getLocations();
+        this.paths = ride.getPaths();
+        this.estimatedTimeInMinutes = (int) ride.getEstimatedTimeInMinutes();
+        this.reviews = ride.getReviews();
+        this.letter = ride.getLetter();
+        this.panic = ride.isPanic();
+        this.babyTransport = ride.isBabyTransport();
+        this.petFriendly = ride.isPetFriendly();
+        this.vehicleType = ride.getVehicleType();
+        this.status = ride.getStatus();
+    }
 
     public RideResponseDTO parseToResponse(){
         RideResponseDTO rideResponse = new RideResponseDTO(this.passengers, this.vehicleType, this.babyTransport, this.petFriendly, this.locations);
         return rideResponse;
     }
+
+    public RideResponseRejectionDTO parseToResponseRejection(){
+        RideResponseRejectionDTO rideResponse = new RideResponseRejectionDTO(this.startTime,
+                this.endTime, this.totalCost, this.driver, this.passengers, this.estimatedTimeInMinutes, this.vehicleType,
+                this.babyTransport, this.petFriendly, this.locations, this.status, this.letter);
+
+        return rideResponse;
+    }
+
+
 }

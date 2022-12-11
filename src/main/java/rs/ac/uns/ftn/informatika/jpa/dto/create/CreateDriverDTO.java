@@ -1,8 +1,11 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
-public class CreatePassengerDTO {
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
-    //    {
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
+
+public class CreateDriverDTO {
+
+//    {
 //        "name": "Pera",
 //            "surname": "Perić",
 //            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
@@ -11,6 +14,7 @@ public class CreatePassengerDTO {
 //            "address": "Bulevar Oslobodjenja 74",
 //            "password": "Pasword123"
 //    }
+
     private String name;
     private String surname;
     private String profilePicture;
@@ -19,10 +23,10 @@ public class CreatePassengerDTO {
     private String address;
     private String password;
 
-    public CreatePassengerDTO() {
+    public CreateDriverDTO() {
     }
 
-    public CreatePassengerDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
+    public CreateDriverDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
@@ -31,8 +35,6 @@ public class CreatePassengerDTO {
         this.address = address;
         this.password = password;
     }
-
-
 
     public String getName() {
         return name;
@@ -90,14 +92,13 @@ public class CreatePassengerDTO {
         this.password = password;
     }
 
-    public PassengerResponseDTO parseToResponse(Long id){
-        PassengerResponseDTO passengerResponse = new PassengerResponseDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
-        passengerResponse.setId(id);
-        return passengerResponse;
+    public DriverResponseDTO parseToResponse(Long id){
+        DriverResponseDTO driverResponse = new DriverResponseDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
+        driverResponse.setId(id);
+        return driverResponse;
     }
 
-    public Passenger parseToPassenger(Long id){
-        return new Passenger(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
+    public Driver parseToDriver(Long id){
+        return new Driver(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
     }
-
 }

@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.uns.ftn.informatika.jpa.dto.PanicResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.CreatePanicDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Panic;
 

@@ -6,11 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.*;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DocumentDummy;
+import rs.ac.uns.ftn.informatika.jpa.dto.CreateDriverVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.DriverVehicleResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDocumentDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DriverDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Document;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
-import rs.ac.uns.ftn.informatika.jpa.dto.CreateDriverWorkingHourDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.DriverWorkingHourResponseDTO;
 
 import java.util.ArrayList;
 
@@ -39,9 +43,8 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverDocumentResponseDTO> createDriverDocument(@PathVariable("id") Long driverId,@RequestBody CreateDriverDocumentDTO document) throws Exception {
+    public ResponseEntity<DriverDocumentResponseDTO> createDriverDocument(@PathVariable("id") Long driverId, @RequestBody CreateDriverDocumentDTO document) throws Exception {
         Long id = documentDummy.counter.incrementAndGet();
-
         DriverDocumentResponseDTO driverDocumentResponse = document.parseToResponse(id,driverId);
 
 //        for (Driver driver: driverDummy.drivers.values()){
@@ -55,12 +58,13 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverVehicleResponseDTO> createDriverVehicle(@PathVariable("id") Long driverId,@RequestBody CreateDriverVehicleDTO vehicle) throws Exception {
+    public ResponseEntity<DriverVehicleResponseDTO> createDriverVehicle(@PathVariable("id") Long driverId, @RequestBody CreateDriverVehicleDTO vehicle) throws Exception {
         Long id = driverDummy.counter.incrementAndGet();
         DriverVehicleResponseDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
 
         return new ResponseEntity<DriverVehicleResponseDTO>(driverVehicleResponse, HttpStatus.CREATED);
     }
+
 
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DriverWorkingHourResponseDTO> createDriverWorkingHour(@PathVariable("id") Long driverId,@RequestBody CreateDriverWorkingHourDTO workingHour) throws Exception {

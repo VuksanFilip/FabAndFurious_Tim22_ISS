@@ -1,6 +1,6 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
 
 public class CreateReviewDTO {
