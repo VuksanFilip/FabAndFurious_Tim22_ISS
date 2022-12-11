@@ -23,10 +23,12 @@ public class RideController{
     private PanicDummy panicDummy = new PanicDummy();
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RideResponseDTO> createRide(@RequestBody CreateRideDTO ride) throws Exception {
+    public ResponseEntity<RideResponseDTO> createRide(@RequestBody CreateRideDTO createRideDTO) throws Exception {
         Long rideId = rideDummy.rideCounter.incrementAndGet();
-        RideResponseDTO rideResponseDTO = ride.parseToResponse(rideId);
-        rideDummy.rides.put(rideId, ride.parseToRide(rideId));
+        Ride ride = createRideDTO.parseToRide(rideId);
+        rideDummy.rides.put(rideId, ride);
+
+        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatus();
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
 
@@ -58,10 +60,10 @@ public class RideController{
         if (ride == null) {
             return new ResponseEntity<RideResponseDTO>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<RideResponseDTO>(ride.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<RideResponseDTO>(ride.parseToResponseWithStatus(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/withdraw")
+    @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RideResponseDTO> withdrawRide(@PathVariable Long id) throws Exception {
         Ride ride = rideDummy.rides.get(id);
         ride.setStatus(RideStatus.CANCELED);
@@ -81,7 +83,7 @@ public class RideController{
         return new ResponseEntity<PanicSmallerDataResponseDTO>(panic.parseToResponseSmallerData(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/accept")
+    @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RideResponseDTO> acceptRide(@PathVariable Long id) throws Exception {
         Ride ride = rideDummy.rides.get(id);
         ride.setStatus(RideStatus.ACCEPTED);
@@ -91,7 +93,7 @@ public class RideController{
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/end")
+    @PutMapping(value = "/{id}/end", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RideResponseDTO> endRide(@PathVariable Long id) throws Exception {
         Ride ride = rideDummy.rides.get(id);
         ride.setStatus(RideStatus.FINISHED);
@@ -101,7 +103,7 @@ public class RideController{
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/cancel")
+    @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RideResponseDTO> cancelRide(@RequestBody CreateRejectionLetterDTO letter, @PathVariable Long id) throws Exception {
         Ride ride = rideDummy.rides.get(id);
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
