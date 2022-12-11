@@ -21,8 +21,11 @@ public class Vehicle {
         this.id = id;
     }
 
+
     public Vehicle() {
     }
+
+
 
     public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
         this.id = id;
@@ -34,6 +37,19 @@ public class Vehicle {
         this.location = new Location(currentLocation.getId(),currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
+    }
+
+    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location location, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
+        this.id = id;
+        this.driver = driver;
+        this.vehicleModel = vehicleModel;
+        this.type = type;
+        this.registarskeTablice = registarskeTablice;
+        this.seats = seats;
+        this.location = location;
+        this.babyFriendly = babyFriendly;
+        this.petFriendly = petFriendly;
+        this.reviews = reviews;
     }
 
     public Long getId() {
