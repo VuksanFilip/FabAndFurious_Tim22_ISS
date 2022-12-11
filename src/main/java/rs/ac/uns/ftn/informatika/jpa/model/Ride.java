@@ -1,9 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerIdEmailResponse;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RejectionReasonTimeOfDetectionDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseNoStatusDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -222,7 +219,13 @@ public class Ride {
         for(Passenger p : passengers){
             passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
         }
-        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations);
+
+        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        for(Location l : locations){
+            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+        }
+
+        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, locationResponseDTOS);
         return rideResponse;
     }
 
@@ -231,7 +234,12 @@ public class Ride {
         for(Passenger p : passengers){
             passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
         }
-        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations, this.status);
+
+        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        for(Location l : locations){
+            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+        }
+        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, locationResponseDTOS, this.status);
         return rideResponse;
     }
 
@@ -240,7 +248,12 @@ public class Ride {
         for(Passenger p : passengers){
             passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
         }
-        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations, this.status, new RejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
+
+        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        for(Location l : locations){
+            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+        }
+        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, locationResponseDTOS, this.status, new RejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
         return rideResponse;
     }
 
@@ -249,7 +262,11 @@ public class Ride {
         for(Passenger p : passengers){
             passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
         }
-        RideResponseNoStatusDTO rideResponse = new RideResponseNoStatusDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations);
+        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        for(Location l : locations){
+            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+        }
+        RideResponseNoStatusDTO rideResponse = new RideResponseNoStatusDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, locationResponseDTOS);
         return rideResponse;
     }
 

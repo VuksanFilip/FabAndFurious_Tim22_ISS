@@ -34,7 +34,7 @@ public class RideController{
     public ResponseEntity<RideResponseDTO> getActiveDriver(@PathVariable("driverId") Long id) {
         for(Ride r : rideDummy.rides.values()){
             if(r.getDriver().getId() == id){
-                return new ResponseEntity<RideResponseDTO>(r.parseToResponse(), HttpStatus.CREATED);
+                return new ResponseEntity<RideResponseDTO>(r.parseToResponse(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<RideResponseDTO>(HttpStatus.NOT_FOUND);
@@ -45,7 +45,7 @@ public class RideController{
         for(Ride r : rideDummy.rides.values()){
             for(Passenger p : r.getPassengers()){
                 if(p.getId() == id){
-                    return new ResponseEntity<RideResponseDTO>(r.parseToResponse(), HttpStatus.CREATED);
+                    return new ResponseEntity<RideResponseDTO>(r.parseToResponse(), HttpStatus.OK);
                 }
             }
         }

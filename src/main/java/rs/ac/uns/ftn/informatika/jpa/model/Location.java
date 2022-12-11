@@ -1,10 +1,12 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.LocationResponseDTO;
+
 public class Location {
-    Long id;
-    String address;
-    double longitude;
-    double latitude;
+    private Long id;
+    private String address;
+    private double longitude;
+    private double latitude;
 
     public Location() {
     }
@@ -53,5 +55,9 @@ public class Location {
 
     public void setLatitude(float latitude) {
         this.latitude = latitude;
+    }
+
+    public LocationResponseDTO parseToResponse(){
+        return new LocationResponseDTO(this.address, this.latitude, this.longitude);
     }
 }

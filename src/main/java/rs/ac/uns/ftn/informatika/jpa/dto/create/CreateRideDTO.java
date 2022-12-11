@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerIdEmailResponse;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
@@ -71,13 +70,13 @@ public class CreateRideDTO {
             passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
         }
 
-        ArrayList<Location> l = new ArrayList<Location>();
-        Destination d = new Destination(1L, "1", 2.1, 2.2);
-        Departure de = new Departure(1L, "1", 2.1, 2.2);
-        l.add(d);
-        l.add(de);
+        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        DepartureResponseDTO departureResponseDTO = new DepartureResponseDTO();
+        DestinationResponseDTO destinationResponseDTO = new DestinationResponseDTO();
+        locationResponseDTOS.add(departureResponseDTO);
+        locationResponseDTOS.add(destinationResponseDTO);
 
-        RideResponseDTO rideResponse = new RideResponseDTO(id, passengerIdEmailResponses, this.vehicleType, this.babyTransport, this.petTransport,  l);
+        RideResponseDTO rideResponse = new RideResponseDTO(id, passengerIdEmailResponses, this.vehicleType, this.babyTransport, this.petTransport,  locationResponseDTOS);
         return rideResponse;
     }
 
