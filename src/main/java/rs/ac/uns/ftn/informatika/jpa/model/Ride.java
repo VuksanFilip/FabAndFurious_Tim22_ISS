@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerIdEmailResponse;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseRejectionDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +23,7 @@ public class Ride {
     boolean babyTransport;
     boolean petFriendly;
     VehicleType vehicleType;
-    String status;
+    RideStatus status;
 
     public Ride() {
     }
@@ -50,7 +49,7 @@ public class Ride {
 
 
 
-    public Ride(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, ArrayList<Location> locations, ArrayList<Path> paths, int estimatedTimeInMinutes, ArrayList<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petFriendly, VehicleType vehicleType, String status) {
+    public Ride(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, ArrayList<Location> locations, ArrayList<Path> paths, int estimatedTimeInMinutes, ArrayList<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petFriendly, VehicleType vehicleType, RideStatus status) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -180,11 +179,11 @@ public class Ride {
         this.vehicleType = vehicleType;
     }
 
-    public String getStatus() {
+    public RideStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RideStatus status) {
         this.status = status;
     }
 
@@ -225,11 +224,12 @@ public class Ride {
         return rideResponse;
     }
 
-    public RideResponseRejectionDTO parseToResponseRejection(){
-        RideResponseRejectionDTO rideResponse = new RideResponseRejectionDTO(this.startTime,
-                this.endTime, this.totalCost, this.driver, this.passengers, this.estimatedTimeInMinutes, this.vehicleType,
-                this.babyTransport, this.petFriendly, this.locations, this.status, this.letter);
-
+    public RideResponseDTO parseToResponseWithStatus(){
+        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+        for(Passenger p : passengers){
+            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+        }
+        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations, this.status);
         return rideResponse;
     }
 

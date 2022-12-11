@@ -17,13 +17,13 @@ public class RideResponseRejectionDTO {
     private boolean babyTransport;
     private boolean petFriendly;
     private ArrayList<Location> locations;
-    private String status;
+    private RideStatus status;
     private RejectionLetter rejection;
 
     public RideResponseRejectionDTO() {
     }
 
-    public RideResponseRejectionDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status, RejectionLetter rejection) {
+    public RideResponseRejectionDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, RideStatus status, RejectionLetter rejection) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -118,11 +118,11 @@ public class RideResponseRejectionDTO {
         this.locations = locations;
     }
 
-    public String getStatus() {
+    public RideStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RideStatus status) {
         this.status = status;
     }
 

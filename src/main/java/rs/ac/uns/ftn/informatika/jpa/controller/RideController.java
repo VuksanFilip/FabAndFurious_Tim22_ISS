@@ -9,10 +9,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
-import rs.ac.uns.ftn.informatika.jpa.model.Panic;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
-import rs.ac.uns.ftn.informatika.jpa.model.Ride;
-import rs.ac.uns.ftn.informatika.jpa.model.User;
+import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.Date;
 
@@ -61,42 +58,52 @@ public class RideController{
         return new ResponseEntity<RideResponseDTO>(ride.parseToResponse(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{rideId}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Panic> setPanicReason(@RequestBody String reason, @PathVariable Long rideId) throws Exception {
+    @PutMapping(value = "/{id}/withdraw")
+    public ResponseEntity<RideResponseDTO> withdrawRide(@PathVariable Long id) throws Exception {
+        Ride ride = rideDummy.rides.get(id);
+        ride.setStatus(RideStatus.CANCELED);
+        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatus();
+        rideDummy.rides.put(id, ride);
+
+        return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Panic> setPanicReason(@RequestBody String reason, @PathVariable Long id) throws Exception {
         Long panicId = panicDummy.counter.incrementAndGet();
-        Ride ride = rideDummy.rides.get(rideId);
+        Ride ride = rideDummy.rides.get(id);
         Panic panic = new Panic(panicId, new User(), ride, new Date(), reason);
         panicDummy.panics.put(panicId, panic);
 
         return new ResponseEntity<Panic>(panic, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{rideId}/accept")
-    public ResponseEntity<RideResponseDTO> acceptRide(@PathVariable Long rideId) throws Exception {
-        Ride ride = rideDummy.rides.get(rideId);
-        ride.setStatus("ACCEPTED");
-        RideResponseDTO rideResponseDTO = ride.parseToResponse();
-        rideDummy.rides.put(rideId, ride);
+    @PutMapping(value = "/{id}/accept")
+    public ResponseEntity<RideResponseDTO> acceptRide(@PathVariable Long id) throws Exception {
+        Ride ride = rideDummy.rides.get(id);
+        ride.setStatus(RideStatus.ACCEPTED);
+        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatus();
+        rideDummy.rides.put(id, ride);
 
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{rideId}/end")
-    public ResponseEntity<RideResponseDTO> endRide(@PathVariable Long rideId) throws Exception {
-        Ride ride = rideDummy.rides.get(rideId);
-        ride.setStatus("FINISHED");
-        RideResponseDTO rideResponseDTO = ride.parseToResponse();
-        rideDummy.rides.put(rideId, ride);
+    @PutMapping(value = "/{id}/end")
+    public ResponseEntity<RideResponseDTO> endRide(@PathVariable Long id) throws Exception {
+        Ride ride = rideDummy.rides.get(id);
+        ride.setStatus(RideStatus.FINISHED);
+        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatus();
+        rideDummy.rides.put(id, ride);
 
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{rideId}/cancel")
-    public ResponseEntity<RideResponseDTO> cancelRide(@PathVariable Long rideId) throws Exception {
-        Ride ride = rideDummy.rides.get(rideId);
-        ride.setStatus("REJECTED");
-        RideResponseDTO rideResponseDTO = ride.parseToResponse();
-        rideDummy.rides.put(rideId, ride);
+    @PutMapping(value = "/{id}/cancel")
+    public ResponseEntity<RideResponseDTO> cancelRide(@PathVariable Long id) throws Exception {
+        Ride ride = rideDummy.rides.get(id);
+        ride.setStatus(RideStatus.REJECTED);
+        RideResponseDTO rideResponseDTO = ride.parseToResponseWithStatus();
+        rideDummy.rides.put(id, ride);
 
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }

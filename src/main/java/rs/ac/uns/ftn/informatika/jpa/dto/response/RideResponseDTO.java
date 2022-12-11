@@ -19,12 +19,12 @@ public class RideResponseDTO {
     private boolean petFriendly;
     private RejectionReasonTimeOfDetectionDTO rejection;
     private ArrayList<Location> locations;
-    private String status;
+    private RideStatus status;
 
     public RideResponseDTO() {
     }
 
-    public RideResponseDTO(Date startTime, Date endTime, int totalCost, DriverIdEmailResponse driver, ArrayList<PassengerIdEmailResponse> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status, RejectionReasonTimeOfDetectionDTO rejection) {
+    public RideResponseDTO(Date startTime, Date endTime, int totalCost, DriverIdEmailResponse driver, ArrayList<PassengerIdEmailResponse> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, RideStatus status, RejectionReasonTimeOfDetectionDTO rejection) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -52,7 +52,23 @@ public class RideResponseDTO {
         this.driver = new DriverIdEmailResponse(123L, null);
         this.rejection = new RejectionReasonTimeOfDetectionDTO();
         this.estimatedTimeInMinutes = 0;
-        this.status = null;
+        this.status = RideStatus.PENDING;
+    }
+
+    public RideResponseDTO(Long id, ArrayList<PassengerIdEmailResponse> passengers, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, RideStatus status) {
+        this.id = id;
+        this.passengers = passengers;
+        this.vehicleType = vehicleType;
+        this.babyTransport = babyTransport;
+        this.petFriendly = petFriendly;
+        this.locations = locations;
+        this.startTime = null;
+        this.endTime = null;
+        this.totalCost = 0;
+        this.driver = new DriverIdEmailResponse(123L, null);
+        this.rejection = new RejectionReasonTimeOfDetectionDTO();
+        this.estimatedTimeInMinutes = 0;
+        this.status = status;
     }
 
     public Long getId() {
@@ -143,11 +159,11 @@ public class RideResponseDTO {
         this.locations = locations;
     }
 
-    public String getStatus() {
+    public RideStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RideStatus status) {
         this.status = status;
     }
 
