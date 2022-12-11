@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.UserResponseDTO;
+
 public class User {
     private Long id;
     private String firstName;
@@ -128,5 +130,9 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public UserResponseDTO parseToResponseUser(){
+        return new UserResponseDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
     }
 }

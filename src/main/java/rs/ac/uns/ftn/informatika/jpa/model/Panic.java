@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicSmallerDataResponseDTO;
 
 import java.util.Date;
 
@@ -38,6 +39,14 @@ public class Panic {
         this.reason = reason;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public User getUser() {
         return user;
     }
@@ -72,5 +81,9 @@ public class Panic {
 
     public PanicResponseDTO parseToResponse(int numberOfPanics){
         return new PanicResponseDTO(numberOfPanics,this.id, this.time, this.reason, this.user, this.ride);
+    }
+
+    public PanicSmallerDataResponseDTO parseToResponseSmallerData(){
+        return new PanicSmallerDataResponseDTO(this.id, this.user.parseToResponseUser(), this.ride.parseToResponseNoStatus(), this.time, this.reason);
     }
 }

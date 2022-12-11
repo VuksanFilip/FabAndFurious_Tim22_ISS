@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreatePanicStringDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateRejectionLetterDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicSmallerDataResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
@@ -25,7 +27,7 @@ public class RideController{
         Long rideId = rideDummy.rideCounter.incrementAndGet();
         RideResponseDTO rideResponseDTO = ride.parseToResponse(rideId);
         rideDummy.rides.put(rideId, ride.parseToRide(rideId));
-        return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.CREATED);
+        return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/driver/{driverId}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,13 +72,13 @@ public class RideController{
     }
 
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Panic> setPanicReason(@RequestBody String reason, @PathVariable Long id) throws Exception {
+    public ResponseEntity<PanicSmallerDataResponseDTO> setPanicReason(@RequestBody CreatePanicStringDTO reason, @PathVariable Long id) throws Exception {
         Long panicId = panicDummy.counter.incrementAndGet();
         Ride ride = rideDummy.rides.get(id);
-        Panic panic = new Panic(panicId, new User(), ride, new Date(), reason);
+        Panic panic = new Panic(panicId, new User(), ride, new Date(), reason.getReason());
         panicDummy.panics.put(panicId, panic);
 
-        return new ResponseEntity<Panic>(panic, HttpStatus.OK);
+        return new ResponseEntity<PanicSmallerDataResponseDTO>(panic.parseToResponseSmallerData(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/accept")

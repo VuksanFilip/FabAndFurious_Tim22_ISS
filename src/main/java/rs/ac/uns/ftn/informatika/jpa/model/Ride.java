@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerIdEmailResponse;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RejectionReasonTimeOfDetectionDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseNoStatusDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -240,6 +241,15 @@ public class Ride {
             passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
         }
         RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations, this.status, new RejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
+        return rideResponse;
+    }
+
+    public RideResponseNoStatusDTO parseToResponseNoStatus(){
+        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+        for(Passenger p : passengers){
+            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+        }
+        RideResponseNoStatusDTO rideResponse = new RideResponseNoStatusDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations);
         return rideResponse;
     }
 
