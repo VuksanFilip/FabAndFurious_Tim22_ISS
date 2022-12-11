@@ -4,19 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.*;
-import rs.ac.uns.ftn.informatika.jpa.dummy.DocumentDummy;
 import rs.ac.uns.ftn.informatika.jpa.dto.CreateDriverVehicleDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.DriverVehicleResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDocumentDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dummy.DocumentDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DriverDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Document;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
-
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/driver")
@@ -66,13 +63,13 @@ public class DriverController {
     }
 
 
-    @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+/*    @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DriverWorkingHourResponseDTO> createDriverWorkingHour(@PathVariable("id") Long driverId,@RequestBody CreateDriverWorkingHourDTO workingHour) throws Exception {
         Long id = driverDummy.counter.incrementAndGet();
         DriverWorkingHourResponseDTO driverWorkingHourResponse = workingHour.parseToResponse(driverId);
 
         return new ResponseEntity<DriverWorkingHourResponseDTO>(driverWorkingHourResponse, HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping(value = "/{id}/documents", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DriverDocumentResponseDTO> getDriverDocuments(@PathVariable("id") Long driverId) {

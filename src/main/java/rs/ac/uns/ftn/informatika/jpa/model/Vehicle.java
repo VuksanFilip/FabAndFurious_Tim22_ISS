@@ -26,7 +26,7 @@ public class Vehicle {
         this.type = type;
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
-        this.location = new Location(currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
+        this.location = new Location(currentLocation.getId(), currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
