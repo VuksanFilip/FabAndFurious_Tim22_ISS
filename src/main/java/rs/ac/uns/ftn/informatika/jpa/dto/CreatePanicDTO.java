@@ -12,11 +12,11 @@ public class CreatePanicDTO {
 
     }
 
-    public PanicResponseDTO parseToResponse(Long id){
-        PanicResponseDTO panicResponse = new PanicResponseDTO();
-        panicResponse.setId(id);
-        return panicResponse;
-    }
+//    public PanicResponseDTO parseToResponse(Long id){
+//        PanicResponseDTO panicResponse = new PanicResponseDTO();
+//        panicResponse.setId(id);
+//        return panicResponse;
+//    }
 
     public Panic parseToPanic(Long id, Date time, String reason, User user, Ride ride){
 

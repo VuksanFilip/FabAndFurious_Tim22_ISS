@@ -1,7 +1,12 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+<<<<<<< Updated upstream
 import rs.ac.uns.ftn.informatika.jpa.dto.DriverResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+=======
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRideDriverResponseDTO;
+>>>>>>> Stashed changes
 
 import java.util.ArrayList;
 
@@ -56,5 +61,9 @@ public class Driver extends User{
 
     public DriverResponseDTO parseToResponse(){
         return new DriverResponseDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
+    }
+
+    public PanicRideDriverResponseDTO parseToPanicDriverResponse(){
+        return new PanicRideDriverResponseDTO(this.getId(), this.getEmail());
     }
 }

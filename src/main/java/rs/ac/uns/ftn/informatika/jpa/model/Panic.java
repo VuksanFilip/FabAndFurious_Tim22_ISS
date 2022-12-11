@@ -71,7 +71,7 @@ public class Panic {
         this.reason = reason;
     }
 
-    public PanicResponseDTO parseToResponse(int numberOfPanics){
-        return new PanicResponseDTO(numberOfPanics,this.id, this.time, this.reason, this.user, this.ride);
+    public PanicResponseDTO parseToResponse(){
+        return new PanicResponseDTO(this.id, this.user.parseToPanicResponse(), this.ride.parseToPanicResponse(), this.time, this.reason);
     }
 }

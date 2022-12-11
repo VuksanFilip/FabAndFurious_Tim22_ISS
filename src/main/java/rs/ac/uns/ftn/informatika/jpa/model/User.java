@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicUserResponseDTO;
+
 public class User {
     private Long id;
     private String firstName;
@@ -106,5 +108,9 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public PanicUserResponseDTO parseToPanicResponse(){
+        return new PanicUserResponseDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
     }
 }

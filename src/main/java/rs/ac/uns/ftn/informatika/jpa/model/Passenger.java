@@ -1,6 +1,11 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+<<<<<<< Updated upstream
 import rs.ac.uns.ftn.informatika.jpa.dto.PassengerResponseDTO;
+=======
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRidePassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
+>>>>>>> Stashed changes
 
 public class Passenger {
 
@@ -92,6 +97,7 @@ public class Passenger {
         this.email = email;
     }
 
+<<<<<<< Updated upstream
     public String getAddress() {
         return address;
     }
@@ -127,4 +133,10 @@ public class Passenger {
     public PassengerResponseDTO parseToResponse(){
         return new PassengerResponseDTO(this.id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
     }
+=======
+    public PanicRidePassengerResponseDTO parseToPanicPassengersDTO(){
+        return new PanicRidePassengerResponseDTO(this.getId(), this.getEmail());
+    }
+
+>>>>>>> Stashed changes
 }
