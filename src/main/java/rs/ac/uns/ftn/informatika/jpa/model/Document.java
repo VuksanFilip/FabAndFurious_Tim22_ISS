@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.DriverDocumentResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.DriverResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 
 public class Document {
 
