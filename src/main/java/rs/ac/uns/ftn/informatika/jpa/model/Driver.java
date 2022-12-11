@@ -35,6 +35,7 @@ public class Driver extends User{
     }
 
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password){
+        super(id, firstName, lastName, picture, phoneNumber, email, address, password);
         this.setBlocked(false);
         this.setActive(false);
         this.documents = new ArrayList<Document>();

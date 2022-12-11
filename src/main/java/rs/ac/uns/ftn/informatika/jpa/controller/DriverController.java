@@ -31,7 +31,7 @@ public class DriverController {
     private WorkHourDummy workHourDummy = new WorkHourDummy();
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverResponseDTO> createDriver(@RequestBody CreateDriverDTO driver) throws Exception {
+    public ResponseEntity<DriverResponseDTO > createDriver(@RequestBody CreateDriverDTO driver) throws Exception {
         Long id = driverDummy.counter.incrementAndGet();
         DriverResponseDTO driverResponse = driver.parseToResponse(id);
         driverDummy.drivers.put(id, driver.parseToDriver(id));
@@ -51,12 +51,6 @@ public class DriverController {
     public ResponseEntity<DriverDocumentResponseDTO> createDriverDocument(@PathVariable("id") Long driverId, @RequestBody CreateDriverDocumentDTO document) throws Exception {
         Long id = documentDummy.counter.incrementAndGet();
         DriverDocumentResponseDTO driverDocumentResponse = document.parseToResponse(id,driverId);
-
-//        for (Driver driver: driverDummy.drivers.values()){
-//            if (driver.getId() == driverId){
-//                driver.getDocuments().add(document.parseToDocument(id,driverId));
-//            }
-//        }
         documentDummy.documents.put(id,document.parseToDocument(id,driverId));
 
         return new ResponseEntity<DriverDocumentResponseDTO>(driverDocumentResponse, HttpStatus.CREATED);
@@ -110,7 +104,7 @@ public class DriverController {
         return new ResponseEntity<DriverVehicleResponseDTO>(vehicle.parseToResponse(), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{working-hour-id}/working-hour", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DriverWorkingHourResponseDTO> getDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId) {
         WorkHour workHour = new WorkHour();
         for (WorkHour w:workHourDummy.workinghours.values()){
@@ -161,7 +155,7 @@ public class DriverController {
         return new ResponseEntity<DriverVehicleResponseDTO>(vehicleForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
-    @PutMapping (value = "/{working-hour-id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping (value = "/working-hour/{working-hour-id} ", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DriverWorkingHourResponseDTO> updateDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId, @RequestBody CreateDriverWorkingHourDTO workingHourDTO) {
 
         WorkHour workHourForUpdate = new WorkHour();
@@ -176,6 +170,12 @@ public class DriverController {
         workHourDummy.workinghours.put(workHourForUpdate.getId(), workHourForUpdate);
 
         return new ResponseEntity<DriverWorkingHourResponseDTO>(workHourForUpdate.parseToResponse(), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/document/{document-id}")
+    public ResponseEntity<String> deleteDocument(@PathVariable("document-id") Long documentId) {
+        documentDummy.documents.remove(documentId);
+        return new ResponseEntity<>("Driver document deleted successfully", HttpStatus.NO_CONTENT);
     }
 
 }
