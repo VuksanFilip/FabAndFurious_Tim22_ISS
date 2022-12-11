@@ -19,6 +19,10 @@ public class Review {
      public Review() {
      }
 
+     public Review(Long id) {
+          this.id = id;
+     }
+
      public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, Long vehicleId, String str) {
           this.id = id;
           this.rating = rating;
@@ -47,7 +51,13 @@ public class Review {
           this.passenger = null;
      }
 
-
+     public Review(Long id, float rating, String comment, Ride ride, Passenger passenger) {
+          this.id = id;
+          this.rating = rating;
+          this.comment = comment;
+          this.ride = ride;
+          this.passenger = passenger;
+     }
 
      public Review(float rating, Ride ride, Passenger passenger) {
           this.rating = rating;
@@ -110,7 +120,7 @@ public class Review {
           this.vehicleId = vehicleId;
      }
 
-     public ReviewResponseDTO parseToResponse(int totalCount){
+     public ReviewResponseDTO parseToResponse(){
           return new ReviewResponseDTO(this.id, this.rating, this.comment);
      }
 
