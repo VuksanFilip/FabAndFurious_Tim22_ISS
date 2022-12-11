@@ -160,4 +160,22 @@ public class DriverController {
 
         return new ResponseEntity<DriverVehicleResponseDTO>(vehicleForUpdate.parseToResponse(), HttpStatus.OK);
     }
+
+    @PutMapping (value = "/{working-hour-id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DriverWorkingHourResponseDTO> updateDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId, @RequestBody CreateDriverWorkingHourDTO workingHourDTO) {
+
+        WorkHour workHourForUpdate = new WorkHour();
+        for (WorkHour workHour : workHourDummy.workinghours.values()){
+            if (workHour.getId() == workingHourId){
+                workHourForUpdate = workHour;
+            }
+        }
+        WorkHour workHour = workingHourDTO.parseToWorkHour(workHourForUpdate.getId());
+        workHourForUpdate.setStart(workHour.getStart());
+        workHourForUpdate.setEnd(workHour.getEnd());
+        workHourDummy.workinghours.put(workHourForUpdate.getId(), workHourForUpdate);
+
+        return new ResponseEntity<DriverWorkingHourResponseDTO>(workHourForUpdate.parseToResponse(), HttpStatus.OK);
+    }
+
 }
