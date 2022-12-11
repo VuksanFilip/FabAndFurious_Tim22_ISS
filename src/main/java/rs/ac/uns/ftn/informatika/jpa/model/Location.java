@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 public class Location {
-
     Long id;
     String address;
     double longitude;
@@ -12,6 +11,13 @@ public class Location {
 
     public Location(Long id, String address, double longitude, double latitude) {
         this.id = id;
+        this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+
+    public Location(String address, double longitude, double latitude) {
         this.address = address;
         this.longitude = longitude;
         this.latitude = latitude;

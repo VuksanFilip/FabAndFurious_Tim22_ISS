@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
+
 import java.util.ArrayList;
 
 public class Vehicle {
@@ -9,7 +12,6 @@ public class Vehicle {
     VehicleType type;
     String registarskeTablice;
     int seats;
-    String currentLocation;
     Location location;
     boolean babyFriendly;
     boolean petFriendly;
@@ -19,14 +21,17 @@ public class Vehicle {
         this.id = id;
     }
 
-    public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location currentLocation, int seats,  boolean babyFriendly, boolean petFriendly) {
+    public Vehicle() {
+    }
+
+    public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
         this.id = id;
         this.driver = new Driver(driverId);
         this.vehicleModel = vehicleModel;
         this.type = type;
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
-        this.location = new Location(currentLocation.getId(), currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
+        this.location = new Location(currentLocation.getId(),currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
@@ -87,14 +92,6 @@ public class Vehicle {
         this.seats = seats;
     }
 
-    public String getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(String currentLocation) {
-        this.currentLocation = currentLocation;
-    }
-
     public boolean isBabyFriendly() {
         return babyFriendly;
     }
@@ -119,5 +116,8 @@ public class Vehicle {
         this.reviews = reviews;
     }
 
+    public DriverVehicleResponseDTO parseToResponse(){
+        return new DriverVehicleResponseDTO(this.getId(), this.getDriver().getId(), this.getType(), this.getVehicleModel(), this.getRegistarskeTablice(), this.getLocation(), this.getSeats(), this.isBabyFriendly(), this.isPetFriendly());
+    }
 
 }
