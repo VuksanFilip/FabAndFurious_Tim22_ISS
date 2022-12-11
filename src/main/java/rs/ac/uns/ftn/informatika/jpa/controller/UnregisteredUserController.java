@@ -19,6 +19,6 @@ public class UnregisteredUserController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UnregisteredUserReponseDTO> createUnregisteredUser(@RequestBody CreateUnregisteredUserDTO unregisteredUser) throws Exception {
         UnregisteredUserReponseDTO unregisteredUserResponse = unregisteredUser.parseToResponse();
-        return new ResponseEntity<UnregisteredUserReponseDTO>(unregisteredUserResponse, HttpStatus.CREATED);
+        return new ResponseEntity<UnregisteredUserReponseDTO>(unregisteredUserResponse, HttpStatus.OK);
     }
 }
