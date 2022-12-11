@@ -127,4 +127,5 @@ public class Passenger {
     public PassengerResponseDTO parseToResponse(){
         return new PassengerResponseDTO(this.id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
     }
+
 }
