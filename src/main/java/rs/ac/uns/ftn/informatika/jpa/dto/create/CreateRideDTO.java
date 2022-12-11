@@ -82,6 +82,6 @@ public class CreateRideDTO {
     }
 
     public Ride parseToRide(Long id){
-        return new Ride(id, this.locations, this.passengers, new VehicleType(this.vehicleType), this.babyTransport, this.petTransport);
+        return new Ride(id, this.locations, this.passengers, new VehicleType(this.vehicleType), this.babyTransport, this.petTransport, new Driver(123L));
     }
 }

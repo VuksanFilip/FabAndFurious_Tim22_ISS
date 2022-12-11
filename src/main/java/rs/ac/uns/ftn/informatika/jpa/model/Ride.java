@@ -38,6 +38,17 @@ public class Ride {
         this.vehicleType = vehicleType;
     }
 
+    public Ride(Long id, ArrayList<Location> locations, ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, Driver driver){
+        this.id = id;
+        this.passengers = passengers;
+        this.locations = locations;
+        this.babyTransport = babyTransport;
+        this.petFriendly = petFriendly;
+        this.vehicleType = vehicleType;
+        this.driver = driver;
+    }
+
+
 
     public Ride(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, ArrayList<Location> locations, ArrayList<Path> paths, int estimatedTimeInMinutes, ArrayList<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petFriendly, VehicleType vehicleType, String status) {
         this.startTime = startTime;
