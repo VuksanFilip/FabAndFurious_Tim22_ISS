@@ -76,5 +76,15 @@ public class RideController{
 
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/{rideId}/end")
+    public ResponseEntity<RideResponseDTO> endRide(@PathVariable Long rideId) throws Exception {
+        Ride ride = rideDummy.rides.get(rideId);
+        ride.setStatus("FINISHED");
+        RideResponseDTO rideResponseDTO = ride.parseToResponse();
+        rideDummy.rides.put(rideId, ride);
+
+        return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
+    }
 }
 
