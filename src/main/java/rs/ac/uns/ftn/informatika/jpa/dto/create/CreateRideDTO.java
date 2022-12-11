@@ -9,14 +9,14 @@ public class CreateRideDTO {
 
     private ArrayList<Location> locations;
     private ArrayList<Passenger> passengers;
-    private String vehicleType;
+    private VehicleType vehicleType;
     private boolean babyTransport;
     private boolean petTransport;
 
     public CreateRideDTO() {
     }
 
-    public CreateRideDTO(ArrayList<Location> locations, ArrayList<Passenger> passengers, String vehicleType, boolean babyTransport, boolean petTransport) {
+    public CreateRideDTO(ArrayList<Location> locations, ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petTransport) {
         this.locations = locations;
         this.passengers = passengers;
         this.vehicleType = vehicleType;
@@ -40,11 +40,11 @@ public class CreateRideDTO {
         this.passengers = passengers;
     }
 
-    public String getVehicleType() {
+    public VehicleType getVehicleType() {
         return vehicleType;
     }
 
-    public void setVehicleType(String vehicleType) {
+    public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
 

@@ -13,7 +13,7 @@ public class RideResponseDTO {
     private Driver driver;
     private ArrayList<Passenger> passengers;
     private int estimatedTimeInMinutes;
-    private String vehicleType;
+    private VehicleType vehicleType;
     private boolean babyTransport;
     private boolean petFriendly;
     private ArrayList<Location> locations;
@@ -22,7 +22,7 @@ public class RideResponseDTO {
     public RideResponseDTO() {
     }
 
-    public RideResponseDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, String vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status) {
+    public RideResponseDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -36,7 +36,7 @@ public class RideResponseDTO {
         this.status = status;
     }
 
-    public RideResponseDTO(ArrayList<Passenger> passengers, String vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
+    public RideResponseDTO(ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
         this.passengers = passengers;
         this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
@@ -98,11 +98,11 @@ public class RideResponseDTO {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
     }
 
-    public String getVehicleType() {
+    public VehicleType getVehicleType() {
         return vehicleType;
     }
 
-    public void setVehicleType(String vehicleType) {
+    public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
 
