@@ -122,4 +122,19 @@ public class DriverController {
         }
         return new ResponseEntity<DriverWorkingHourResponseDTO>(workHour.parseToResponse(), HttpStatus.CREATED);
     }
+
+    @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DriverResponseDTO> updateDriver(@PathVariable("id") Long id, @RequestBody CreateDriverDTO driverDTO) {
+        Driver driverForUpdate = driverDummy.drivers.get(id);
+        Driver driver = driverDTO.parseToDriver(id);
+        driverForUpdate.setFirstName(driver.getFirstName());
+        driverForUpdate.setLastName(driver.getLastName());
+        driverForUpdate.setPicture(driver.getPicture());
+        driverForUpdate.setPhoneNumber(driver.getPhoneNumber());
+        driverForUpdate.setEmail(driver.getEmail());
+        driverForUpdate.setAddress(driver.getAddress());
+        driverForUpdate.setPassword(driver.getPassword());
+        driverDummy.drivers.put(id, driverForUpdate);
+        return new ResponseEntity<DriverResponseDTO>(driverForUpdate.parseToResponse(), HttpStatus.OK);
+    }
 }
