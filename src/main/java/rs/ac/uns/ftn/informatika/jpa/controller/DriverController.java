@@ -68,7 +68,6 @@ public class DriverController {
         DriverVehicleResponseDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
         vehicleDummy.vehicles.put(id,vehicle.parseToVehicle(id,driverId));
 
-        driverDummy.drivers.get(driverId).setVehicle(vehicle.parseToVehicle(id,driverId));
 
         return new ResponseEntity<DriverVehicleResponseDTO>(driverVehicleResponse, HttpStatus.CREATED);
     }
@@ -144,9 +143,9 @@ public class DriverController {
     public ResponseEntity<DriverVehicleResponseDTO> updateDriverVehicle(@PathVariable("id") Long driverId, @RequestBody CreateDriverVehicleDTO vehicleDTO) {
 
         Vehicle vehicleForUpdate = new Vehicle();
-        for (Driver driver : driverDummy.drivers.values()){
-            if (driver.getId() == driverId){
-                vehicleForUpdate = driver.getVehicle();
+        for (Vehicle vehicle : vehicleDummy.vehicles.values()){
+            if (vehicle.getDriver().getId() == driverId){
+                vehicleForUpdate = vehicle;
             }
         }
         Vehicle vehicle = vehicleDTO.parseToVehicle(vehicleForUpdate.getId(),driverId);
@@ -159,12 +158,6 @@ public class DriverController {
         vehicleForUpdate.setPetFriendly(vehicle.isPetFriendly());
         vehicleDummy.vehicles.put(vehicleForUpdate.getId(), vehicleForUpdate);
 
-        for (Driver driver : driverDummy.drivers.values()){
-            if (driver.getId() == driverId){
-                driver.setVehicle(vehicleForUpdate);
-                driverDummy.drivers.put(driverId,driver);
-            }
-        }
         return new ResponseEntity<DriverVehicleResponseDTO>(vehicleForUpdate.parseToResponse(), HttpStatus.OK);
     }
 }
