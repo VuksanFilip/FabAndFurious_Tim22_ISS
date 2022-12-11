@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.DriverDocumentResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.DriverResponseDTO;
+
 public class Document {
 
     Long id;
@@ -46,5 +49,9 @@ public class Document {
 
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+    public DriverDocumentResponseDTO parseToResponse(){
+        return new DriverDocumentResponseDTO(this.getId(), this.getName(), this.getImage(), this.getDriver().getId());
     }
 }
