@@ -22,13 +22,13 @@ public class Ride {
     boolean panic;
     boolean babyTransport;
     boolean petFriendly;
-    String vehicleType;
+    VehicleType vehicleType;
     String status;
 
     public Ride() {
     }
 
-    public Ride(Long id, ArrayList<Location> locations, ArrayList<Passenger> passengers, String vehicleType, boolean babyTransport, boolean petFriendly) {
+    public Ride(Long id, ArrayList<Location> locations, ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petFriendly) {
         this.id = id;
         this.passengers = passengers;
         this.locations = locations;
@@ -38,7 +38,7 @@ public class Ride {
     }
 
 
-    public Ride(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, ArrayList<Location> locations, ArrayList<Path> paths, int estimatedTimeInMinutes, ArrayList<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petFriendly, String vehicleType, String status) {
+    public Ride(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, ArrayList<Location> locations, ArrayList<Path> paths, int estimatedTimeInMinutes, ArrayList<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petFriendly, VehicleType vehicleType, String status) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -160,11 +160,11 @@ public class Ride {
         this.petFriendly = petFriendly;
     }
 
-    public String getVehicleType() {
+    public VehicleType getVehicleType() {
         return vehicleType;
     }
 
-    public void setVehicleType(String vehicleType) {
+    public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
 

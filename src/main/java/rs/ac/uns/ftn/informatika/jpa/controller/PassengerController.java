@@ -11,7 +11,7 @@ import rs.ac.uns.ftn.informatika.jpa.dummy.PassengerDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
 @RestController
-@RequestMapping("/api/passengers")
+@RequestMapping("/api/passenger")
 public class PassengerController{
     private PassengerDummy passengerDummy = new PassengerDummy();
 

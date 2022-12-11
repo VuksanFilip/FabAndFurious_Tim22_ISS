@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Driver extends User{
 
-    Long id;
+//    Long id;
 
     ArrayList<Document> documents;
     ArrayList<Ride> rides;
