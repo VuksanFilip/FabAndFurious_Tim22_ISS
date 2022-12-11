@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.CreateDriverVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.DriverVehicleResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDocumentDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
@@ -43,7 +45,7 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverVehicleResponseDTO> createDriverVehicle(@PathVariable("id") Long driverId,@RequestBody CreateDriverVehicleDTO vehicle) throws Exception {
+    public ResponseEntity<DriverVehicleResponseDTO> createDriverVehicle(@PathVariable("id") Long driverId, @RequestBody CreateDriverVehicleDTO vehicle) throws Exception {
         Long id = driverDummy.counter.incrementAndGet();
         DriverVehicleResponseDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
 
