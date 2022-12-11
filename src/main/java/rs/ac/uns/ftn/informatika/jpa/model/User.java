@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicUserResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.UserResponseDTO;
 
 public class User {
@@ -134,5 +135,9 @@ public class User {
 
     public UserResponseDTO parseToResponseUser(){
         return new UserResponseDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
+    }
+
+    public PanicUserResponseDTO parseToPanicResponse(){
+        return new PanicUserResponseDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
     }
 }

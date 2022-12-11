@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRidePassengerResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
 
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ public class Passenger extends User{
 
         public PassengerResponseDTO parseToResponse(){
         return new PassengerResponseDTO(this.getId(), this.getFirstName(), this.getFirstName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
+    }
+
+    public PanicRidePassengerResponseDTO parseToPanicPassengersDTO(){
+        return new PanicRidePassengerResponseDTO(this.getId(), this.getEmail());
     }
 
 }

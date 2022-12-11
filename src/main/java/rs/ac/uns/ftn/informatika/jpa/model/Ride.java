@@ -1,12 +1,10 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerIdEmailResponse;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RejectionReasonTimeOfDetectionDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseNoStatusDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Ride {
 
@@ -28,6 +26,11 @@ public class Ride {
     RideStatus status;
 
     public Ride() {
+    }
+
+    public Ride(Driver driver, ArrayList<Passenger> passengers) {
+        this.driver = driver;
+        this.passengers = passengers;
     }
 
     public Ride(Long id, ArrayList<Location> locations, ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petFriendly) {
@@ -253,5 +256,15 @@ public class Ride {
         return rideResponse;
     }
 
+    public PanicRideResponseDTO parseToPanicResponse(){
+        ConcurrentHashMap<String, PanicRideLocationResponseDTO> locations = new ConcurrentHashMap<>();
+        locations.put("departure", new PanicRideLocationResponseDTO());
+        locations.put("destionation", new PanicRideLocationResponseDTO());
+        ArrayList<PanicRidePassengerResponseDTO> passengers = new ArrayList<>();
+        for (Passenger p:this.passengers) {
+            passengers.add(p.parseToPanicPassengersDTO());
+        }
+        return new PanicRideResponseDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicleType, this.babyTransport, this.petFriendly, new PanicRejectionResponseDTO("reason1", new Date()), locations);
+    }
 
 }

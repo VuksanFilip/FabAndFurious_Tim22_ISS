@@ -79,11 +79,11 @@ public class Panic {
         this.reason = reason;
     }
 
-    public PanicResponseDTO parseToResponse(int numberOfPanics){
-        return new PanicResponseDTO(numberOfPanics,this.id, this.time, this.reason, this.user, this.ride);
-    }
-
     public PanicSmallerDataResponseDTO parseToResponseSmallerData(){
         return new PanicSmallerDataResponseDTO(this.id, this.user.parseToResponseUser(), this.ride.parseToResponseNoStatus(), this.time, this.reason);
+    }
+
+    public PanicResponseDTO parseToResponse(){
+        return new PanicResponseDTO(this.id, this.user.parseToPanicResponse(), this.ride.parseToPanicResponse(), this.time, this.reason);
     }
 }
