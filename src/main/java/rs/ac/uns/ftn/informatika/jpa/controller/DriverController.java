@@ -68,6 +68,8 @@ public class DriverController {
         DriverVehicleResponseDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
         vehicleDummy.vehicles.put(id,vehicle.parseToVehicle(id,driverId));
 
+        driverDummy.drivers.get(driverId).setVehicle(vehicle.parseToVehicle(id,driverId));
+
         return new ResponseEntity<DriverVehicleResponseDTO>(driverVehicleResponse, HttpStatus.CREATED);
     }
 
@@ -136,5 +138,33 @@ public class DriverController {
         driverForUpdate.setPassword(driver.getPassword());
         driverDummy.drivers.put(id, driverForUpdate);
         return new ResponseEntity<DriverResponseDTO>(driverForUpdate.parseToResponse(), HttpStatus.OK);
+    }
+
+    @PutMapping (value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DriverVehicleResponseDTO> updateDriverVehicle(@PathVariable("id") Long driverId, @RequestBody CreateDriverVehicleDTO vehicleDTO) {
+
+        Vehicle vehicleForUpdate = new Vehicle();
+        for (Driver driver : driverDummy.drivers.values()){
+            if (driver.getId() == driverId){
+                vehicleForUpdate = driver.getVehicle();
+            }
+        }
+        Vehicle vehicle = vehicleDTO.parseToVehicle(vehicleForUpdate.getId(),driverId);
+        vehicleForUpdate.setType(vehicle.getType());
+        vehicleForUpdate.setVehicleModel(vehicle.getVehicleModel());
+        vehicleForUpdate.setRegistarskeTablice(vehicle.getRegistarskeTablice());
+        vehicleForUpdate.setLocation(vehicle.getLocation());
+        vehicleForUpdate.setSeats(vehicle.getSeats());
+        vehicleForUpdate.setBabyFriendly(vehicle.isBabyFriendly());
+        vehicleForUpdate.setPetFriendly(vehicle.isPetFriendly());
+        vehicleDummy.vehicles.put(vehicleForUpdate.getId(), vehicleForUpdate);
+
+        for (Driver driver : driverDummy.drivers.values()){
+            if (driver.getId() == driverId){
+                driver.setVehicle(vehicleForUpdate);
+                driverDummy.drivers.put(driverId,driver);
+            }
+        }
+        return new ResponseEntity<DriverVehicleResponseDTO>(vehicleForUpdate.parseToResponse(), HttpStatus.OK);
     }
 }
