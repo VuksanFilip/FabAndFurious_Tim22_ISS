@@ -7,22 +7,24 @@ import java.util.Date;
 
 public class RideResponseDTO {
 
+    private Long id;
     private Date startTime;
     private Date endTime;
     private int totalCost;
-    private Driver driver;
-    private ArrayList<Passenger> passengers;
+    private DriverIdEmailResponse driver;
+    private ArrayList<PassengerIdEmailResponse> passengers;
     private int estimatedTimeInMinutes;
-    private VehicleType vehicleType;
+    private Type vehicleType;
     private boolean babyTransport;
     private boolean petFriendly;
     private ArrayList<Location> locations;
     private String status;
+    private RejectionReasonTimeOfDetectionDTO reason;
 
     public RideResponseDTO() {
     }
 
-    public RideResponseDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status) {
+    public RideResponseDTO(Date startTime, Date endTime, int totalCost, DriverIdEmailResponse driver, ArrayList<PassengerIdEmailResponse> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, String status, RejectionReasonTimeOfDetectionDTO reason) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -34,9 +36,11 @@ public class RideResponseDTO {
         this.petFriendly = petFriendly;
         this.locations = locations;
         this.status = status;
+        this.reason = reason;
     }
 
-    public RideResponseDTO(ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
+    public RideResponseDTO(Long id, ArrayList<PassengerIdEmailResponse> passengers, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
+        this.id = id;
         this.passengers = passengers;
         this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
@@ -44,10 +48,19 @@ public class RideResponseDTO {
         this.locations = locations;
         this.startTime = null;
         this.endTime = null;
-        totalCost = 0;
-        this.driver = new Driver(0L, null);
+        this.totalCost = 0;
+        this.driver = new DriverIdEmailResponse(0L, null);
+        this.reason = new RejectionReasonTimeOfDetectionDTO();
         this.estimatedTimeInMinutes = 0;
         this.status = null;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Date getStartTime() {
@@ -74,19 +87,19 @@ public class RideResponseDTO {
         this.totalCost = totalCost;
     }
 
-    public Driver getDriver() {
+    public DriverIdEmailResponse getDriver() {
         return driver;
     }
 
-    public void setDriver(Driver driver) {
+    public void setDriver(DriverIdEmailResponse driver) {
         this.driver = driver;
     }
 
-    public ArrayList<Passenger> getPassengers() {
+    public ArrayList<PassengerIdEmailResponse> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(ArrayList<Passenger> passengers) {
+    public void setPassengers(ArrayList<PassengerIdEmailResponse> passengers) {
         this.passengers = passengers;
     }
 
@@ -98,11 +111,11 @@ public class RideResponseDTO {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
     }
 
-    public VehicleType getVehicleType() {
+    public Type getVehicleType() {
         return vehicleType;
     }
 
-    public void setVehicleType(VehicleType vehicleType) {
+    public void setVehicleType(Type vehicleType) {
         this.vehicleType = vehicleType;
     }
 
@@ -136,5 +149,13 @@ public class RideResponseDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public RejectionReasonTimeOfDetectionDTO getReason() {
+        return reason;
+    }
+
+    public void setReason(RejectionReasonTimeOfDetectionDTO reason) {
+        this.reason = reason;
     }
 }

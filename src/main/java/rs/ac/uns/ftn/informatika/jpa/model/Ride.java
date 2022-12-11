@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerIdEmailResponse;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseRejectionDTO;
 
@@ -205,7 +206,11 @@ public class Ride {
     }
 
     public RideResponseDTO parseToResponse(){
-        RideResponseDTO rideResponse = new RideResponseDTO(this.passengers, this.vehicleType, this.babyTransport, this.petFriendly, this.locations);
+        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+        for(Passenger p : passengers){
+            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+        }
+        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petFriendly, this.locations);
         return rideResponse;
     }
 
