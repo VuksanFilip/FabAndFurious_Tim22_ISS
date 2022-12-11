@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateReviewDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseVehicleDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.ReviewDummy;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
 
 @RestController
@@ -17,7 +19,7 @@ public class ReviewController {
     private ReviewDummy reviewDummy = new ReviewDummy();
 
     @PostMapping(value = "{rideId}/vehicle/{vehicleId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReviewResponseDTO> createVehicleReview(@PathVariable("rideId") Long rideId,@PathVariable("vehicleId") Long vehicleId,@RequestBody CreateReviewDTO review) throws Exception {
+    public ResponseEntity<ReviewResponseDTO> createVehicleReview(@PathVariable("rideId") Long rideId, @PathVariable("vehicleId") Long vehicleId, @RequestBody CreateReviewDTO review) throws Exception {
         Long id = reviewDummy.counter.incrementAndGet();
         ReviewResponseDTO reviewResponse = review.parseToResponse(id);
         reviewDummy.reviewsForVehicles.put(id, review.parseToReviewVehicle(id, rideId, vehicleId));

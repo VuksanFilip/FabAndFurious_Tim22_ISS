@@ -1,42 +1,52 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
-public class ReviewResponseDTO {
+public class ReviewResponseDriverDTO {
 
 //    {
-//        "id": 123,
-//            "rating": 3,
-//            "comment": "The driver was driving really fast",
-//            "passenger": {
-//        "id": 123,
-//                "email": "user@example.com"
-//    }
+//        "totalCount": 243,
+//            "results": [
+//        {
+//            "id": 123,
+//                "rating": 3,
+//                "comment": "The driver was driving too fast",
+//                "passenger": {
+//            "id": 123,
+//                    "email": "user@example.com"
+//        }
+//        }
+//  ]
 //    }
 
+    private int totalCount;
 
     private Long id;
+
     private float rating;
+
     private String comment;
+
     private Passenger passenger;
 
-    public ReviewResponseDTO() {
+    public ReviewResponseDriverDTO() {
     }
 
-    public ReviewResponseDTO(int rating, String comment) {
-        this.rating = rating;
-        this.comment = comment;
-        this.passenger = null;
-    }
-
-    public ReviewResponseDTO( Long id , float rating, String comment) {
+    public ReviewResponseDriverDTO(int totalCount, Long id , float rating, String comment) {
         this.id = id;
+        this.totalCount = totalCount;
         this.rating = rating;
         this.comment = comment;
         this.passenger = null;
     }
 
+    public int getTotalCount() {
+        return totalCount;
+    }
 
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
 
     public Long getId() {
         return id;

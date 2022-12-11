@@ -1,9 +1,9 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class CreateRideDTO {
 

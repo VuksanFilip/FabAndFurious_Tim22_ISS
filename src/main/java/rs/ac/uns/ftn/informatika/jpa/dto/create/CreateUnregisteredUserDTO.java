@@ -1,5 +1,6 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.UnregisteredUserReponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 

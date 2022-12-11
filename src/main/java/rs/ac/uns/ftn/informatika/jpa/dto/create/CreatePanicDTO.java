@@ -1,4 +1,5 @@
-package rs.ac.uns.ftn.informatika.jpa.dto;
+package rs.ac.uns.ftn.informatika.jpa.dto.create;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Panic;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;

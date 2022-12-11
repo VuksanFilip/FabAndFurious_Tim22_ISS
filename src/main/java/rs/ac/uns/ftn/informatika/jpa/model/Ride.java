@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.RideResponseRejectionDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.RideResponseRejectionDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,6 +184,26 @@ public class Ride {
         this.id = id;
     }
 
+
+
+    public void copyValues(Ride ride) {
+        this.startTime = ride.getStartTime();
+        this.endTime = ride.getEndTime();
+        this.totalCost = (int) ride.getTotalCost();
+        this.driver = ride.getDriver();
+        this.passengers = ride.getPassengers();
+        this.locations = ride.getLocations();
+        this.paths = ride.getPaths();
+        this.estimatedTimeInMinutes = (int) ride.getEstimatedTimeInMinutes();
+        this.reviews = ride.getReviews();
+        this.letter = ride.getLetter();
+        this.panic = ride.isPanic();
+        this.babyTransport = ride.isBabyTransport();
+        this.petFriendly = ride.isPetFriendly();
+        this.vehicleType = ride.getVehicleType();
+        this.status = ride.getStatus();
+    }
+
     public RideResponseDTO parseToResponse(){
         RideResponseDTO rideResponse = new RideResponseDTO(this.passengers, this.vehicleType, this.babyTransport, this.petFriendly, this.locations);
         return rideResponse;
@@ -196,4 +216,6 @@ public class Ride {
 
         return rideResponse;
     }
+
+
 }
