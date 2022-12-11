@@ -18,12 +18,12 @@ public class RideResponseNoStatusDTO {
     private boolean babyTransport;
     private boolean petFriendly;
     private RejectionReasonTimeOfDetectionDTO rejection;
-    private ArrayList<Location> locations;
+    private ArrayList<LocationResponseDTO> locations;
 
     public RideResponseNoStatusDTO() {
     }
 
-    public RideResponseNoStatusDTO(Long id, ArrayList<PassengerIdEmailResponse> passengers, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations) {
+    public RideResponseNoStatusDTO(Long id, ArrayList<PassengerIdEmailResponse> passengers, Type vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<LocationResponseDTO> locations) {
         this.id = id;
         this.passengers = passengers;
         this.vehicleType = vehicleType;
@@ -118,11 +118,11 @@ public class RideResponseNoStatusDTO {
         this.petFriendly = petFriendly;
     }
 
-    public ArrayList<Location> getLocations() {
+    public ArrayList<LocationResponseDTO> getLocations() {
         return locations;
     }
 
-    public void setLocations(ArrayList<Location> locations) {
+    public void setLocations(ArrayList<LocationResponseDTO> locations) {
         this.locations = locations;
     }
 
