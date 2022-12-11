@@ -86,5 +86,15 @@ public class RideController{
 
         return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/{rideId}/cancel")
+    public ResponseEntity<RideResponseDTO> cancelRide(@PathVariable Long rideId) throws Exception {
+        Ride ride = rideDummy.rides.get(rideId);
+        ride.setStatus("REJECTED");
+        RideResponseDTO rideResponseDTO = ride.parseToResponse();
+        rideDummy.rides.put(rideId, ride);
+
+        return new ResponseEntity<RideResponseDTO>(rideResponseDTO, HttpStatus.OK);
+    }
 }
 
