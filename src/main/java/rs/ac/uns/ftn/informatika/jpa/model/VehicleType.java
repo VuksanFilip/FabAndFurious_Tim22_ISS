@@ -1,8 +1,25 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+
+@Entity
 public class VehicleType {
+    @Id
+    private Long id;
+
+    @Enumerated
     Type type;
     float pricePerKm;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public VehicleType() {
     }

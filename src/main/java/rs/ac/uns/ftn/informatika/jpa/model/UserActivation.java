@@ -1,10 +1,17 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
+@Entity
 public class UserActivation {
 
+    @Id
     private int id;
+
+    @OneToOne
     private User user;
     private Date date;
     private int lifespan;

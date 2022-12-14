@@ -2,7 +2,13 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.LocationResponseDTO;
 
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class Location {
+
+    @Id
     private Long id;
     private String address;
     private double longitude;

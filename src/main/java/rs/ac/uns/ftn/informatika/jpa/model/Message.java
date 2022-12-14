@@ -2,15 +2,27 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.MessageResponseDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
+@Entity
 public class Message {
 
+    @Id
     private Long id;
+
+    @OneToOne
     private User sender;
+
+    @OneToOne
     private User reciever;
     private String message;
     private Date sendingtime;
+
+    @Enumerated
     private MessageType type;
     private int driveID;
 

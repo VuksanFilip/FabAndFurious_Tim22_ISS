@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Departure extends Location{
 
     public Departure() {

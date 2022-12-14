@@ -3,7 +3,15 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicUserResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.UserResponseDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+
+@Entity
+@Inheritance
 public class User {
+
+    @Id
     private Long id;
     private String firstName;
     private String lastName;
