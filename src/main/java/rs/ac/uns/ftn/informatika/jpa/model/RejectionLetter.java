@@ -1,13 +1,30 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
+@Entity
 public class RejectionLetter {
+    @Id
+    private Long id;
 
+    @OneToOne
     Ride ride;
     String reason;
+
+    @OneToOne
     User user;
     Date time;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public RejectionLetter() {
     }

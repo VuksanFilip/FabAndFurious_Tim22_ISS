@@ -4,13 +4,24 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseVehicleDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Review {
 
      int totalCount;
+
+     @Id
      private Long id;
      float rating;
      String comment;
+
+     @ManyToOne
      Ride ride;
+
+     @ManyToOne
      Passenger passenger;
 
      Long vehicleId;

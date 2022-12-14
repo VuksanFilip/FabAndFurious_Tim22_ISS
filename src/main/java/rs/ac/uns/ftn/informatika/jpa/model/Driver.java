@@ -3,14 +3,22 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRideDriverResponseDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 
+@Entity
 public class Driver extends User{
 
 //    Long id;
-
+    @OneToMany
     ArrayList<Document> documents;
+
+    @OneToMany
     ArrayList<Ride> rides;
+
+    @OneToOne
     Vehicle vehicle;
 
     public Driver() {

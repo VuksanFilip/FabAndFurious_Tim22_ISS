@@ -1,10 +1,16 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 
+@Entity
 public class UnregisteredUser {
 
+    @OneToMany
     private ArrayList<Location> locations;
+
+    @OneToMany
     private ArrayList<Passenger> passenger;
     private String VehicleType;
     private boolean babyTransport;

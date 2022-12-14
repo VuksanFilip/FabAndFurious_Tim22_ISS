@@ -1,20 +1,34 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 
+@Entity
 public class Vehicle {
+
+    @Id
     Long id;
+
+    @OneToOne
     Driver driver;
     String vehicleModel;
+
+    @OneToOne
     VehicleType type;
     String registarskeTablice;
     int seats;
+
+    @OneToOne
     Location location;
     boolean babyFriendly;
     boolean petFriendly;
+
+    @OneToMany
     ArrayList<Review> reviews;
 
     public Vehicle(Long id) {

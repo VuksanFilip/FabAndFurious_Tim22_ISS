@@ -2,26 +2,43 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Entity
 public class Ride {
 
+    @Id
     Long id;
     Date startTime;
     Date endTime;
     int totalCost;
+
+    @ManyToOne
     Driver driver;
+
+    @ManyToMany
     ArrayList<Passenger> passengers;
+
+    @OneToMany
     ArrayList<Location> locations;
+
+    @OneToMany
     ArrayList<Path> paths;
     int estimatedTimeInMinutes;
+
+    @OneToMany
     ArrayList<Review> reviews;
+
+    @OneToOne
     RejectionLetter letter;
     boolean panic;
     boolean babyTransport;
     boolean petFriendly;
+
+    @OneToOne
     VehicleType vehicleType;
     RideStatus status;
 

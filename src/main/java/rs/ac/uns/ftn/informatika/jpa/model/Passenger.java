@@ -3,11 +3,18 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRidePassengerResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 
+@Entity
 public class Passenger extends User{
 
+    @ManyToMany
     ArrayList<Ride> rides;
+
+    @OneToMany
     ArrayList<Path> favoritePaths;
 
     public Passenger() {
