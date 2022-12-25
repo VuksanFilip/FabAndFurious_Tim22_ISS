@@ -1,7 +1,9 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DestinationResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.LocationResponseDTO;
 
 import java.util.ArrayList;
 
@@ -34,7 +36,7 @@ public class Vehicle {
         this.type = type;
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
-        this.location = new Location(currentLocation.getId(),currentLocation.getAddress(),currentLocation.getLongitude(),currentLocation.getLatitude());
+        this.location = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
@@ -133,7 +135,11 @@ public class Vehicle {
     }
 
     public DriverVehicleResponseDTO parseToResponse(){
-        return new DriverVehicleResponseDTO(this.getId(), this.getDriver().getId(), this.getType(), this.getVehicleModel(), this.getRegistarskeTablice(), this.getLocation(), this.getSeats(), this.isBabyFriendly(), this.isPetFriendly());
+        DestinationResponseDTO locationResponseDTO = new DestinationResponseDTO();
+
+        locationResponseDTO=new DestinationResponseDTO(location.getAddress(),location.getLatitude(), location.getLongitude());
+
+        return new DriverVehicleResponseDTO(this.getId(), this.getDriver().getId(), this.type.type, this.getVehicleModel(), this.getRegistarskeTablice(), locationResponseDTO, this.getSeats(), this.isBabyFriendly(), this.isPetFriendly());
     }
 
 }

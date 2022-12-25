@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
+import rs.ac.uns.ftn.informatika.jpa.model.Type;
 import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
 
 public class DriverVehicleResponseDTO {
@@ -22,15 +23,15 @@ public class DriverVehicleResponseDTO {
 //    }
     private Long id;
     private Long driverId;
-    private VehicleType type;
+    private Type type;
     private String model;
     private String licenseNumber;
-    private Location location;
+    private DestinationResponseDTO location;
     private int passengerSeats;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public DriverVehicleResponseDTO(Long id, Long driverId, VehicleType type, String model, String licenseNumber, Location location, int passengerSeats, boolean babyTransport, boolean petTransport) {
+    public DriverVehicleResponseDTO(Long id, Long driverId, Type type, String model, String licenseNumber, DestinationResponseDTO location, int passengerSeats, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.driverId = driverId;
         this.type = type;
@@ -58,11 +59,11 @@ public class DriverVehicleResponseDTO {
         this.driverId = driverId;
     }
 
-    public VehicleType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(VehicleType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -82,11 +83,11 @@ public class DriverVehicleResponseDTO {
         this.licenseNumber = licenseNumber;
     }
 
-    public Location getLocation() {
+    public DestinationResponseDTO getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(DestinationResponseDTO location) {
         this.location = location;
     }
 

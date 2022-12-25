@@ -1,9 +1,14 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.create;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.DestinationResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.LocationResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
+import rs.ac.uns.ftn.informatika.jpa.model.Type;
 import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
+
+import java.util.ArrayList;
 
 public class CreateDriverVehicleDTO {
 
@@ -21,7 +26,7 @@ public class CreateDriverVehicleDTO {
 //            "petTransport": true
 //    }
     private Long id;
-    private VehicleType type;
+    private Type type;
     private String model;
     private String licenseNumber;
     private Location location;
@@ -29,11 +34,11 @@ public class CreateDriverVehicleDTO {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public VehicleType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(VehicleType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -94,12 +99,13 @@ public class CreateDriverVehicleDTO {
     }
 
     public DriverVehicleResponseDTO parseToResponse(Long id, Long driverId){
-        DriverVehicleResponseDTO driverVehicleResponse = new DriverVehicleResponseDTO(id, driverId, this.type, this.model, this.licenseNumber, new Location(), this.passengerSeats, this.babyTransport, this.petTransport);
+        DestinationResponseDTO destinationResponseDTO = new DestinationResponseDTO();
+        DriverVehicleResponseDTO driverVehicleResponse = new DriverVehicleResponseDTO(id, driverId, this.type, this.model, this.licenseNumber, destinationResponseDTO, this.passengerSeats, this.babyTransport, this.petTransport);
         driverVehicleResponse.setId(id);
         return driverVehicleResponse;
     }
 
     public Vehicle parseToVehicle(Long id, Long driverId){
-        return new Vehicle(id, driverId, this.type, this.model, this.licenseNumber, new Location(), this.passengerSeats, this.babyTransport, this.petTransport);
+        return new Vehicle(id, driverId, new VehicleType(this.type), this.model, this.licenseNumber, this.location, this.passengerSeats, this.babyTransport, this.petTransport);
     }
 }
