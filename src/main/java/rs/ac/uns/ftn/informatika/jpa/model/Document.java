@@ -13,6 +13,7 @@ public class Document {
     }
 
     public Document(Long id, String name, String image, Long driverId) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.driver = new Driver(driverId);
