@@ -26,14 +26,14 @@ public class ReviewResponseDTO {
     public ReviewResponseDTO(int rating, String comment) {
         this.rating = rating;
         this.comment = comment;
-        this.passenger = null;
+        this.passenger = new Passenger();
     }
 
     public ReviewResponseDTO( Long id , float rating, String comment) {
         this.id = id;
         this.rating = rating;
         this.comment = comment;
-        this.passenger = null;
+        this.passenger = new Passenger();
     }
 
 
