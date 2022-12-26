@@ -238,71 +238,71 @@ public class Ride {
         this.status = ride.getStatus();
     }
 
-    public RideResponseDTO parseToResponse(){
-        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+    public ResponseRideDTO parseToResponse(){
+        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
         for(Passenger p : passengers){
-            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
         }
 
-        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+            responseLocationDTOS.add(new ResponseLocationDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
         }
 
-        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petTransport, locationResponseDTOS);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS);
         return rideResponse;
     }
 
-    public RideResponseDTO parseToResponseWithStatus(){
-        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+    public ResponseRideDTO parseToResponseWithStatus(){
+        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
         for(Passenger p : passengers){
-            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
         }
 
-        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+            responseLocationDTOS.add(new ResponseLocationDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
         }
-        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petTransport, locationResponseDTOS, this.status);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status);
         return rideResponse;
     }
 
-    public RideResponseDTO parseToResponseWithStatusAndReason(){
-        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+    public ResponseRideDTO parseToResponseWithStatusAndReason(){
+        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
         for(Passenger p : passengers){
-            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
         }
 
-        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+            responseLocationDTOS.add(new ResponseLocationDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
         }
-        RideResponseDTO rideResponse = new RideResponseDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petTransport, locationResponseDTOS, this.status, new RejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
         return rideResponse;
     }
 
-    public RideResponseNoStatusDTO parseToResponseNoStatus(){
-        ArrayList<PassengerIdEmailResponse> passengerIdEmailResponses = new ArrayList<PassengerIdEmailResponse>();
+    public ResponseRideNoStatusDTO parseToResponseNoStatus(){
+        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
         for(Passenger p : passengers){
-            passengerIdEmailResponses.add(new PassengerIdEmailResponse(p.getId(), p.getEmail()));
+            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
         }
-        ArrayList<LocationResponseDTO> locationResponseDTOS = new ArrayList<LocationResponseDTO>();
+        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            locationResponseDTOS.add(new LocationResponseDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
+            responseLocationDTOS.add(new ResponseLocationDTO(l.getAddress(),l.getLatitude(), l.getLongitude()));
         }
-        RideResponseNoStatusDTO rideResponse = new RideResponseNoStatusDTO(this.id, passengerIdEmailResponses, this.vehicleType.type, this.babyTransport, this.petTransport, locationResponseDTOS);
+        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS);
         return rideResponse;
     }
 
-    public PanicRideResponseDTO parseToPanicResponse(){
-        ConcurrentHashMap<String, PanicRideLocationResponseDTO> locations = new ConcurrentHashMap<>();
-        locations.put("departure", new PanicRideLocationResponseDTO());
-        locations.put("destionation", new PanicRideLocationResponseDTO());
-        ArrayList<PanicRidePassengerResponseDTO> passengers = new ArrayList<>();
+    public ResponsePanicRideDTO parseToPanicResponse(){
+        ConcurrentHashMap<String, ResponsePanicRideLocationDTO> locations = new ConcurrentHashMap<>();
+        locations.put("departure", new ResponsePanicRideLocationDTO());
+        locations.put("destionation", new ResponsePanicRideLocationDTO());
+        ArrayList<ResponsePanicRidePassengerDTO> passengers = new ArrayList<>();
         for (Passenger p:this.passengers) {
             passengers.add(p.parseToPanicPassengersDTO());
         }
-        return new PanicRideResponseDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicleType, this.babyTransport, this.petTransport, new PanicRejectionResponseDTO("reason1", new Date()), locations);
+        return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicleType, this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date()), locations);
     }
 
 }

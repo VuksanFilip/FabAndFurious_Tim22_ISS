@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.MessageResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseMessageDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -112,7 +112,7 @@ public class Message {
         this.driveID = driveID;
     }
 
-    public MessageResponseDTO parseToDTO(){
-        return new MessageResponseDTO(this.id, this.sendingtime, this.sender.getId(), this.reciever.getId(), this.message, this.type, Long.valueOf(this.driveID));
+    public ResponseMessageDTO parseToDTO(){
+        return new ResponseMessageDTO(this.id, this.sendingtime, this.sender.getId(), this.reciever.getId(), this.message, this.type, Long.valueOf(this.driveID));
     }
 }

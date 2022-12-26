@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.LocationResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -65,7 +65,7 @@ public class Location {
         this.latitude = latitude;
     }
 
-    public LocationResponseDTO parseToResponse(){
-        return new LocationResponseDTO(this.address, this.latitude, this.longitude);
+    public ResponseLocationDTO parseToResponse(){
+        return new ResponseLocationDTO(this.address, this.latitude, this.longitude);
     }
 }

@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -59,7 +59,7 @@ public class Document {
         this.driver = driver;
     }
 
-    public DriverDocumentResponseDTO parseToResponse(){
-        return new DriverDocumentResponseDTO(this.getId(), this.getName(), this.getImage(), this.getDriver().getId());
+    public ResponseDriverDocumentDTO parseToResponse(){
+        return new ResponseDriverDocumentDTO(this.getId(), this.getName(), this.getImage(), this.getDriver().getId());
     }
 }

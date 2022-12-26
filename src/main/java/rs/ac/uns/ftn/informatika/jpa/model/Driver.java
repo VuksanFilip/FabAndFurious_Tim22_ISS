@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRideDriverResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRideDriverDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -79,11 +79,11 @@ public class Driver extends User{
         this.vehicle = vehicle;
     }
 
-    public DriverResponseDTO parseToResponse(){
-        return new DriverResponseDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
+    public ResponseDriverDTO parseToResponse(){
+        return new ResponseDriverDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
     }
 
-    public PanicRideDriverResponseDTO parseToPanicDriverResponse(){
-        return new PanicRideDriverResponseDTO(this.getId(), this.getEmail());
+    public ResponsePanicRideDriverDTO parseToPanicDriverResponse(){
+        return new ResponsePanicRideDriverDTO(this.getId(), this.getEmail());
     }
 }

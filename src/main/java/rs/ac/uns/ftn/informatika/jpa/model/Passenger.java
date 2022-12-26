@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicRidePassengerResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PassengerResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRidePassengerDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -43,12 +43,12 @@ public class Passenger extends User{
         this.favoritePaths = favoriteRides;
     }
 
-    public PassengerResponseDTO parseToResponse(){
-        return new PassengerResponseDTO(this.getId(), this.getFirstName(), this.getFirstName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
+    public ResponsePassengerDTO parseToResponse(){
+        return new ResponsePassengerDTO(this.getId(), this.getFirstName(), this.getFirstName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
     }
 
-    public PanicRidePassengerResponseDTO parseToPanicPassengersDTO(){
-        return new PanicRidePassengerResponseDTO(this.getId(), this.getEmail());
+    public ResponsePanicRidePassengerDTO parseToPanicPassengersDTO(){
+        return new ResponsePanicRidePassengerDTO(this.getId(), this.getEmail());
     }
 
 }

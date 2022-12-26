@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverWorkingHourResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 
 public class WorkHour {
 
@@ -57,7 +57,7 @@ public class WorkHour {
         this.driver = driver;
     }
 
-    public DriverWorkingHourResponseDTO parseToResponse(){
-        return new DriverWorkingHourResponseDTO(this.getId(), this.getStart(), this.getEnd());
+    public ResponseDriverWorkingHourDTO parseToResponse(){
+        return new ResponseDriverWorkingHourDTO(this.getId(), this.getStart(), this.getEnd());
     }
 }

@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dummy;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateNoteDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.NoteResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestNoteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseNoteDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 
 import java.util.Date;
@@ -18,7 +18,7 @@ public class NoteDummy {
         this.notes = new ConcurrentHashMap<Long, Note>();
     }
 
-    public NoteResponseDTO parseToResponse(CreateNoteDTO createNoteDTO){
-        return new NoteResponseDTO(Long.valueOf(this.notes.size()+1), new Date(), createNoteDTO.getMessage());
+    public ResponseNoteDTO parseToResponse(RequestNoteDTO requestNoteDTO){
+        return new ResponseNoteDTO(Long.valueOf(this.notes.size()+1), new Date(), requestNoteDTO.getMessage());
     }
 }

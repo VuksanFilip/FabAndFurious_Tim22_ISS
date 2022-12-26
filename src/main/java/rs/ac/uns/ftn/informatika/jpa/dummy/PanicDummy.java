@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dummy;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.AllPanicsResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAllPanicsDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
@@ -25,11 +25,11 @@ public class PanicDummy {
         this.panics.put(Long.valueOf(2), new Panic(Long.valueOf(2), new Date(),"reasonn2", new User(), new Ride(new Driver(), passengers)));
     }
 
-    public AllPanicsResponseDTO parseToResponse(){
-        ArrayList<PanicResponseDTO> panics = new ArrayList<>();
+    public ResponseAllPanicsDTO parseToResponse(){
+        ArrayList<ResponsePanicDTO> panics = new ArrayList<>();
         for (Long id:this.panics.keySet()) {
             panics.add(this.panics.get(id).parseToResponse());
         }
-        return new AllPanicsResponseDTO(panics.size(), panics);
+        return new ResponseAllPanicsDTO(panics.size(), panics);
     }
 }

@@ -1,8 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseDriverDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ReviewResponseVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewVehicleDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -131,16 +131,16 @@ public class Review {
           this.vehicleId = vehicleId;
      }
 
-     public ReviewResponseDTO parseToResponse(){
-          return new ReviewResponseDTO(this.id, this.rating, this.comment);
+     public ResponseReviewDTO parseToResponse(){
+          return new ResponseReviewDTO(this.id, this.rating, this.comment);
      }
 
-     public ReviewResponseVehicleDTO parseToResponseVehicle(int totalCount, Long id){
-          return new ReviewResponseVehicleDTO(totalCount, id, this.rating, this.comment);
+     public ResponseReviewVehicleDTO parseToResponseVehicle(int totalCount, Long id){
+          return new ResponseReviewVehicleDTO(totalCount, id, this.rating, this.comment);
      }
 
-     public ReviewResponseDriverDTO parseToResponseDriver(int totalCount, Long id){
-          return new ReviewResponseDriverDTO(totalCount, id, this.rating, this.comment);
+     public ResponseReviewDriverDTO parseToResponseDriver(int totalCount, Long id){
+          return new ResponseReviewDriverDTO(totalCount, id, this.rating, this.comment);
      }
 
 }

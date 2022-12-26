@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.AllPanicsResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAllPanicsDTO;
 
 @RestController
 @RequestMapping("/api/panic")
@@ -15,7 +15,7 @@ public class PanicController {
     private PanicDummy panicDummy = new PanicDummy();
 
     @GetMapping
-    public ResponseEntity<AllPanicsResponseDTO> getPanic() {
-        return new ResponseEntity<AllPanicsResponseDTO>(this.panicDummy.parseToResponse(), HttpStatus.OK);
+    public ResponseEntity<ResponseAllPanicsDTO> getPanic() {
+        return new ResponseEntity<ResponseAllPanicsDTO>(this.panicDummy.parseToResponse(), HttpStatus.OK);
     }
 }

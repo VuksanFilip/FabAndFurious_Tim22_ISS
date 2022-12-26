@@ -4,14 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverVehicleDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverDocumentDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.create.CreateDriverWorkingHourDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverWorkingHourResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverDocumentDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverWorkingHourDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DocumentDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DriverDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.VehicleDummy;
@@ -31,53 +31,53 @@ public class DriverController {
     private WorkHourDummy workHourDummy = new WorkHourDummy();
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverResponseDTO > createDriver(@RequestBody CreateDriverDTO driver) throws Exception {
+    public ResponseEntity<ResponseDriverDTO> createDriver(@RequestBody RequestDriverDTO driver) throws Exception {
         Long id = driverDummy.counter.incrementAndGet();
-        DriverResponseDTO driverResponse = driver.parseToResponse(id);
+        ResponseDriverDTO driverResponse = driver.parseToResponse(id);
         driverDummy.drivers.put(id, driver.parseToDriver(id));
-        return new ResponseEntity<DriverResponseDTO>(driverResponse, HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverDTO>(driverResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverResponseDTO> getDriver(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseDriverDTO> getDriver(@PathVariable("id") Long id) {
         Driver driver = driverDummy.drivers.get(id);
         if (driver == null) {
-            return new ResponseEntity<DriverResponseDTO>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ResponseDriverDTO>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<DriverResponseDTO>(driver.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<ResponseDriverDTO>(driver.parseToResponse(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverDocumentResponseDTO> createDriverDocument(@PathVariable("id") Long driverId, @RequestBody CreateDriverDocumentDTO document) throws Exception {
+    public ResponseEntity<ResponseDriverDocumentDTO> createDriverDocument(@PathVariable("id") Long driverId, @RequestBody RequestDriverDocumentDTO document) throws Exception {
         Long id = documentDummy.counter.incrementAndGet();
-        DriverDocumentResponseDTO driverDocumentResponse = document.parseToResponse(id,driverId);
+        ResponseDriverDocumentDTO driverDocumentResponse = document.parseToResponse(id,driverId);
         documentDummy.documents.put(id,document.parseToDocument(id,driverId));
 
-        return new ResponseEntity<DriverDocumentResponseDTO>(driverDocumentResponse, HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverDocumentDTO>(driverDocumentResponse, HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverVehicleResponseDTO> createDriverVehicle(@PathVariable("id") Long driverId, @RequestBody CreateDriverVehicleDTO vehicle) throws Exception {
+    public ResponseEntity<ResponseDriverVehicleDTO> createDriverVehicle(@PathVariable("id") Long driverId, @RequestBody RequestDriverVehicleDTO vehicle) throws Exception {
         Long id = vehicleDummy.counter.incrementAndGet();
-        DriverVehicleResponseDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
+        ResponseDriverVehicleDTO driverVehicleResponse = vehicle.parseToResponse(id,driverId);
         vehicleDummy.vehicles.put(id,vehicle.parseToVehicle(id,driverId));
 
 
-        return new ResponseEntity<DriverVehicleResponseDTO>(driverVehicleResponse, HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverVehicleDTO>(driverVehicleResponse, HttpStatus.CREATED);
     }
 
 
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverWorkingHourResponseDTO> createDriverWorkingHour(@PathVariable("id") Long driverId,@RequestBody CreateDriverWorkingHourDTO workingHour) throws Exception {
+    public ResponseEntity<ResponseDriverWorkingHourDTO> createDriverWorkingHour(@PathVariable("id") Long driverId, @RequestBody RequestDriverWorkingHourDTO workingHour) throws Exception {
         Long id = workHourDummy.counter.incrementAndGet();
-        DriverWorkingHourResponseDTO driverWorkingHourResponse = workingHour.parseToResponse(id);
+        ResponseDriverWorkingHourDTO driverWorkingHourResponse = workingHour.parseToResponse(id);
         workHourDummy.workinghours.put(id,workingHour.parseToWorkHour(id));
 
-        return new ResponseEntity<DriverWorkingHourResponseDTO>(driverWorkingHourResponse, HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverWorkingHourDTO>(driverWorkingHourResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}/documents", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverDocumentResponseDTO> getDriverDocuments(@PathVariable("id") Long driverId) {
+    public ResponseEntity<ResponseDriverDocumentDTO> getDriverDocuments(@PathVariable("id") Long driverId) {
         Document document = new Document();
         for (Document d:documentDummy.documents.values()){
             if (d.getDriver().getId() == driverId){
@@ -85,13 +85,13 @@ public class DriverController {
             }
         }
         if (document == null) {
-            return new ResponseEntity<DriverDocumentResponseDTO>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ResponseDriverDocumentDTO>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<DriverDocumentResponseDTO>(document.parseToResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverDocumentDTO>(document.parseToResponse(), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}/vehicle", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverVehicleResponseDTO> getDriverVehicle(@PathVariable("id") Long driverId) {
+    public ResponseEntity<ResponseDriverVehicleDTO> getDriverVehicle(@PathVariable("id") Long driverId) {
         Vehicle vehicle = new Vehicle();
         for (Vehicle v:vehicleDummy.vehicles.values()){
             if (v.getDriver().getId() == driverId){
@@ -99,13 +99,13 @@ public class DriverController {
             }
         }
         if (vehicle == null) {
-            return new ResponseEntity<DriverVehicleResponseDTO>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ResponseDriverVehicleDTO>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<DriverVehicleResponseDTO>(vehicle.parseToResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverVehicleDTO>(vehicle.parseToResponse(), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverWorkingHourResponseDTO> getDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId) {
+    public ResponseEntity<ResponseDriverWorkingHourDTO> getDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId) {
         WorkHour workHour = new WorkHour();
         for (WorkHour w:workHourDummy.workinghours.values()){
             if (w.getId() == workingHourId){
@@ -113,13 +113,13 @@ public class DriverController {
             }
         }
         if (workHour == null) {
-            return new ResponseEntity<DriverWorkingHourResponseDTO>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ResponseDriverWorkingHourDTO>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<DriverWorkingHourResponseDTO>(workHour.parseToResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<ResponseDriverWorkingHourDTO>(workHour.parseToResponse(), HttpStatus.CREATED);
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverResponseDTO> updateDriver(@PathVariable("id") Long id, @RequestBody CreateDriverDTO driverDTO) {
+    public ResponseEntity<ResponseDriverDTO> updateDriver(@PathVariable("id") Long id, @RequestBody RequestDriverDTO driverDTO) {
         Driver driverForUpdate = driverDummy.drivers.get(id);
         Driver driver = driverDTO.parseToDriver(id);
         driverForUpdate.setFirstName(driver.getFirstName());
@@ -130,11 +130,11 @@ public class DriverController {
         driverForUpdate.setAddress(driver.getAddress());
         driverForUpdate.setPassword(driver.getPassword());
         driverDummy.drivers.put(id, driverForUpdate);
-        return new ResponseEntity<DriverResponseDTO>(driverForUpdate.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<ResponseDriverDTO>(driverForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
     @PutMapping (value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverVehicleResponseDTO> updateDriverVehicle(@PathVariable("id") Long driverId, @RequestBody CreateDriverVehicleDTO vehicleDTO) {
+    public ResponseEntity<ResponseDriverVehicleDTO> updateDriverVehicle(@PathVariable("id") Long driverId, @RequestBody RequestDriverVehicleDTO vehicleDTO) {
 
         Vehicle vehicleForUpdate = new Vehicle();
         for (Vehicle vehicle : vehicleDummy.vehicles.values()){
@@ -152,11 +152,11 @@ public class DriverController {
         vehicleForUpdate.setPetFriendly(vehicle.isPetFriendly());
         vehicleDummy.vehicles.put(vehicleForUpdate.getId(), vehicleForUpdate);
 
-        return new ResponseEntity<DriverVehicleResponseDTO>(vehicleForUpdate.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<ResponseDriverVehicleDTO>(vehicleForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
     @PutMapping (value = "/working-hour/{working-hour-id} ", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DriverWorkingHourResponseDTO> updateDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId, @RequestBody CreateDriverWorkingHourDTO workingHourDTO) {
+    public ResponseEntity<ResponseDriverWorkingHourDTO> updateDriverWorkingHour(@PathVariable("working-hour-id") Long workingHourId, @RequestBody RequestDriverWorkingHourDTO workingHourDTO) {
 
         WorkHour workHourForUpdate = new WorkHour();
         for (WorkHour workHour : workHourDummy.workinghours.values()){
@@ -169,7 +169,7 @@ public class DriverController {
         workHourForUpdate.setEnd(workHour.getEnd());
         workHourDummy.workinghours.put(workHourForUpdate.getId(), workHourForUpdate);
 
-        return new ResponseEntity<DriverWorkingHourResponseDTO>(workHourForUpdate.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<ResponseDriverWorkingHourDTO>(workHourForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/document/{document-id}")

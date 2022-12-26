@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.PanicUserResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.UserResponseDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicUserDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -141,11 +141,11 @@ public class User {
         this.active = active;
     }
 
-    public UserResponseDTO parseToResponseUser(){
-        return new UserResponseDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
+    public ResponseUserDTO parseToResponseUser(){
+        return new ResponseUserDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
     }
 
-    public PanicUserResponseDTO parseToPanicResponse(){
-        return new PanicUserResponseDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
+    public ResponsePanicUserDTO parseToPanicResponse(){
+        return new ResponsePanicUserDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
     }
 }
