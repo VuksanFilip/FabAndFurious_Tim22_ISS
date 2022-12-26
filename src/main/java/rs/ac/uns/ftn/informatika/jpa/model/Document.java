@@ -2,11 +2,19 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Document {
 
+    @Id
     Long id;
     String name;
     String image;
+
+    @OneToOne
     Driver driver;
 
     public Document() {

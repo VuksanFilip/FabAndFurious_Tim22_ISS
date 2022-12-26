@@ -1,23 +1,36 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DestinationResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.LocationResponseDTO;
 
-import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.util.List;
 
+@Entity
 public class Vehicle {
+
+    @Id
     Long id;
+
+    @OneToOne
     Driver driver;
     String vehicleModel;
+
+    @OneToOne
     VehicleType type;
     String registarskeTablice;
     int seats;
+
+    @OneToOne
     Location location;
     boolean babyFriendly;
     boolean petFriendly;
-    ArrayList<Review> reviews;
+
+    @OneToMany
+    List<Review> reviews;
 
     public Vehicle(Long id) {
         this.id = id;
@@ -41,7 +54,7 @@ public class Vehicle {
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location location, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
+    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location location, boolean babyFriendly, boolean petFriendly, List<Review> reviews) {
         this.id = id;
         this.driver = driver;
         this.vehicleModel = vehicleModel;
@@ -126,11 +139,11 @@ public class Vehicle {
         this.petFriendly = petFriendly;
     }
 
-    public ArrayList<Review> getReviews() {
+    public List<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
+    public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
 
