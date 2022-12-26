@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.informatika.jpa.dummy;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 
 import java.util.concurrent.ConcurrentHashMap;
