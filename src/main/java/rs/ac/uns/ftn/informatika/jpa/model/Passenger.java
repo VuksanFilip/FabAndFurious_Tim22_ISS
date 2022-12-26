@@ -7,15 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Passenger extends User{
 
     @ManyToMany
-    ArrayList<Ride> rides;
+    List<Ride> rides;
 
     @OneToMany
-    ArrayList<Path> favoritePaths;
+    List<Path> favoritePaths;
 
     public Passenger() {
     }
@@ -26,15 +27,15 @@ public class Passenger extends User{
         this.favoritePaths = new ArrayList<Path>();
     }
 
-    public ArrayList<Ride> getRides() {
+    public List<Ride> getRides() {
         return rides;
     }
 
-    public void setRides(ArrayList<Ride> rides) {
+    public void setRides(List<Ride> rides) {
         this.rides = rides;
     }
 
-    public ArrayList<Path> getFavoriteRides() {
+    public List<Path> getFavoriteRides() {
         return favoritePaths;
     }
 
@@ -42,7 +43,7 @@ public class Passenger extends User{
         this.favoritePaths = favoriteRides;
     }
 
-        public PassengerResponseDTO parseToResponse(){
+    public PassengerResponseDTO parseToResponse(){
         return new PassengerResponseDTO(this.getId(), this.getFirstName(), this.getFirstName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
     }
 

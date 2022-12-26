@@ -1,9 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverVehicleResponseDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverWorkingHourResponseDTO;
-
-import java.util.Date;
 
 public class WorkHour {
 

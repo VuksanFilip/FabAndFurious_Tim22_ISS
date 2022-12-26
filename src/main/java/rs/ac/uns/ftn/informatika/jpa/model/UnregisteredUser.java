@@ -1,25 +1,38 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class UnregisteredUser {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @OneToMany
-    private ArrayList<Location> locations;
+    private List<Location> locations;
 
     @OneToMany
-    private ArrayList<Passenger> passenger;
+    private List<Passenger> passenger;
     private String VehicleType;
     private boolean babyTransport;
     private boolean petTransport;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public UnregisteredUser() {
     }
 
-    public UnregisteredUser(ArrayList<Location> locations, ArrayList<Passenger> passenger, String vehicleType, boolean babyTransport, boolean petTransport) {
+    public UnregisteredUser(List<Location> locations, List<Passenger> passenger, String vehicleType, boolean babyTransport, boolean petTransport) {
         this.locations = locations;
         this.passenger = passenger;
         VehicleType = vehicleType;
@@ -27,19 +40,19 @@ public class UnregisteredUser {
         this.petTransport = petTransport;
     }
 
-    public ArrayList<Location> getLocations() {
+    public List<Location> getLocations() {
         return locations;
     }
 
-    public void setLocations(ArrayList<Location> locations) {
+    public void setLocations(List<Location> locations) {
         this.locations = locations;
     }
 
-    public ArrayList<Passenger> getPassenger() {
+    public List<Passenger> getPassenger() {
         return passenger;
     }
 
-    public void setPassenger(ArrayList<Passenger> passenger) {
+    public void setPassenger(List<Passenger> passenger) {
         this.passenger = passenger;
     }
 

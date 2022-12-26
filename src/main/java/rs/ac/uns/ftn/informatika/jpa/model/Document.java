@@ -4,7 +4,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.DriverDocumentResponseDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Document {
@@ -14,7 +14,7 @@ public class Document {
     String name;
     String image;
 
-    @ManyToOne
+    @OneToOne
     Driver driver;
 
     public Document() {

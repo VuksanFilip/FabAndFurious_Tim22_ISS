@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Vehicle {
@@ -29,7 +29,7 @@ public class Vehicle {
     boolean petFriendly;
 
     @OneToMany
-    ArrayList<Review> reviews;
+    List<Review> reviews;
 
     public Vehicle(Long id) {
         this.id = id;
@@ -53,7 +53,7 @@ public class Vehicle {
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location location, boolean babyFriendly, boolean petFriendly, ArrayList<Review> reviews) {
+    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location location, boolean babyFriendly, boolean petFriendly, List<Review> reviews) {
         this.id = id;
         this.driver = driver;
         this.vehicleModel = vehicleModel;
@@ -138,11 +138,11 @@ public class Vehicle {
         this.petFriendly = petFriendly;
     }
 
-    public ArrayList<Review> getReviews() {
+    public List<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
+    public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
 

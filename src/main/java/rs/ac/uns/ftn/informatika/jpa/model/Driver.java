@@ -7,16 +7,18 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Driver extends User{
 
-//    Long id;
-    @OneToMany
-    ArrayList<Document> documents;
+    Long id;
 
     @OneToMany
-    ArrayList<Ride> rides;
+    List<Document> documents;
+
+    @OneToMany
+    List<Ride> rides;
 
     @OneToOne
     Vehicle vehicle;
@@ -53,19 +55,19 @@ public class Driver extends User{
 
     }
 
-    public ArrayList<Document> getDocuments() {
+    public List<Document> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(ArrayList<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 
-    public ArrayList<Ride> getRides() {
+    public List<Ride> getRides() {
         return rides;
     }
 
-    public void setRides(ArrayList<Ride> rides) {
+    public void setRides(List<Ride> rides) {
         this.rides = rides;
     }
 
