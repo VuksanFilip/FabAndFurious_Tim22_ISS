@@ -4,17 +4,6 @@ import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
 public class ResponseReviewDTO {
 
-//    {
-//        "id": 123,
-//            "rating": 3,
-//            "comment": "The driver was driving really fast",
-//            "passenger": {
-//        "id": 123,
-//                "email": "user@example.com"
-//    }
-//    }
-
-
     private Long id;
     private float rating;
     private String comment;

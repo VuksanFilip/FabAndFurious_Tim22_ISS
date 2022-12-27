@@ -1,7 +1,9 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationLocationDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDepartureDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -148,9 +150,10 @@ public class Vehicle {
     }
 
     public ResponseDriverVehicleDTO parseToResponse(){
-        ResponseDestinationLocationDTO locationResponseDTO = new ResponseDestinationLocationDTO();
+        ResponseDepartureDTO responseDepartureDTO = this.location.getDeparture().parseToResponse();
+        ResponseDestinationDTO responseDestinationDTO = this.location.getDestination().parseToResponse();
 
-        locationResponseDTO=new ResponseDestinationLocationDTO(location.getAddress(),location.getLatitude(), location.getLongitude());
+        ResponseLocationDTO locationResponseDTO=new ResponseLocationDTO(responseDepartureDTO, responseDestinationDTO);
 
         return new ResponseDriverVehicleDTO(this.getId(), this.getDriver().getId(), this.type.type, this.getVehicleModel(), this.getRegistarskeTablice(), locationResponseDTO, this.getSeats(), this.isBabyFriendly(), this.isPetFriendly());
     }

@@ -1,53 +1,39 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Departure;
+import rs.ac.uns.ftn.informatika.jpa.model.Destination;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
 
 public class RequestLocationDTO {
 
-//    {
-//        "address": "Bulevar oslobodjenja 46",
-//            "latitude": 45.267136,
-//            "longitude": 19.833549
-//    }
-
-    private String address;
-    private double latitude;
-    private double longitude;
+    private Departure departure;
+    private Destination destination;
 
     public RequestLocationDTO() {
     }
 
-    public RequestLocationDTO(String address, double latitude, double longitude) {
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public RequestLocationDTO(Departure departure,  Destination destination) {
+        this.departure = departure;
+        this.destination = destination;
     }
 
-    public String getAddress() {
-        return address;
+    public Departure getDeparture() {
+        return departure;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDeparture(Departure departure) {
+        this.departure = departure;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public Destination getDestination() {
+        return destination;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setDestination(Destination destination) {
+        this.destination = destination;
     }
 
     public Location parseToLocation(){
-        return new Location(this.address, this.latitude, this.longitude);
+        return new Location(new Departure(), new Destination());
     }
 }

@@ -4,60 +4,6 @@ import java.util.Date;
 
 public class ResponsePanicDTO {
 
-// [
-//        {
-//                "id": 10,
-//                "user": {
-//                    "name": "Pera",
-//                    "surname": "Perić",
-//                    "profilePicture": "U3dhZ2dlciByb2Nrcw==",
-//                    "telephoneNumber": "+381123123",
-//                    "email": "pera.peric@email.com",
-//                    "address": "Bulevar Oslobodjenja 74"
-//                    },
-//                "ride": {
-//                    "id": 123,
-//                    "startTime": "2017-07-21T17:32:28Z",
-//                    "endTime": "2017-07-21T17:45:14Z",
-//                    "totalCost": 1235,
-//                    "driver": {
-//                        "id": 123,
-//                        "email": "user@example.com"
-//                    },
-//                    "passengers": [
-//                        {
-//                            "id": 123,
-//                            "email": "user@example.com"
-//                        }
-//                    ],
-//                    "estimatedTimeInMinutes": 5,
-//                    "vehicleType": "STANDARDNO",
-//                    "babyTransport": true,
-//                    "petTransport": true,
-//                    "rejection": {
-//                         "reason": "Ride is canceled due to previous problems with the passenger",
-//                        "timeOfRejection": "2022-11-25T17:32:28Z"
-//                        },
-//                     "locations": [
-//                        {
-//                            "departure": {
-//                                "address": "Bulevar oslobodjenja 46",
-//                                "latitude": 45.267136,
-//                                "longitude": 19.833549
-//                            },
-//                            "destination": {
-//                                "address": "Bulevar oslobodjenja 46",
-//                                "latitude": 45.267136,
-//                                "longitude": 19.833549
-//                            }
-//                        }
-//                    ]
-//                },
-//            "time": "2022-12-11T20:19:29.285Z",
-//            "reason": "Driver is drinking while driving"
-//        }
-
-
     private Long id;
     private ResponsePanicUserDTO user;
     private ResponsePanicRideDTO ride;

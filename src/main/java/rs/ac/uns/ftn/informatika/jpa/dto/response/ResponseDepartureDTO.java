@@ -1,35 +1,18 @@
-package rs.ac.uns.ftn.informatika.jpa.model;
+package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
+public class ResponseDepartureDTO {
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-public class Destination{
-
-    @Id
-    private Long id;
     private String address;
     private double latitude;
     private double longitude;
 
-    public Destination() {
+    public ResponseDepartureDTO() {
     }
 
-    public Destination(Long id, String address, double latitude, double longitude) {
-        this.id = id;
+    public ResponseDepartureDTO(String address, double latitude, double longitude) {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getAddress() {
@@ -56,7 +39,4 @@ public class Destination{
         this.longitude = longitude;
     }
 
-    public ResponseDestinationDTO parseToResponse(){
-        return new ResponseDestinationDTO(this.address, this.latitude, this.longitude);
-    }
 }

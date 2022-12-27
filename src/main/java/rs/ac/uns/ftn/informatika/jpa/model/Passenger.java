@@ -21,6 +21,10 @@ public class Passenger extends User{
     public Passenger() {
     }
 
+    public Passenger(Long id, String email) {
+        super(id, email);
+    }
+
     public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password);
         this.rides = new ArrayList<Ride>();

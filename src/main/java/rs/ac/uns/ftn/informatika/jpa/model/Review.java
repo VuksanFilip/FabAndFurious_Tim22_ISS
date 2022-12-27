@@ -41,8 +41,8 @@ public class Review {
           this.passenger = passenger;
           this.ride = new Ride();
           this.ride.setId(rideId);
-          this.ride.driver = new Driver();
-          this.ride.driver.vehicle = new Vehicle(vehicleId);
+          this.ride.setDriver(new Driver());
+          this.ride.getDriver().setVehicle(new Vehicle(vehicleId));
      }
 
      public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, String str, Long driverId) {
@@ -52,7 +52,7 @@ public class Review {
           this.passenger = passenger;
           this.ride = new Ride();
           this.ride.setId(rideId);
-          ride.driver = new Driver(driverId);
+          this.ride.setDriver(new Driver(driverId));
      }
 
      public Review(Long id, float rating, String comment) {

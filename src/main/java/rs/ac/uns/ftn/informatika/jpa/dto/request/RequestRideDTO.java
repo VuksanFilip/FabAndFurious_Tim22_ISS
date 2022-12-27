@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
@@ -71,8 +73,8 @@ public class RequestRideDTO {
         }
 
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        ResponseDepartureLocationDTO responseDepartureDTO = new ResponseDepartureLocationDTO();
-        ResponseDestinationLocationDTO responseDestinationDTO = new ResponseDestinationLocationDTO();
+        ResponseLocationDTO responseDepartureDTO = new ResponseLocationDTO();
+        ResponseLocationDTO responseDestinationDTO = new ResponseLocationDTO();
         responseLocationDTOS.add(responseDepartureDTO);
         responseLocationDTOS.add(responseDestinationDTO);
 
@@ -81,6 +83,6 @@ public class RequestRideDTO {
     }
 
     public Ride parseToRide(Long id){
-        return new Ride(id, this.locations, this.passengers, new VehicleType(this.vehicleType), this.babyTransport, this.petTransport, new Driver(123L));
+        return new Ride(id, this.locations, this.passengers, new VehicleType(this.vehicleType), this.babyTransport, this.petTransport);
     }
 }

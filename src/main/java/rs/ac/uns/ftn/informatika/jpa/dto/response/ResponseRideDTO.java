@@ -39,6 +39,22 @@ public class ResponseRideDTO {
         this.rejection = rejection;
     }
 
+    public ResponseRideDTO(Long id, Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petTransport, ResponseRejectionReasonTimeOfDetectionDTO rejection, ArrayList<ResponseLocationDTO> locations, RideStatus status) {
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.totalCost = totalCost;
+        this.driver = driver;
+        this.passengers = passengers;
+        this.estimatedTimeInMinutes = estimatedTimeInMinutes;
+        this.vehicleType = vehicleType;
+        this.babyTransport = babyTransport;
+        this.petTransport = petTransport;
+        this.rejection = rejection;
+        this.locations = locations;
+        this.status = status;
+    }
+
     public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Type vehicleType, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
         this.id = id;
         this.passengers = passengers;
@@ -49,7 +65,7 @@ public class ResponseRideDTO {
         this.startTime = null;
         this.endTime = null;
         this.totalCost = 0;
-        this.driver = new ResponseDriverIdEmailDTO(123L, null);
+        this.driver = new ResponseDriverIdEmailDTO(1236L, null);
         this.rejection = new ResponseRejectionReasonTimeOfDetectionDTO();
         this.estimatedTimeInMinutes = 0;
         this.status = RideStatus.PENDING;
@@ -62,12 +78,6 @@ public class ResponseRideDTO {
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
-        this.startTime = null;
-        this.endTime = null;
-        this.totalCost = 0;
-        this.driver = new ResponseDriverIdEmailDTO(123L, null);
-        this.rejection = new ResponseRejectionReasonTimeOfDetectionDTO();
-        this.estimatedTimeInMinutes = 0;
         this.status = status;
     }
 

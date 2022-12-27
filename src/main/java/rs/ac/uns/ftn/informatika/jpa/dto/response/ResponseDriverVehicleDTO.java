@@ -4,32 +4,17 @@ import rs.ac.uns.ftn.informatika.jpa.model.Type;
 
 public class ResponseDriverVehicleDTO {
 
-//    {
-//        "id": 123,
-//            "driverId": 123,
-//            "vehicleType": "STANDARDNO",
-//            "model": "VW Golf 2",
-//            "licenseNumber": "NS 123-AB",
-//            "currentLocation": {
-//        "address": "Bulevar oslobodjenja 46",
-//                "latitude": 45.267136,
-//                "longitude": 19.833549
-//    },
-//        "passengerSeats": 4,
-//            "babyTransport": true,
-//            "petTransport": true
-//    }
     private Long id;
     private Long driverId;
     private Type type;
     private String model;
     private String licenseNumber;
-    private ResponseDestinationLocationDTO location;
+    private ResponseLocationDTO location;
     private int passengerSeats;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public ResponseDriverVehicleDTO(Long id, Long driverId, Type type, String model, String licenseNumber, ResponseDestinationLocationDTO location, int passengerSeats, boolean babyTransport, boolean petTransport) {
+    public ResponseDriverVehicleDTO(Long id, Long driverId, Type type, String model, String licenseNumber, ResponseLocationDTO location, int passengerSeats, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.driverId = driverId;
         this.type = type;
@@ -81,11 +66,11 @@ public class ResponseDriverVehicleDTO {
         this.licenseNumber = licenseNumber;
     }
 
-    public ResponseDestinationLocationDTO getLocation() {
+    public ResponseLocationDTO getLocation() {
         return location;
     }
 
-    public void setLocation(ResponseDestinationLocationDTO location) {
+    public void setLocation(ResponseLocationDTO location) {
         this.location = location;
     }
 

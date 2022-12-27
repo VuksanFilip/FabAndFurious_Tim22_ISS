@@ -15,6 +15,7 @@ import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.Date;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/ride")
@@ -23,33 +24,42 @@ public class RideController{
     private RideDummy rideDummy = new RideDummy();
     private PanicDummy panicDummy = new PanicDummy();
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> createRide(@RequestBody RequestRideDTO requestRideDTO) throws Exception {
 
-        Long rideId = rideDummy.rideCounter.incrementAndGet();
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseRideDTO> postRide(@RequestBody RequestRideDTO requestRideDTO){
+
+        Long rideId = 123L;
+        if(!rideDummy.rides.containsKey(123L)){
+            Ride ride = new Ride();
+            ride.setDefaultData();
+            rideDummy.rides.put(rideId, ride);
+        }
+
+        rideId = rideDummy.rideCounter.incrementAndGet();
         Ride ride = requestRideDTO.parseToRide(rideId);
         rideDummy.rides.put(rideId, ride);
 
-        ResponseRideDTO responseRideDTO = ride.parseToResponseWithStatus();
+        ResponseRideDTO responseRideDTO = ride.parseToResponse();
         return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/driver/{driverId}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> getActiveDriver(@PathVariable("driverId") Long id) {
         for(Ride r : rideDummy.rides.values()){
-            if(r.getDriver().getId() == id){
-                return new ResponseEntity<>(r.parseToResponse(), HttpStatus.OK);
+            if(Objects.equals(id, r.getDriver().getId())){
+                return new ResponseEntity<>(r.parseToResponseDefault(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/passenger/{passengerId}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/passenger/{passengerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> getActivePassenger(@PathVariable("passengerId") Long id) {
         for(Ride r : rideDummy.rides.values()){
+            System.out.println(r.getPassengers().get(0).getId());
             for(Passenger p : r.getPassengers()){
                 if(p.getId() == id){
-                    return new ResponseEntity<>(r.parseToResponse(), HttpStatus.OK);
+                    return new ResponseEntity<>(r.parseToResponseDefault(), HttpStatus.OK);
                 }
             }
         }

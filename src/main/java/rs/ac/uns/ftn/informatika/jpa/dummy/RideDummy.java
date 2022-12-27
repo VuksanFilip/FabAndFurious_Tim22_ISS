@@ -12,6 +12,6 @@ public class RideDummy {
 
     public RideDummy() {
         this.rideCounter = new AtomicLong();
-        this.rides = new ConcurrentHashMap<Long, Ride>();
+        this.rides = new ConcurrentHashMap<>();
     }
 }

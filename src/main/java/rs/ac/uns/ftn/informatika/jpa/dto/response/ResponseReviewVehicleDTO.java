@@ -4,21 +4,6 @@ import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
 public class ResponseReviewVehicleDTO {
 
-//    {
-//        "totalCount": 243,
-//            "results": [
-//        {
-//            "id": 123,
-//                "rating": 3,
-//                "comment": "The driver was driving too fast",
-//                "passenger": {
-//            "id": 123,
-//                    "email": "user@example.com"
-//        }
-//        }
-//  ]
-//    }
-
     private int totalCount;
 
     private Long id;

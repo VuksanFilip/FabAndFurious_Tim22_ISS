@@ -15,7 +15,7 @@ public class ResponseRideRejectionDTO {
     private int estimatedTimeInMinutes;
     private VehicleType vehicleType;
     private boolean babyTransport;
-    private boolean petFriendly;
+    private boolean petTransport;
     private ArrayList<Location> locations;
     private RideStatus status;
     private RejectionLetter rejection;
@@ -23,7 +23,7 @@ public class ResponseRideRejectionDTO {
     public ResponseRideRejectionDTO() {
     }
 
-    public ResponseRideRejectionDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, VehicleType vehicleType, boolean babyTransport, boolean petFriendly, ArrayList<Location> locations, RideStatus status, RejectionLetter rejection) {
+    public ResponseRideRejectionDTO(Date startTime, Date endTime, int totalCost, Driver driver, ArrayList<Passenger> passengers, int estimatedTimeInMinutes, VehicleType vehicleType, boolean babyTransport, boolean petTransport, ArrayList<Location> locations, RideStatus status, RejectionLetter rejection) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
@@ -32,7 +32,7 @@ public class ResponseRideRejectionDTO {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
         this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
-        this.petFriendly = petFriendly;
+        this.petTransport = petTransport;
         this.locations = locations;
         this.status = status;
         this.rejection = rejection;
@@ -102,12 +102,12 @@ public class ResponseRideRejectionDTO {
         this.babyTransport = babyTransport;
     }
 
-    public boolean isPetFriendly() {
-        return petFriendly;
+    public boolean isPetTransport() {
+        return petTransport;
     }
 
-    public void setPetFriendly(boolean petFriendly) {
-        this.petFriendly = petFriendly;
+    public void setPetTransport(boolean petTransport) {
+        this.petTransport = petTransport;
     }
 
     public ArrayList<Location> getLocations() {

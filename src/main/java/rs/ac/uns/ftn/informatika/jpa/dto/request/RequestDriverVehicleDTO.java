@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
 import rs.ac.uns.ftn.informatika.jpa.model.Type;
 import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
@@ -96,7 +96,7 @@ public class RequestDriverVehicleDTO {
     }
 
     public ResponseDriverVehicleDTO parseToResponse(Long id, Long driverId){
-        ResponseDestinationLocationDTO responseDestinationDTO = new ResponseDestinationLocationDTO();
+        ResponseLocationDTO responseDestinationDTO = new ResponseLocationDTO();
         ResponseDriverVehicleDTO driverVehicleResponse = new ResponseDriverVehicleDTO(id, driverId, this.type, this.model, this.licenseNumber, responseDestinationDTO, this.passengerSeats, this.babyTransport, this.petTransport);
         driverVehicleResponse.setId(id);
         return driverVehicleResponse;

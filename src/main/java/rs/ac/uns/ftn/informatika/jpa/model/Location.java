@@ -1,10 +1,13 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDepartureDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance
@@ -12,25 +15,25 @@ public class Location {
 
     @Id
     private Long id;
-    private String address;
-    private double longitude;
-    private double latitude;
+
+    @OneToOne
+    private Departure departure;
+
+    @OneToOne
+    private Destination destination;
 
     public Location() {
     }
 
-    public Location(Long id, String address, double longitude, double latitude) {
+    public Location(Long id, Departure departure, Destination destination) {
         this.id = id;
-        this.address = address;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.departure = departure;
+        this.destination = destination;
     }
 
-
-    public Location(String address, double longitude, double latitude) {
-        this.address = address;
-        this.longitude = longitude;
-        this.latitude = latitude;
+    public Location(Departure departure, Destination destination) {
+        this.departure = departure;
+        this.destination = destination;
     }
 
     public Long getId() {
@@ -41,31 +44,25 @@ public class Location {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public Departure getDeparture() {
+        return departure;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDeparture(Departure departure) {
+        this.departure = departure;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public Destination getDestination() {
+        return destination;
     }
 
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
+    public void setDestination(Destination destination) {
+        this.destination = destination;
     }
 
     public ResponseLocationDTO parseToResponse(){
-        return new ResponseLocationDTO(this.address, this.latitude, this.longitude);
+        ResponseDepartureDTO departure = this.departure.parseToResponse();
+        ResponseDestinationDTO destination = this.destination.parseToResponse();
+        return new ResponseLocationDTO(departure, destination);
     }
 }

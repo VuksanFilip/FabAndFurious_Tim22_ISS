@@ -33,6 +33,12 @@ public class RejectionLetter {
         this.reason = reason;
     }
 
+    public RejectionLetter(String reason, Date time) {
+        this.reason = reason;
+        this.time = time;
+
+    }
+
     public RejectionLetter(Ride ride, String reason, User user, Date time) {
         this.ride = ride;
         this.reason = reason;

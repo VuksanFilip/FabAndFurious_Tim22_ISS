@@ -12,8 +12,6 @@ import java.util.List;
 @Entity
 public class Driver extends User{
 
-    Long id;
-
     @OneToMany
     List<Document> documents;
 
