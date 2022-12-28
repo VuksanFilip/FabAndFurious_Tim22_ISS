@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,15 @@ public interface RideService {
 
     Optional<Ride> getRide(String id);
 
+    Optional<Ride> updateRide(Optional<Ride> ride);
+
     void add(Ride ride);
 
     long getSize();
+
+    Ride getRideByDriverId(String id);
+
+    Ride getRideByPassengerId(String id);
+
+    void updateRideByStatus(String id, RideStatus status);
 }

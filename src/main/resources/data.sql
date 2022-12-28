@@ -1,2 +1,2 @@
-insert into PASSENGER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (101, true, 'Vlade Matovica 27', false, 'andrea.katzenberger@gmail.com', 'andrea', 'katzenberger', 'sifra', '0665423903', 'picture')
-insert into DRIVER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (102, true, 'Jug Bogdana 11', false, 'bojana.popov@gmail.com', 'bojana', 'popov', 'sifra', '0665423903', 'picture')
+insert into PASSENGER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (1, true, 'Vlade Matovica 27', false, 'andrea.katzenberger@gmail.com', 'andrea', 'katzenberger', 'sifra', '0665423903', 'picture')
+insert into DRIVER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (1, true, 'Jug Bogdana 11', false, 'bojana.popov@gmail.com', 'bojana', 'popov', 'sifra', '0665423903', 'picture')

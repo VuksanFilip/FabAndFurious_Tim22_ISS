@@ -6,7 +6,6 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
 import javax.persistence.*;
 
 @Entity
-@Inheritance
 public class User {
 
     @Id

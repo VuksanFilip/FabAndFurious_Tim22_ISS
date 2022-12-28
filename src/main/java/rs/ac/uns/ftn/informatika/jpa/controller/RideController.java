@@ -14,10 +14,10 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.PanicService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ride")
@@ -26,10 +26,12 @@ public class RideController{
     private RideDummy rideDummy = new RideDummy();
     private PanicDummy panicDummy = new PanicDummy();
     private RideService rideService;
+    private PanicService panicService;
 
     @Autowired
-    public RideController(RideService rideService) {
+    public RideController(RideService rideService, PanicService panicService) {
         this.rideService = rideService;
+        this.panicService = panicService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,86 +54,84 @@ public class RideController{
     }
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> getActiveDriver(@PathVariable("driverId") Long id) {
+    public ResponseEntity<ResponseRideDTO> getActiveDriver(@PathVariable("driverId") String id) {
 
-
-        for(Ride r : rideDummy.rides.values()){
-            if(Objects.equals(id, r.getDriver().getId())){
-                return new ResponseEntity<>(r.parseToResponseDefault(), HttpStatus.OK);
-            }
+        Ride ride = rideService.getRideByDriverId(id);
+        if(ride != null){
+            return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
         }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     @GetMapping(value = "/passenger/{passengerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> getActivePassenger(@PathVariable("passengerId") Long id) {
-        for(Ride r : rideDummy.rides.values()){
-            System.out.println(r.getPassengers().get(0).getId());
-            for(Passenger p : r.getPassengers()){
-                if(p.getId() == id){
-                    return new ResponseEntity<>(r.parseToResponseDefault(), HttpStatus.OK);
-                }
-            }
+    public ResponseEntity<ResponseRideDTO> getActivePassenger(@PathVariable("passengerId") String id) {
+
+        Ride ride = rideService.getRideByPassengerId(id);
+        if(ride != null){
+            return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
         }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> getActiveRide(@PathVariable("id") Long id) {
-        Ride ride = rideDummy.rides.get(id);
+    public ResponseEntity<ResponseRideDTO> getActiveRide(@PathVariable("id") String id) {
+
+        Optional<Ride> ride = rideService.getRide(id);
         if (ride == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(ride.parseToResponseWithStatus(), HttpStatus.OK);
+        return new ResponseEntity<>(ride.get().parseToResponseWithStatus(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> withdrawRide(@PathVariable Long id) throws Exception {
-        Ride ride = rideDummy.rides.get(id);
-        ride.setStatus(RideStatus.CANCELED);
-        ResponseRideDTO responseRideDTO = ride.parseToResponseWithStatus();
-        rideDummy.rides.put(id, ride);
+    public ResponseEntity<ResponseRideDTO> withdrawRide(@PathVariable String id) throws Exception {
 
-        return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
+        //TODO PORADITI NA APDEJTU
+        rideService.updateRideByStatus(id, RideStatus.CANCELED);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponsePanicSmallerDataDTO> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable Long id) throws Exception {
-        Long panicId = panicDummy.counter.incrementAndGet();
-        Ride ride = rideDummy.rides.get(id);
-        Panic panic = new Panic(panicId, new User(), ride, new Date(), reason.getReason());
-        panicDummy.panics.put(panicId, panic);
+    public ResponseEntity<ResponsePanicSmallerDataDTO> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
+
+        //TODO Skontati kako sam objekat da izgenerise id preko baze
+        Optional<Ride> ride = rideService.getRide(id);
+        Panic panic = panicService.createPanicByRide(ride.get(),reason.getReason());
+
+        //TODO Skontati zasto nece na bazu
+//        panicService.add(panic);
 
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> acceptRide(@PathVariable Long id) throws Exception {
-        Ride ride = rideDummy.rides.get(id);
-        ride.setStatus(RideStatus.ACCEPTED);
-        ResponseRideDTO responseRideDTO = ride.parseToResponseWithStatus();
-        rideDummy.rides.put(id, ride);
+    public ResponseEntity<ResponseRideDTO> acceptRide(@PathVariable String id) throws Exception {
 
-        return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
+        //TODO PORADITI NA APDEJTU
+        rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/end", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> endRide(@PathVariable Long id) throws Exception {
-        Ride ride = rideDummy.rides.get(id);
-        ride.setStatus(RideStatus.FINISHED);
-        ResponseRideDTO responseRideDTO = ride.parseToResponseWithStatus();
-        rideDummy.rides.put(id, ride);
+    public ResponseEntity<ResponseRideDTO> endRide(@PathVariable String id) throws Exception {
 
-        return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
+        //TODO PORADITI NA APDEJTU
+        rideService.updateRideByStatus(id, RideStatus.FINISHED);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable Long id) throws Exception {
-        Ride ride = rideDummy.rides.get(id);
+    public ResponseEntity<ResponseRideDTO> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) throws Exception {
+
+        //TODO PORADITI NA APDEJTU
+        Optional<Ride> ride = rideService.getRide(id);
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
-        ride.setLetter(rejectionLetter);
-        ResponseRideDTO responseRideDTO = ride.parseToResponseWithStatusAndReason();
-        rideDummy.rides.put(id, ride);
+        ride.get().setLetter(rejectionLetter);
+        ResponseRideDTO responseRideDTO = ride.get().parseToResponseWithStatusAndReason();
 
         return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
     }
