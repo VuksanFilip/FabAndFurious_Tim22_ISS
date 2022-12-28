@@ -2,15 +2,15 @@ package rs.ac.uns.ftn.informatika.jpa.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.model.Departure;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PassengerRepository extends CrudRepository<Passenger, Long> {
+public interface DepartureRepository extends CrudRepository<Departure, Long> {
 
-    List<Passenger> findAll();
-    Optional<Passenger> findById(String Long);
+    List<Departure> findAll();
+    Optional<Departure> findById(String Long);
 
 }
