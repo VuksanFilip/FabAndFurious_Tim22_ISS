@@ -4,22 +4,20 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDepartureDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Inheritance
 public class Location {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Departure departure;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Destination destination;
 
     public Location() {

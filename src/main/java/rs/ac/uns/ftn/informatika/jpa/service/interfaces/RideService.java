@@ -12,4 +12,6 @@ public interface RideService {
     Optional<Ride> getRide(String id);
 
     void add(Ride ride);
+
+    long getSize();
 }

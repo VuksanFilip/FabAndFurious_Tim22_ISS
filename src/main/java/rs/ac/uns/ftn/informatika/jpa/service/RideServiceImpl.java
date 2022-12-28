@@ -31,4 +31,6 @@ public class RideServiceImpl implements RideService {
     public void add(Ride ride) {
         this.rideRepository.save(ride);
     }
+
+    public long getSize() { return this.rideRepository.count(); }
 }

@@ -4,9 +4,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewVehicleDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Review {
@@ -14,6 +12,7 @@ public class Review {
      int totalCount;
 
      @Id
+     @GeneratedValue(strategy= GenerationType.IDENTITY)
      private Long id;
      float rating;
      String comment;

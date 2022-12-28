@@ -18,29 +18,29 @@ public class Ride {
     private Date endTime;
     private int totalCost;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Driver driver;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     private List<Passenger> passengers;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Location> locations;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Path> paths;
     private int estimatedTimeInMinutes;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Review> reviews;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private RejectionLetter letter;
     private boolean panic;
     private boolean babyTransport;
     private boolean petTransport;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private VehicleType vehicleType;
     private RideStatus status;
 

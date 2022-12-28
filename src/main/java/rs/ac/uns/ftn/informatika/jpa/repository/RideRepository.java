@@ -12,5 +12,6 @@ public interface RideRepository extends CrudRepository<Ride, Long> {
 
     List<Ride> findAll();
     Optional<Ride> findById(String Long);
+    long count();
 
 }

@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
 import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
 
 import java.util.Date;
 import java.util.Objects;
@@ -23,23 +25,24 @@ public class RideController{
 
     private RideDummy rideDummy = new RideDummy();
     private PanicDummy panicDummy = new PanicDummy();
+    private RideService rideService;
+
+    @Autowired
+    public RideController(RideService rideService) {
+        this.rideService = rideService;
+    }
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> postRide(@RequestBody RequestRideDTO requestRideDTO){
 
-        Long rideId = 123L;
-        if(!rideDummy.rides.containsKey(123L)){
-            Ride ride = new Ride();
-            ride.setDefaultData();
-            rideDummy.rides.put(rideId, ride);
-        }
+        long size = rideService.getSize();
+        System.out.println(rideService.getSize());
 
-        rideId = rideDummy.rideCounter.incrementAndGet();
-        Ride ride = requestRideDTO.parseToRide(rideId);
-        rideDummy.rides.put(rideId, ride);
+        Ride ride = requestRideDTO.parseToRide(size);
+        rideService.add(ride);
 
-        ResponseRideDTO responseRideDTO = ride.parseToResponse();
+        ResponseRideDTO responseRideDTO = ride.parseToResponseDefault();
         return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
     }
 
