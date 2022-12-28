@@ -13,12 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Ride {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private Date startTime;
     private Date endTime;
     private int totalCost;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL})
     private Driver driver;
 
     @ManyToMany(cascade = {CascadeType.ALL})
@@ -50,6 +51,14 @@ public class Ride {
     public Ride(Driver driver, List<Passenger> passengers) {
         this.driver = driver;
         this.passengers = passengers;
+    }
+
+    public Ride(List<Location> locations, ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petTransport) {
+        this.passengers = passengers;
+        this.locations = locations;
+        this.babyTransport = babyTransport;
+        this.petTransport = petTransport;
+        this.vehicleType = vehicleType;
     }
 
     public Ride(Long id, List<Location> locations, ArrayList<Passenger> passengers, VehicleType vehicleType, boolean babyTransport, boolean petTransport) {

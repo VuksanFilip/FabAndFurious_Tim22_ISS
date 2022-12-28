@@ -32,14 +32,19 @@ public class RideController{
         this.rideService = rideService;
     }
 
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> postRide(@RequestBody RequestRideDTO requestRideDTO){
 
-        long size = rideService.getSize();
-        System.out.println(rideService.getSize());
+        //TODO Skontati kako sam objekat da izgenerise id preko baze
+        long size = rideService.getSize()+1;
 
         Ride ride = requestRideDTO.parseToRide(size);
+
+        //TODO Skontati sto izbacuje null ako ne kreiramo novi;
+        ride.setDriver(new Driver());
+        ride.setLetter(new RejectionLetter());
+
+        //Ubacuje ride u bazu
         rideService.add(ride);
 
         ResponseRideDTO responseRideDTO = ride.parseToResponseDefault();
@@ -48,6 +53,8 @@ public class RideController{
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> getActiveDriver(@PathVariable("driverId") Long id) {
+
+
         for(Ride r : rideDummy.rides.values()){
             if(Objects.equals(id, r.getDriver().getId())){
                 return new ResponseEntity<>(r.parseToResponseDefault(), HttpStatus.OK);
