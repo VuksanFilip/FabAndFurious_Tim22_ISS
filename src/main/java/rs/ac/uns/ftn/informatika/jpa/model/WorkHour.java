@@ -2,11 +2,19 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class WorkHour {
 
+    @Id
     Long id;
     String start;
     String end;
+
+    @OneToOne
     Driver driver;
 
     public WorkHour() {

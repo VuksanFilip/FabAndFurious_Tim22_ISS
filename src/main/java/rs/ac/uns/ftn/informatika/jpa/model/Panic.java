@@ -3,12 +3,21 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicSmallerDataDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
+@Entity
 public class Panic {
 
+    @Id
     Long id;
+
+    @OneToOne
     User user;
+
+    @OneToOne
     Ride ride;
     Date time;
     String reason;
