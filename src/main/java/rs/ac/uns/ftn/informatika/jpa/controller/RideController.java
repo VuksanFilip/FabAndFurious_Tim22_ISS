@@ -6,32 +6,34 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicSmallerDataDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
-import rs.ac.uns.ftn.informatika.jpa.dummy.PanicDummy;
-import rs.ac.uns.ftn.informatika.jpa.dummy.RideDummy;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.FavoriteLocationsService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.PanicService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ride")
 public class RideController{
 
-    private RideDummy rideDummy = new RideDummy();
-    private PanicDummy panicDummy = new PanicDummy();
     private RideService rideService;
     private PanicService panicService;
+    private FavoriteLocationsService favouriteLocationService;
 
     @Autowired
-    public RideController(RideService rideService, PanicService panicService) {
+    public RideController(RideService rideService, PanicService panicService, FavoriteLocationsService favouriteLocationService) {
         this.rideService = rideService;
         this.panicService = panicService;
+        this.favouriteLocationService = favouriteLocationService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,11 +44,9 @@ public class RideController{
 
         Ride ride = requestRideDTO.parseToRide(size);
 
-        //TODO Skontati sto izbacuje null ako ne kreiramo novi;
         ride.setDriver(new Driver());
         ride.setLetter(new RejectionLetter());
 
-        //Ubacuje ride u bazu
         rideService.add(ride);
 
         ResponseRideDTO responseRideDTO = ride.parseToResponseDefault();
@@ -76,7 +76,6 @@ public class RideController{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> getActiveRide(@PathVariable("id") String id) {
 
@@ -90,8 +89,21 @@ public class RideController{
     @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> withdrawRide(@PathVariable String id) throws Exception {
 
-        //TODO PORADITI NA APDEJTU
         rideService.updateRideByStatus(id, RideStatus.CANCELED);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseRideDTO> acceptRide(@PathVariable String id) throws Exception {
+
+        rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/end", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseRideDTO> endRide(@PathVariable String id) throws Exception {
+
+        rideService.updateRideByStatus(id, RideStatus.FINISHED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
@@ -102,38 +114,41 @@ public class RideController{
         Optional<Ride> ride = rideService.getRide(id);
         Panic panic = panicService.createPanicByRide(ride.get(),reason.getReason());
 
-        //TODO Skontati zasto nece na bazu
-//        panicService.add(panic);
-
+        panicService.add(panic);
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> acceptRide(@PathVariable String id) throws Exception {
-
-        //TODO PORADITI NA APDEJTU
-        rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/{id}/end", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> endRide(@PathVariable String id) throws Exception {
-
-        //TODO PORADITI NA APDEJTU
-        rideService.updateRideByStatus(id, RideStatus.FINISHED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) throws Exception {
 
-        //TODO PORADITI NA APDEJTU
-        Optional<Ride> ride = rideService.getRide(id);
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
-        ride.get().setLetter(rejectionLetter);
-        ResponseRideDTO responseRideDTO = ride.get().parseToResponseWithStatusAndReason();
 
-        return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
+        rideService.updateRideByRejectionLetter(id, rejectionLetter);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseWithStatusAndReason(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseFavoriteLocationsDTO> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
+
+        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations();
+
+        favouriteLocationService.add(favoriteLocations);
+        return new ResponseEntity<>(favoriteLocations.parseToResponse(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ResponseFavoriteLocationsDTO>> getFavoriteLocations() {
+
+        List<FavoriteLocations> favoriteLocations = favouriteLocationService.getAll();
+        List<ResponseFavoriteLocationsDTO> responseFavoriteLocations = new FavoriteLocations().parseToResponseList(favoriteLocations);
+
+        return new ResponseEntity<>(responseFavoriteLocations, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ResponseFavoriteLocationsDTO>> getFavoriteLocations(@PathVariable("id") String id) {
+
+        favouriteLocationService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-

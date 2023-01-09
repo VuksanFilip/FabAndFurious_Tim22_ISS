@@ -263,7 +263,7 @@ public class Ride {
         this.panic = true;
         this.babyTransport = true;
         this.petTransport = true;
-        this.vehicleType = new VehicleType(Type.STANDARDNO);
+        this.vehicleType = new VehicleType(Type.STANDARD);
         this.status = RideStatus.PENDING;
     }
 

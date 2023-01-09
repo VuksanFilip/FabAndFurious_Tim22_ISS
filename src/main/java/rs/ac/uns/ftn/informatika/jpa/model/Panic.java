@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicSmallerDataDTO;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -14,7 +15,7 @@ public class Panic {
     @Id
     Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     User user;
 
     @OneToOne

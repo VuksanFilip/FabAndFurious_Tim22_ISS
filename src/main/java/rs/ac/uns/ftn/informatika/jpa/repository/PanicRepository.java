@@ -12,5 +12,7 @@ public interface PanicRepository extends CrudRepository<Panic, Long> {
 
     List<Panic> findAll();
     Optional<Panic> findById(String Long);
+    Panic save(Panic panic);
+
 
 }

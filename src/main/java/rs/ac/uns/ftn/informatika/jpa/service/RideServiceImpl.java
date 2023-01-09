@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
@@ -31,7 +32,7 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public Optional<Ride> updateRide(Optional<Ride> ride) {
+    public Ride updateRide(Ride ride) {
         return  this.rideRepository.save(ride);
     }
 
@@ -64,6 +65,12 @@ public class RideServiceImpl implements RideService {
     public void updateRideByStatus(String id, RideStatus status){
         Optional<Ride> ride = getRide(id);
         ride.get().setStatus(status);
-//        rideRepository.save(ride);
+        this.rideRepository.save(ride.get());
+    }
+
+    public void updateRideByRejectionLetter(String id, RejectionLetter letter){
+        Optional<Ride> ride = getRide(id);
+        ride.get().setLetter(letter);
+        this.rideRepository.save(ride.get());
     }
 }

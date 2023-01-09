@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
+import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
 
@@ -12,7 +13,7 @@ public interface RideService {
 
     Optional<Ride> getRide(String id);
 
-    Optional<Ride> updateRide(Optional<Ride> ride);
+    Ride updateRide(Ride ride);
 
     void add(Ride ride);
 
@@ -23,4 +24,6 @@ public interface RideService {
     Ride getRideByPassengerId(String id);
 
     void updateRideByStatus(String id, RideStatus status);
+
+    void updateRideByRejectionLetter(String id, RejectionLetter letter);
 }
