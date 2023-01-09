@@ -31,8 +31,8 @@ public class FavoriteLocationsServiceImpl implements FavoriteLocationsService {
         return  this.favoriteLocationsRepository.findById(Long.parseLong(id));
     }
 
-    public FavoriteLocations add(FavoriteLocations favoriteLocations) {
-        return this.favoriteLocationsRepository.save(favoriteLocations);
+    public void add(FavoriteLocations favoriteLocations) {
+        this.favoriteLocationsRepository.save(favoriteLocations);
     }
 
     @Override

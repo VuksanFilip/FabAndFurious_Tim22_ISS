@@ -3,16 +3,14 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicSmallerDataDTO;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Panic {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long id;
 
     @OneToOne(cascade = CascadeType.ALL)

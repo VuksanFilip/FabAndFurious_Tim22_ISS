@@ -40,12 +40,21 @@ public class RideController{
     public ResponseEntity<ResponseRideDTO> postRide(@RequestBody RequestRideDTO requestRideDTO){
 
         //TODO Skontati kako sam objekat da izgenerise id preko baze
+        //GORA OPCIJA
         long size = rideService.getSize()+1;
-
         Ride ride = requestRideDTO.parseToRide(size);
-
         ride.setDriver(new Driver());
         ride.setLetter(new RejectionLetter());
+
+        //BOLJA OPCIJA
+//        Ride ride = new Ride();
+//        ride.setLocations(requestRideDTO.getLocations());
+//        ride.setPassengers(requestRideDTO.getPassengers());
+//        ride.setVehicleType(new VehicleType(requestRideDTO.getVehicleType()));
+//        ride.setBabyTransport(requestRideDTO.isBabyTransport());
+//        ride.setPetTransport(requestRideDTO.isPetTransport());
+//        ride.setDriver(new Driver());
+//        ride.setLetter(new RejectionLetter());
 
         rideService.add(ride);
 
@@ -110,7 +119,6 @@ public class RideController{
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponsePanicSmallerDataDTO> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
 
-        //TODO Skontati kako sam objekat da izgenerise id preko baze
         Optional<Ride> ride = rideService.getRide(id);
         Panic panic = panicService.createPanicByRide(ride.get(),reason.getReason());
 
@@ -130,15 +138,21 @@ public class RideController{
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseFavoriteLocationsDTO> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
 
-        FavoriteLocations favoriteLocations = new FavoriteLocations();
-        favoriteLocations.setFavoriteName(requestFavouriteLocationDTO.getFavoriteName());
-        favoriteLocations.setLocations(requestFavouriteLocationDTO.getLocations());
-        favoriteLocations.setPassengers(requestFavouriteLocationDTO.getPassengers());
-        favoriteLocations.setVehicleType(requestFavouriteLocationDTO.getVehicleType());
-        favoriteLocations.setPetTransport(requestFavouriteLocationDTO.isPetTransport());
-        favoriteLocations.setBabyTransport(requestFavouriteLocationDTO.isBabyTransport());
+        //TODO Skontati kako sam objekat da izgenerise id preko baze
+        //GORA OPCIJA
+        long size = favouriteLocationService.getSize()+1;
+        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations(size);
 
-        favoriteLocations = favouriteLocationService.add(favoriteLocations);
+        //BOLJA OPCIJA
+//        FavoriteLocations favoriteLocations = new FavoriteLocations();
+//        favoriteLocations.setFavoriteName(requestFavouriteLocationDTO.getFavoriteName());
+//        favoriteLocations.setLocations(requestFavouriteLocationDTO.getLocations());
+//        favoriteLocations.setPassengers(requestFavouriteLocationDTO.getPassengers());
+//        favoriteLocations.setVehicleType(requestFavouriteLocationDTO.getVehicleType());
+//        favoriteLocations.setPetTransport(requestFavouriteLocationDTO.isPetTransport());
+//        favoriteLocations.setBabyTransport(requestFavouriteLocationDTO.isBabyTransport());
+
+        favouriteLocationService.add(favoriteLocations);
         return new ResponseEntity<>(favoriteLocations.parseToResponse(), HttpStatus.OK);
     }
 

@@ -36,8 +36,7 @@ public class PanicServiceImpl implements PanicService {
     }
 
     public Panic createPanicByRide(Ride ride, String reason){
-        long id = getAll().size() + 1;
-        Panic panic = new Panic(id, new User(), ride, new Date(), reason);
+        Panic panic = new Panic(new User(), ride, new Date(), reason);
         return panic;
     }
 }

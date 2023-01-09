@@ -31,6 +31,16 @@ public class FavoriteLocations {
 
     }
 
+    public FavoriteLocations(Long id, String favoriteName, List<Location> locations, List<Passenger> passengers, Type vehicleType, boolean babyTransport, boolean petTransport) {
+        this.id = id;
+        this.favoriteName = favoriteName;
+        this.locations = locations;
+        this.passengers = passengers;
+        this.vehicleType = vehicleType;
+        this.babyTransport = babyTransport;
+        this.petTransport = petTransport;
+    }
+
     public FavoriteLocations(String favoriteName, List<Location> locations, List<Passenger> passengers, Type vehicleType, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
         this.locations = locations;
