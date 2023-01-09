@@ -17,9 +17,9 @@ public class FavoriteLocations {
     private Long id;
     private String favoriteName;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private List<Location> locations;
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Passenger> passengers;
 
     @Enumerated
@@ -106,7 +106,7 @@ public class FavoriteLocations {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        return new ResponseFavoriteLocationsDTO(this.id, this.favoriteName, responseLocationDTOS, responsPassengerIdEmailDTOS, this.vehicleType, this.babyTransport, this.petTransport);
+        return new ResponseFavoriteLocationsDTO(this.id, this.favoriteName, responseLocationDTOS, this.vehicleType, this.babyTransport, this.petTransport);
     }
 
     public List<ResponseFavoriteLocationsDTO> parseToResponseList(List<FavoriteLocations> favoriteLocations){

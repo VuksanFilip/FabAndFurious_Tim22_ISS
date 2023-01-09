@@ -11,7 +11,7 @@ public interface FavoriteLocationsService {
 
     Optional<FavoriteLocations> getFavoriteLocations(String id);
 
-    void add(FavoriteLocations favoriteLocations);
+    FavoriteLocations add(FavoriteLocations favoriteLocations);
 
     long getSize();
 

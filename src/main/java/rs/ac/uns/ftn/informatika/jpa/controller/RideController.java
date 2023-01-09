@@ -130,9 +130,15 @@ public class RideController{
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseFavoriteLocationsDTO> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
 
-        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations();
+        FavoriteLocations favoriteLocations = new FavoriteLocations();
+        favoriteLocations.setFavoriteName(requestFavouriteLocationDTO.getFavoriteName());
+        favoriteLocations.setLocations(requestFavouriteLocationDTO.getLocations());
+        favoriteLocations.setPassengers(requestFavouriteLocationDTO.getPassengers());
+        favoriteLocations.setVehicleType(requestFavouriteLocationDTO.getVehicleType());
+        favoriteLocations.setPetTransport(requestFavouriteLocationDTO.isPetTransport());
+        favoriteLocations.setBabyTransport(requestFavouriteLocationDTO.isBabyTransport());
 
-        favouriteLocationService.add(favoriteLocations);
+        favoriteLocations = favouriteLocationService.add(favoriteLocations);
         return new ResponseEntity<>(favoriteLocations.parseToResponse(), HttpStatus.OK);
     }
 

@@ -6,7 +6,6 @@ import rs.ac.uns.ftn.informatika.jpa.model.FavoriteLocations;
 import rs.ac.uns.ftn.informatika.jpa.repository.FavoriteLocationsRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.FavoriteLocationsService;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,11 +31,8 @@ public class FavoriteLocationsServiceImpl implements FavoriteLocationsService {
         return  this.favoriteLocationsRepository.findById(Long.parseLong(id));
     }
 
-    public void add(FavoriteLocations favoriteLocations) {
-        EntityManager entityManager = null;
-        entityManager.persist(favoriteLocations);
-        entityManager.flush();
-        this.favoriteLocationsRepository.save(favoriteLocations);
+    public FavoriteLocations add(FavoriteLocations favoriteLocations) {
+        return this.favoriteLocationsRepository.save(favoriteLocations);
     }
 
     @Override
