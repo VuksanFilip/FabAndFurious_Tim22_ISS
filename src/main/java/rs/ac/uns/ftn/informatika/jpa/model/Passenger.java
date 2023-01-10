@@ -23,7 +23,7 @@ public class Passenger{
     private boolean blocked;
     private boolean active;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     List<Ride> rides;
 
     @OneToMany
@@ -52,6 +52,18 @@ public class Passenger{
 
     public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = false;
+        this.active = false;
+    }
+
+    public Passenger(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.picture = picture;
@@ -172,6 +184,15 @@ public class Passenger{
 
     public void setFavoriteRides(ArrayList<Path> favoriteRides) {
         this.favoritePaths = favoriteRides;
+    }
+
+    public void update(Passenger passenger){
+        this.firstName = passenger.getFirstName();
+        this.lastName = passenger.getLastName();
+        this.picture = passenger.getPicture();
+        this.phoneNumber = passenger.getPhoneNumber();
+        this.email = passenger.getEmail();
+        this.address = passenger.getAddress();
     }
 
     public ResponsePassengerDTO parseToResponse(){

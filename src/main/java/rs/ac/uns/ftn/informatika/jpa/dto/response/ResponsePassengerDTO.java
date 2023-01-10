@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+
 public class ResponsePassengerDTO {
 
     private Long id;
@@ -11,6 +13,16 @@ public class ResponsePassengerDTO {
     private String address;
 
     public ResponsePassengerDTO() {
+    }
+
+    public ResponsePassengerDTO(Passenger passenger) {
+        this.id = passenger.getId();
+        this.name = passenger.getFirstName();
+        this.surname = passenger.getLastName();
+        this.profilePicture = passenger.getPicture();
+        this.telephoneNumber = passenger.getPhoneNumber();
+        this.email = passenger.getEmail();
+        this.address = passenger.getAddress();
     }
 
     public ResponsePassengerDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {

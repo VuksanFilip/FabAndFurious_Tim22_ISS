@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
@@ -29,6 +31,10 @@ public class RideServiceImpl implements RideService {
     @Override
     public Optional<Ride> getRide(String id) {
         return  this.rideRepository.findById(Long.parseLong(id));
+    }
+
+    public Page<Ride> findAll(Pageable page) {
+        return rideRepository.findAll(page);
     }
 
     @Override

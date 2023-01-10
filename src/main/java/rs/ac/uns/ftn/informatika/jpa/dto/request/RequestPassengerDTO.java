@@ -97,8 +97,8 @@ public class RequestPassengerDTO {
         return passengerResponse;
     }
 
-    public Passenger parseToPassenger(Long id){
-        return new Passenger(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
+    public Passenger parseToPassenger(){
+        return new Passenger(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
     }
 
 }

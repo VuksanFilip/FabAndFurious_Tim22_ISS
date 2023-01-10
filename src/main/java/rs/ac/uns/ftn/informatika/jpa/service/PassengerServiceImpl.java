@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.repository.PassengerRepository;
@@ -20,7 +22,11 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     public List<Passenger> getAll() {
-        return (List<Passenger>) this.passengerRepository.findAll();
+        return this.passengerRepository.findAll();
+    }
+
+    public Page<Passenger> findAll(Pageable page) {
+        return passengerRepository.findAll(page);
     }
 
     @Override

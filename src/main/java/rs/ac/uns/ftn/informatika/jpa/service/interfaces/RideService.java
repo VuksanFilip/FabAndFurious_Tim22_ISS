@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
@@ -26,4 +29,7 @@ public interface RideService {
     void updateRideByStatus(String id, RideStatus status);
 
     void updateRideByRejectionLetter(String id, RejectionLetter letter);
+
+    Page<Ride> findAll(Pageable page);
+
 }
