@@ -14,9 +14,9 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicSmallerDataDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.FavoriteLocationsService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.PanicService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IFavoriteLocationsService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPanicService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +25,12 @@ import java.util.Optional;
 @RequestMapping("/api/ride")
 public class RideController{
 
-    private RideService rideService;
-    private PanicService panicService;
-    private FavoriteLocationsService favouriteLocationService;
+    private IRideService rideService;
+    private IPanicService panicService;
+    private IFavoriteLocationsService favouriteLocationService;
 
     @Autowired
-    public RideController(RideService rideService, PanicService panicService, FavoriteLocationsService favouriteLocationService) {
+    public RideController(IRideService rideService, IPanicService panicService, IFavoriteLocationsService favouriteLocationService) {
         this.rideService = rideService;
         this.panicService = panicService;
         this.favouriteLocationService = favouriteLocationService;

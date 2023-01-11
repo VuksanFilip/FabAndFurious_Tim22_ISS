@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Admin;
 import rs.ac.uns.ftn.informatika.jpa.repository.AdminRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.AdminService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IAdminService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl implements IAdminService {
 
     private AdminRepository adminRepository;
 

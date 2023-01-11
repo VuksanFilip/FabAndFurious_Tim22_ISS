@@ -2,18 +2,15 @@ package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.UnregisteredUser;
-import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
 import rs.ac.uns.ftn.informatika.jpa.repository.UnregisteredUserRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.UnregisteredUserService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUnregisteredUserService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UnregisteredUserServiceImpl implements UnregisteredUserService {
+public class UnregisteredUserServiceImpl implements IUnregisteredUserService {
 
     private UnregisteredUserRepository unregisteredUserRepository;
 

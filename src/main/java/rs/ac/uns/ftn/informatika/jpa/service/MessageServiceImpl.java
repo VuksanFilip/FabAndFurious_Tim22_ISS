@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Message;
 import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.MessageService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IMessageService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl implements IMessageService {
 
     private MessageRepository messageRepository;
 

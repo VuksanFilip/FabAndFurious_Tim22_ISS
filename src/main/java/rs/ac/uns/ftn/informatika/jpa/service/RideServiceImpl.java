@@ -9,13 +9,13 @@ import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RideServiceImpl implements RideService {
+public class RideServiceImpl implements IRideService {
 
     private RideRepository rideRepository;
 

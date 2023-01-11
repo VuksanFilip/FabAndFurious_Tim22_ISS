@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.repository.RejectionLetterRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RejectionLetterService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRejectionLetterService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RejectionLetterServiceImpl implements RejectionLetterService {
+public class RejectionLetterServiceImpl implements IRejectionLetterService {
 
     private RejectionLetterRepository rejectionLetterRepository;
 

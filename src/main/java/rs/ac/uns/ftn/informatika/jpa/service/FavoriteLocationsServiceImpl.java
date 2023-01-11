@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.FavoriteLocations;
 import rs.ac.uns.ftn.informatika.jpa.repository.FavoriteLocationsRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.FavoriteLocationsService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IFavoriteLocationsService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FavoriteLocationsServiceImpl implements FavoriteLocationsService {
+public class FavoriteLocationsServiceImpl implements IFavoriteLocationsService {
 
     private FavoriteLocationsRepository favoriteLocationsRepository;
 

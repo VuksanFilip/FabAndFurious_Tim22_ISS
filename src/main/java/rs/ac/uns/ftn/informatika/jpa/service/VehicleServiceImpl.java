@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.repository.VehicleRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.VehicleService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class VehicleServiceImpl implements VehicleService {
+public class VehicleServiceImpl implements IVehicleService {
 
     private VehicleRepository vehicleRepository;
 

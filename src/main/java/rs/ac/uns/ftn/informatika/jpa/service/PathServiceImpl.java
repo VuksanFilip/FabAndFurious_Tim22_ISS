@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Path;
 import rs.ac.uns.ftn.informatika.jpa.repository.PathRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.PathService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPathService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PathServiceImpl implements PathService {
+public class PathServiceImpl implements IPathService {
 
     private PathRepository pathRepository;
 

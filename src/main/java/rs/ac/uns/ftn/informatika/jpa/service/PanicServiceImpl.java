@@ -6,14 +6,14 @@ import rs.ac.uns.ftn.informatika.jpa.model.Panic;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.repository.PanicRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.PanicService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPanicService;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PanicServiceImpl implements PanicService {
+public class PanicServiceImpl implements IPanicService {
 
     private PanicRepository panicRepository;
 

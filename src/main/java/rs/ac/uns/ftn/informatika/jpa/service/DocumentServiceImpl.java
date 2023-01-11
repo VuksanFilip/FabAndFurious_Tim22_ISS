@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Document;
 import rs.ac.uns.ftn.informatika.jpa.repository.DocumentRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.DocumentService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDocumentService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DocumentServiceImpl implements DocumentService {
+public class DocumentServiceImpl implements IDocumentService {
 
     private DocumentRepository documentRepository;
 

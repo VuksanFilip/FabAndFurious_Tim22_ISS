@@ -14,8 +14,8 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.PassengerService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.RideService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,11 +26,11 @@ import java.util.Optional;
 @RequestMapping("/api/passenger")
 public class PassengerController{
 
-    private PassengerService passengerService;
-    private RideService rideService;
+    private IPassengerService passengerService;
+    private IRideService rideService;
 
     @Autowired
-    public PassengerController(PassengerService passengerService, RideService rideService) {
+    public PassengerController(IPassengerService passengerService, IRideService rideService) {
         this.passengerService = passengerService;
         this.rideService = rideService;
     }

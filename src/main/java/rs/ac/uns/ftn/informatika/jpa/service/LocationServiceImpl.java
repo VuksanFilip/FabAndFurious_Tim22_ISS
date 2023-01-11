@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
 import rs.ac.uns.ftn.informatika.jpa.repository.LocationRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.LocationService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.ILocationService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LocationServiceImpl implements LocationService {
+public class LocationServiceImpl implements ILocationService {
 
     private LocationRepository locationRepository;
 

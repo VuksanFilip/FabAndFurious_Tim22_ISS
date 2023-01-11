@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
 import rs.ac.uns.ftn.informatika.jpa.repository.ReviewRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.ReviewService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IReviewService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReviewServiceImpl implements ReviewService {
+public class ReviewServiceImpl implements IReviewService {
 
     private ReviewRepository reviewRepository;
 

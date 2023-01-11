@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserActivationRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.UserActivationService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserActivationServiceImpl implements UserActivationService {
+public class UserActivationServiceImpl implements IUserActivationService {
 
     private UserActivationRepository userActivationRepository;
 

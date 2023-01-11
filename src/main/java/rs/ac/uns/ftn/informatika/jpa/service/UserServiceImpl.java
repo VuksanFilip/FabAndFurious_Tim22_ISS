@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.UserService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
 
     private UserRepository userRepository;
 

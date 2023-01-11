@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.repository.NoteRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.NoteService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.INoteService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NoteServiceImpl implements NoteService {
+public class NoteServiceImpl implements INoteService {
 
     private NoteRepository noteRepository;
 

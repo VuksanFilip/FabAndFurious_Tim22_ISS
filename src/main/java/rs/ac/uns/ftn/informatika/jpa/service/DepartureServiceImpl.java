@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Departure;
 import rs.ac.uns.ftn.informatika.jpa.repository.DepartureRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.DepartureService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDepartureService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DepartureServiceImpl implements DepartureService {
+public class DepartureServiceImpl implements IDepartureService {
 
     private DepartureRepository departureRepository;
 
