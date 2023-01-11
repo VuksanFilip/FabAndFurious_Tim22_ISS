@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
 import java.util.List;
 import java.util.Optional;
 
-public interface VehicleTypeService {
+public interface IVehicleTypeService {
 
     List<VehicleType> getAll();
 

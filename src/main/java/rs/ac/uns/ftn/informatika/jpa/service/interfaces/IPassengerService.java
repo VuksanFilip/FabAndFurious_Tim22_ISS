@@ -7,7 +7,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import java.util.List;
 import java.util.Optional;
 
-public interface PassengerService {
+public interface IPassengerService {
 
     List<Passenger> getAll();
 

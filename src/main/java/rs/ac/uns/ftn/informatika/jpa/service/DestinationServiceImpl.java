@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Destination;
 import rs.ac.uns.ftn.informatika.jpa.repository.DestinationRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.DestinationService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDestinationService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DestinationServiceImpl implements DestinationService {
+public class DestinationServiceImpl implements IDestinationService {
 
     private DestinationRepository destinationRepository;
 

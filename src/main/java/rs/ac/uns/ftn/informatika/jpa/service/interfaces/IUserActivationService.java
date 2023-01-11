@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserActivationService {
+public interface IUserActivationService {
 
     List<UserActivation> getAll();
 

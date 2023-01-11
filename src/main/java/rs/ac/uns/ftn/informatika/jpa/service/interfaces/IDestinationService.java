@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Destination;
 import java.util.List;
 import java.util.Optional;
 
-public interface DestinationService {
+public interface IDestinationService {
 
     List<Destination> getAll();
 

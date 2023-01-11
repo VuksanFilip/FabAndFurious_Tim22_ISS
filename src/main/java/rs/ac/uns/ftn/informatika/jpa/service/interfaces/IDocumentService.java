@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Document;
 import java.util.List;
 import java.util.Optional;
 
-public interface DocumentService {
+public interface IDocumentService {
 
     List<Document> getAll();
 

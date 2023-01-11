@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.FavoriteLocations;
 import java.util.List;
 import java.util.Optional;
 
-public interface FavoriteLocationsService {
+public interface IFavoriteLocationsService {
 
     List<FavoriteLocations> getAll();
 

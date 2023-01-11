@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.WorkHour;
 import java.util.List;
 import java.util.Optional;
 
-public interface WorkHourService {
+public interface IWorkHourService {
 
     List<WorkHour> getAll();
 

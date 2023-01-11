@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import java.util.List;
 import java.util.Optional;
 
-public interface RejectionLetterService {
+public interface IRejectionLetterService {
 
     List<RejectionLetter> getAll();
 

@@ -6,7 +6,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import java.util.List;
 import java.util.Optional;
 
-public interface PanicService {
+public interface IPanicService {
 
     List<Panic> getAll();
 

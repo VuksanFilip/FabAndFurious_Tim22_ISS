@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Admin;
 import java.util.List;
 import java.util.Optional;
 
-public interface AdminService {
+public interface IAdminService {
 
     List<Admin> getAll();
 

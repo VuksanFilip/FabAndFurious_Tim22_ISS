@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.WorkHour;
 import rs.ac.uns.ftn.informatika.jpa.repository.WorkHourRepository;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.WorkHourService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkHourService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class WorkHourServiceImpl implements WorkHourService {
+public class WorkHourServiceImpl implements IWorkHourService {
 
     private WorkHourRepository workHourRepository;
 

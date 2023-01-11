@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.UnregisteredUser;
 import java.util.List;
 import java.util.Optional;
 
-public interface UnregisteredUserService {
+public interface IUnregisteredUserService {
 
     List<UnregisteredUser> getAll();
 

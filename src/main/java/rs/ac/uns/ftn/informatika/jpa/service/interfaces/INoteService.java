@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import java.util.List;
 import java.util.Optional;
 
-public interface NoteService {
+public interface INoteService {
 
     List<Note> getAll();
 

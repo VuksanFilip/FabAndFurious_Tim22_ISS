@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Departure;
 import java.util.List;
 import java.util.Optional;
 
-public interface DepartureService {
+public interface IDepartureService {
 
     List<Departure> getAll();
 
