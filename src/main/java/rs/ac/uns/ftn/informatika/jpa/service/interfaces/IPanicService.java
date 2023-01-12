@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.informatika.jpa.model.Panic;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 
@@ -15,4 +17,8 @@ public interface IPanicService {
     void add(Panic panic);
 
     Panic createPanicByRide(Ride ride, String Reason);
+
+    Page<Panic> findAll(Pageable page);
+
+
 }

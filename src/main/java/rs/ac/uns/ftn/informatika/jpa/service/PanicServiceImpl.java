@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Panic;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
@@ -24,6 +26,10 @@ public class PanicServiceImpl implements IPanicService {
 
     public List<Panic> getAll() {
         return (List<Panic>) this.panicRepository.findAll();
+    }
+
+    public Page<Panic> findAll(Pageable page) {
+        return panicRepository.findAll(page);
     }
 
     @Override
