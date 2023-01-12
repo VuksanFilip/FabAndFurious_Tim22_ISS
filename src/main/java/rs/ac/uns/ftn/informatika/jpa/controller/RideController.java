@@ -57,9 +57,7 @@ public class RideController{
 //        ride.setLetter(new RejectionLetter());
 
         rideService.add(ride);
-
-        ResponseRideDTO responseRideDTO = ride.parseToResponseDefault();
-        return new ResponseEntity<>(responseRideDTO, HttpStatus.OK);
+        return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)

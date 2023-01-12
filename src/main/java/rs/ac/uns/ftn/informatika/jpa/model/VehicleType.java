@@ -12,14 +12,6 @@ public class VehicleType {
     Type type;
     float pricePerKm;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public VehicleType() {
     }
 
@@ -30,6 +22,18 @@ public class VehicleType {
     public VehicleType(Type type, float pricePerKm) {
         this.type = type;
         this.pricePerKm = pricePerKm;
+    }
+
+    public VehicleType(VehicleType type) {
+        this.type = type.getType();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Type getType() {

@@ -5,53 +5,56 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Vehicle {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long id;
 
     @OneToOne
     Driver driver;
     String vehicleModel;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     VehicleType type;
     String registarskeTablice;
     int seats;
 
     @OneToOne
     Location location;
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    CurrentLocation currentLocation;
+
     boolean babyFriendly;
     boolean petFriendly;
 
     @OneToMany
     List<Review> reviews;
 
+    public Vehicle() {
+    }
+
     public Vehicle(Long id) {
         this.id = id;
     }
 
-
-    public Vehicle() {
+    public Vehicle(VehicleType vehicleType) {
+        this.type = vehicleType;
     }
 
-
-
-    public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
+    public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
         this.id = id;
         this.driver = new Driver(driverId);
         this.vehicleModel = vehicleModel;
         this.type = type;
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
-        this.location = currentLocation;
+        this.location = location;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
@@ -147,6 +150,11 @@ public class Vehicle {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public void updateLocation(CurrentLocation location){
+
+        this.currentLocation = location;
     }
 
     public ResponseDriverVehicleDTO parseToResponse(){

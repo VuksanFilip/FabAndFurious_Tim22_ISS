@@ -1,8 +1,5 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 import java.util.ArrayList;
@@ -66,23 +63,23 @@ public class RequestRideDTO {
         this.petTransport = petTransport;
     }
 
-    public ResponseRideDTO parseToResponse(Long id){
-        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-        for(Passenger p : passengers){
-            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-        }
-
-        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        ResponseLocationDTO responseDepartureDTO = new ResponseLocationDTO();
-        ResponseLocationDTO responseDestinationDTO = new ResponseLocationDTO();
-        responseLocationDTOS.add(responseDepartureDTO);
-        responseLocationDTOS.add(responseDestinationDTO);
-
-        ResponseRideDTO rideResponse = new ResponseRideDTO(id, responsPassengerIdEmailDTOS, this.vehicleType, this.babyTransport, this.petTransport, responseLocationDTOS);
-        return rideResponse;
-    }
+//    public ResponseRideDTO parseToResponse(Long id){
+//        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
+//        for(Passenger p : passengers){
+//            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
+//        }
+//
+//        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
+//        ResponseLocationDTO responseDepartureDTO = new ResponseLocationDTO();
+//        ResponseLocationDTO responseDestinationDTO = new ResponseLocationDTO();
+//        responseLocationDTOS.add(responseDepartureDTO);
+//        responseLocationDTOS.add(responseDestinationDTO);
+//
+//        ResponseRideDTO rideResponse = new ResponseRideDTO(id, responsPassengerIdEmailDTOS, new Vehicle(new VehicleType(this.vehicleType)), this.babyTransport, this.petTransport, responseLocationDTOS);
+//        return rideResponse;
+//    }
 
     public Ride parseToRide(Long id){
-        return new Ride(id, this.locations, this.passengers, new VehicleType(this.vehicleType), this.babyTransport, this.petTransport);
+        return new Ride(id, this.locations, this.passengers, new Vehicle(new VehicleType(this.vehicleType)), this.babyTransport, this.petTransport);
     }
 }
