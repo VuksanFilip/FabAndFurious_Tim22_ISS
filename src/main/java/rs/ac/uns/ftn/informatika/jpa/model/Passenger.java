@@ -196,7 +196,7 @@ public class Passenger{
     }
 
     public ResponsePassengerDTO parseToResponse(){
-        return new ResponsePassengerDTO(this.getId(), this.getFirstName(), this.getFirstName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
+        return new ResponsePassengerDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
     }
 
     public ResponsePanicRidePassengerDTO parseToPanicPassengersDTO(){

@@ -15,4 +15,6 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     List<Passenger> findAll();
     Optional<Passenger> findById(String Long);
     Page<Passenger> findAll(Pageable pageable);
+
+    Passenger findByEmail(String email);
 }

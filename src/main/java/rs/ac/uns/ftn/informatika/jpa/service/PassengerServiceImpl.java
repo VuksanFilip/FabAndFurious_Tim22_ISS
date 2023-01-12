@@ -30,6 +30,11 @@ public class PassengerServiceImpl implements IPassengerService {
     }
 
     @Override
+    public Passenger findByEmail(String email) {
+        return passengerRepository.findByEmail(email);
+    }
+
+    @Override
     public Optional<Passenger> getPassenger(String id) {
         return  this.passengerRepository.findById(Long.parseLong(id));
     }

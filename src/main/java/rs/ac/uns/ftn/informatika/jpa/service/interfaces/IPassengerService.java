@@ -17,4 +17,6 @@ public interface IPassengerService {
 
     Page<Passenger> findAll(Pageable page);
 
+    Passenger findByEmail(String email);
+
 }

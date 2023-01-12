@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.messages.Message;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
@@ -36,8 +37,10 @@ public class PassengerController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponsePassengerDTO> createPassenger(@RequestBody RequestPassengerDTO requestPassengerDTO) throws Exception {
-
+    public ResponseEntity<?> createPassenger(@RequestBody RequestPassengerDTO requestPassengerDTO) throws Exception {
+        if(this.passengerService.findByEmail(requestPassengerDTO.getEmail()) != null){
+            return new ResponseEntity<>(new Message("User with that email already exists!"), HttpStatus.BAD_REQUEST);
+        }
         Passenger passenger =  requestPassengerDTO.parseToPassenger();
         passengerService.add(passenger);
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
@@ -57,23 +60,28 @@ public class PassengerController{
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponsePassengerDTO> getPassenger(@PathVariable("id") String id) {
-
+    public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
+        if(this.passengerService.getPassenger(id) == null){
+            return new ResponseEntity<>(new Message("Passenger does not exist!"), HttpStatus.NOT_FOUND);
+        }
         Optional<Passenger> passenger = this.passengerService.getPassenger(id);
         return new ResponseEntity<>(passenger.get().parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/activate/{activationId}")
-    public ResponseEntity<String> activatePassenger(@PathVariable("activationId") String id) {
+    public ResponseEntity<Message> activatePassenger(@PathVariable("activationId") String id) {
         if(passengerService.getPassenger(id).isPresent()){
-            return new ResponseEntity<>("Message placeholder (Concrete messages are in description)", HttpStatus.OK);
+            return new ResponseEntity<>(new Message("Successful account activation!"), HttpStatus.OK);
 
         }
-        return new ResponseEntity<>("Message placeholder (Concrete messages are in description)", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new Message("Activation with entered id does not exist!"), HttpStatus.NOT_FOUND);
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponsePassengerDTO> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
+    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
+        if(this.passengerService.getPassenger(id) == null){
+            return new ResponseEntity<>(new Message("Passenger does not exist!"), HttpStatus.NOT_FOUND);
+        }
         Passenger passengerForUpdate = passengerService.getPassenger(id).get();
         Passenger passenger = requestPassengerDTO.parseToPassenger();
         passengerForUpdate.update(passenger);
