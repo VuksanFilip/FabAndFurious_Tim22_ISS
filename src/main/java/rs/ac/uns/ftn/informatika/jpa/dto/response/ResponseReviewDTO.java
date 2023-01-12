@@ -1,13 +1,11 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
-
 public class ResponseReviewDTO {
 
     private Long id;
     private float rating;
     private String comment;
-    private Passenger passenger;
+    private ResponsePassengerIdEmailDTO passenger;
 
     public ResponseReviewDTO() {
     }
@@ -23,6 +21,13 @@ public class ResponseReviewDTO {
         this.rating = rating;
         this.comment = comment;
         this.passenger = null;
+    }
+
+    public ResponseReviewDTO(Long id , float rating, String comment, ResponsePassengerIdEmailDTO passenger) {
+        this.id = id;
+        this.rating = rating;
+        this.comment = comment;
+        this.passenger = passenger;
     }
 
 
@@ -51,11 +56,11 @@ public class ResponseReviewDTO {
         this.comment = comment;
     }
 
-    public Passenger getPassenger() {
+    public ResponsePassengerIdEmailDTO getPassenger() {
         return passenger;
     }
 
-    public void setPassenger(Passenger passenger) {
+    public void setPassenger(ResponsePassengerIdEmailDTO passenger) {
         this.passenger = passenger;
     }
 }

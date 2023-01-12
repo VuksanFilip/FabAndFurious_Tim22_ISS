@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
 import rs.ac.uns.ftn.informatika.jpa.repository.ReviewRepository;
@@ -22,6 +24,11 @@ public class ReviewServiceImpl implements IReviewService {
     public List<Review> getAll() {
         return (List<Review>) this.reviewRepository.findAll();
     }
+
+    public Page<Review> findAll(Pageable page) {
+        return reviewRepository.findAll(page);
+    }
+
 
     @Override
     public Optional<Review> getReview(String id) {

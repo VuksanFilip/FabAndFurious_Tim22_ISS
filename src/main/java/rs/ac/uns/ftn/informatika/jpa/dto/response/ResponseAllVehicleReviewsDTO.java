@@ -1,13 +1,14 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResponseAllVehicleReviewsDTO {
 
     private int totalCount;
-    private ArrayList<ResponseReviewDTO> results;
+    private List<ResponseReviewDTO> results;
 
-    public ResponseAllVehicleReviewsDTO(int totalCount, ArrayList<ResponseReviewDTO> results) {
+    public ResponseAllVehicleReviewsDTO(int totalCount, List<ResponseReviewDTO> results) {
         this.totalCount = totalCount;
         this.results = results;
     }
@@ -20,7 +21,7 @@ public class ResponseAllVehicleReviewsDTO {
         this.totalCount = totalCount;
     }
 
-    public ArrayList<ResponseReviewDTO> getResults() {
+    public List<ResponseReviewDTO> getResults() {
         return results;
     }
 

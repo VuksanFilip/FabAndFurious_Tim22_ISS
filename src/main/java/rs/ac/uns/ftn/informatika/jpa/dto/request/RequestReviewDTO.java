@@ -5,11 +5,6 @@ import rs.ac.uns.ftn.informatika.jpa.model.Review;
 
 public class RequestReviewDTO {
 
-    //{
-//        "rating": 3,
-//        "comment": "The vehicle was bad and dirty"
-//        }
-
     private int rating;
     private String comment;
 
@@ -44,11 +39,11 @@ public class RequestReviewDTO {
     }
 
 
-    public Review parseToReviewVehicle(Long id, Long rideId, Long vehicleId){
-        return new Review(id, this.rating, this.comment, null, rideId, vehicleId,null);
+    public Review parseToReviewVehicle(Long rideId, Long vehicleId){
+        return new Review(this.rating, this.comment, null, rideId, vehicleId);
     }
 
-    public Review parseToReviewDriver(Long id, Long rideId, Long driverId){
-        return new Review(id, this.rating, this.comment, null, rideId, null,driverId);
+    public Review parseToReviewDriver(Long rideId, Long driverId){
+        return new Review(this.rating, this.comment, null, rideId, null,driverId);
     }
 }

@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+
 public class ResponsePassengerIdEmailDTO {
 
     private Long id;
@@ -11,6 +13,11 @@ public class ResponsePassengerIdEmailDTO {
     public ResponsePassengerIdEmailDTO(Long id, String email) {
         this.id = id;
         this.email = email;
+    }
+
+    public ResponsePassengerIdEmailDTO(Passenger passenger) {
+        this.id = passenger.getId();
+        this.email = passenger.getEmail();
     }
 
     public Long getId() {
