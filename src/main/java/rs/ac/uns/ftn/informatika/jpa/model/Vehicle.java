@@ -24,7 +24,7 @@ public class Vehicle {
     String registarskeTablice;
     int seats;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     Location location;
 
     @OneToOne(cascade = {CascadeType.ALL})
@@ -55,6 +55,28 @@ public class Vehicle {
         this.registarskeTablice = registarskeTablice;
         this.seats = seats;
         this.location = location;
+        this.babyFriendly = babyFriendly;
+        this.petFriendly = petFriendly;
+    }
+
+    public Vehicle(Driver driver, VehicleType type, String vehicleModel, String registarskeTablice, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
+        this.driver = driver;
+        this.vehicleModel = vehicleModel;
+        this.type = type;
+        this.registarskeTablice = registarskeTablice;
+        this.seats = seats;
+        this.location = location;
+        this.babyFriendly = babyFriendly;
+        this.petFriendly = petFriendly;
+    }
+
+    public Vehicle(Driver driver, VehicleType type, String vehicleModel, String registarskeTablice, CurrentLocation currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
+        this.driver = driver;
+        this.vehicleModel = vehicleModel;
+        this.type = type;
+        this.registarskeTablice = registarskeTablice;
+        this.seats = seats;
+        this.currentLocation = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }

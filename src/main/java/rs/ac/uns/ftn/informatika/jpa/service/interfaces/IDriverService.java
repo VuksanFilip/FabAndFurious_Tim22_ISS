@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 
 import java.util.List;
@@ -12,4 +14,6 @@ public interface IDriverService {
     Optional<Driver> getDriver(String id);
 
     void add(Driver driver);
+
+    Page<Driver> findAll(Pageable page);
 }

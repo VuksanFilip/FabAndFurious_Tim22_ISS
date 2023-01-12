@@ -12,4 +12,6 @@ public interface IDocumentService {
     Optional<Document> getDocument(String id);
 
     void add(Document document);
+
+    void deleteById(String id);
 }
