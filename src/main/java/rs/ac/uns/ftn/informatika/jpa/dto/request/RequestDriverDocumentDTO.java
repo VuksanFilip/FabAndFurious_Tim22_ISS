@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Document;
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 
 public class RequestDriverDocumentDTO {
 //    {
@@ -52,7 +53,7 @@ public class RequestDriverDocumentDTO {
         return driverDocumentResponse;
     }
 
-    public Document parseToDocument(Long id, Long driverId){
-        return new Document(id, this.name, this.documentImage, driverId);
+    public Document parseToDocument(Driver driver){
+        return new Document(this.name, this.documentImage, driver);
     }
 }

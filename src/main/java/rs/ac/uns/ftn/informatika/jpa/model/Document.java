@@ -2,19 +2,18 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class Document {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long id;
     String name;
     String image;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     Driver driver;
 
     public Document() {
@@ -25,6 +24,18 @@ public class Document {
         this.name = name;
         this.image = image;
         this.driver = new Driver(driverId);
+    }
+
+    public Document(String name, String image, Long driverId) {
+        this.name = name;
+        this.image = image;
+        this.driver = new Driver(driverId);
+    }
+
+    public Document(String name, String image, Driver driver) {
+        this.name = name;
+        this.image = image;
+        this.driver = driver;
     }
 
     public Long getId() {

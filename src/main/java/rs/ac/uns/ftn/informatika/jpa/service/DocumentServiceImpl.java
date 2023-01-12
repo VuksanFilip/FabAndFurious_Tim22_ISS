@@ -24,6 +24,11 @@ public class DocumentServiceImpl implements IDocumentService {
     }
 
     @Override
+    public void deleteById(String id) {
+        this.documentRepository.deleteById(Long.parseLong(id));
+    }
+
+    @Override
     public Optional<Document> getDocument(String id) {
         return  this.documentRepository.findById(Long.parseLong(id));
     }

@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.repository.DriverRepository;
@@ -21,6 +23,10 @@ public class DriverServiceImpl implements IDriverService {
 
     public List<Driver> getAll() {
         return (List<Driver>) this.driverRepository.findAll();
+    }
+
+    public Page<Driver> findAll(Pageable page) {
+        return driverRepository.findAll(page);
     }
 
     @Override

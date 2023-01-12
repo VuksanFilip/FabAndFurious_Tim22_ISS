@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
+
 public class ResponseDriverDTO {
 
 //    {
@@ -21,6 +23,16 @@ public class ResponseDriverDTO {
     private String address;
 
     public ResponseDriverDTO() {
+    }
+
+    public ResponseDriverDTO(Driver driver) {
+        this.id = driver.getId();
+        this.name = driver.getFirstName();
+        this.surname = driver.getLastName();
+        this.profilePicture = driver.getPicture();
+        this.telephoneNumber = driver.getPhoneNumber();
+        this.email = driver.getEmail();
+        this.address = driver.getAddress();
     }
 
     public ResponseDriverDTO(Long id, String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {

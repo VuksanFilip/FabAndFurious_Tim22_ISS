@@ -23,7 +23,7 @@ public class Driver{
     private boolean blocked;
     private boolean active;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     List<Document> documents;
 
     @OneToMany
@@ -59,6 +59,18 @@ public class Driver{
 
     public Driver(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password){
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = false;
+        this.active = false;
+    }
+
+    public Driver( String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password){
         this.firstName = firstName;
         this.lastName = lastName;
         this.picture = picture;
@@ -188,6 +200,15 @@ public class Driver{
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public void update(Driver driver){
+        this.firstName = driver.getFirstName();
+        this.lastName = driver.getLastName();
+        this.picture = driver.getPicture();
+        this.phoneNumber = driver.getPhoneNumber();
+        this.email = driver.getEmail();
+        this.address = driver.getAddress();
     }
 
     public ResponseDriverDTO parseToResponse(){
