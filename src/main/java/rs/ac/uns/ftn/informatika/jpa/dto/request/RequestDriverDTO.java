@@ -98,7 +98,7 @@ public class RequestDriverDTO {
         return driverResponse;
     }
 
-    public Driver parseToDriver(Long id){
-        return new Driver(id, this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
+    public Driver parseToDriver(){
+        return new Driver(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
     }
 }

@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Document;
+
 public class ResponseDriverDocumentDTO {
 
 //    {
@@ -19,6 +21,13 @@ public class ResponseDriverDocumentDTO {
         this.name = name;
         this.documentImage = documentImage;
         this.driverId = driverId;
+    }
+
+    public ResponseDriverDocumentDTO(Document document) {
+        this.id = document.getId();
+        this.name = document.getName();
+        this.documentImage = document.getImage();
+        this.driverId = document.getDriver().getId();
     }
 
     public Long getId() {
