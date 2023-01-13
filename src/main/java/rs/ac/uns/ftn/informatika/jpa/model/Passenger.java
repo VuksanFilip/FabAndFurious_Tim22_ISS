@@ -195,6 +195,10 @@ public class Passenger{
         this.address = passenger.getAddress();
     }
 
+    public void activate(){
+        this.active = true;
+    }
+
     public ResponsePassengerDTO parseToResponse(){
         return new ResponsePassengerDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
     }
@@ -202,5 +206,4 @@ public class Passenger{
     public ResponsePanicRidePassengerDTO parseToPanicPassengersDTO(){
         return new ResponsePanicRidePassengerDTO(this.getId(), this.getEmail());
     }
-
 }

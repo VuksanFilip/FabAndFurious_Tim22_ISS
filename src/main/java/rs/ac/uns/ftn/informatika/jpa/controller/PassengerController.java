@@ -61,7 +61,7 @@ public class PassengerController{
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
-        if(this.passengerService.getPassenger(id) == null){
+        if(!this.passengerService.getPassenger(id).isPresent()){
             return new ResponseEntity<>(new Message("Passenger does not exist!"), HttpStatus.NOT_FOUND);
         }
         Optional<Passenger> passenger = this.passengerService.getPassenger(id);
@@ -70,9 +70,10 @@ public class PassengerController{
 
     @GetMapping(value = "/activate/{activationId}")
     public ResponseEntity<Message> activatePassenger(@PathVariable("activationId") String id) {
-        if(passengerService.getPassenger(id).isPresent()){
+        if(this.passengerService.getPassenger(id).isPresent()){
+            Passenger passenger = this.passengerService.getPassenger(id).get();
+            passenger.activate();
             return new ResponseEntity<>(new Message("Successful account activation!"), HttpStatus.OK);
-
         }
         return new ResponseEntity<>(new Message("Activation with entered id does not exist!"), HttpStatus.NOT_FOUND);
     }
