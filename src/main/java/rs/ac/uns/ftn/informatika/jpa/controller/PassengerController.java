@@ -73,6 +73,7 @@ public class PassengerController{
         if(this.passengerService.getPassenger(id).isPresent()){
             Passenger passenger = this.passengerService.getPassenger(id).get();
             passenger.activate();
+            this.passengerService.add(passenger);
             return new ResponseEntity<>(new Message("Successful account activation!"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new Message("Activation with entered id does not exist!"), HttpStatus.NOT_FOUND);
@@ -80,7 +81,7 @@ public class PassengerController{
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
-        if(this.passengerService.getPassenger(id) == null){
+        if(!this.passengerService.getPassenger(id).isPresent()){
             return new ResponseEntity<>(new Message("Passenger does not exist!"), HttpStatus.NOT_FOUND);
         }
         Passenger passengerForUpdate = passengerService.getPassenger(id).get();
