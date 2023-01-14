@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.messages.Message;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.dummy.DocumentDummy;
@@ -43,10 +44,13 @@ public class DriverController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseDriverDTO> createDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
+    public ResponseEntity<?> createDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
+        if(this.driverService.findByEmail(requestDriverDTO.getEmail()) != null){
+            return new ResponseEntity<>(new Message("User with that email already exists!"), HttpStatus.BAD_REQUEST);
+        }
         Driver driver = requestDriverDTO.parseToDriver();
         driverService.add(driver);
-        return new ResponseEntity<>(driver.parseToResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(driver.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping
@@ -63,8 +67,10 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseDriverDTO> getDriver(@PathVariable("id") String id) {
-
+    public ResponseEntity<?> getDriver(@PathVariable("id") String id) {
+        if(!this.driverService.getDriver(id).isPresent()){
+            return new ResponseEntity<>(new Message("Driver does not exist!"), HttpStatus.NOT_FOUND);
+        }
         Optional<Driver> driver = this.driverService.getDriver(id);
         return new ResponseEntity<>(driver.get().parseToResponse(), HttpStatus.OK);
     }

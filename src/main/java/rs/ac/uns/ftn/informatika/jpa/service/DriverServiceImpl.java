@@ -30,6 +30,11 @@ public class DriverServiceImpl implements IDriverService {
     }
 
     @Override
+    public Driver findByEmail(String email) {
+        return driverRepository.findByEmail(email);
+    }
+
+    @Override
     public Optional<Driver> getDriver(String id) {
         return  this.driverRepository.findById(Long.parseLong(id));
     }

@@ -16,4 +16,6 @@ public interface IDriverService {
     void add(Driver driver);
 
     Page<Driver> findAll(Pageable page);
+
+    Driver findByEmail(String email);
 }
