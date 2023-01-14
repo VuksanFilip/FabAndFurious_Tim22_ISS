@@ -20,14 +20,16 @@ public class VehicleController {
 
 
     @PutMapping(value = "/{id}/location", consumes = "application/json")
-    public ResponseEntity<String> changeLocation(@PathVariable("id") String id, @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
+    public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
 
-
-        Vehicle vehicleForUpdate = vehicleService.getVehicle(id).get();
+        if(vehicleService.existsById(id) == false){
+            return new ResponseEntity<>("Vehicle does not exist", HttpStatus.NOT_FOUND);
+        }
+        Vehicle vehicle = vehicleService.getVehicle(id).get();
         CurrentLocation updatedLocation = requestCurrentLocationDTO.parseToCurrentLocation();
 
-        vehicleForUpdate.updateLocation(updatedLocation);
-        vehicleService.add(vehicleForUpdate);
+        vehicle.updateLocation(updatedLocation);
+        vehicleService.add(vehicle);
         return new ResponseEntity<>("Coordinates successfully updated", HttpStatus.NO_CONTENT);
     }
 

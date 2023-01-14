@@ -12,5 +12,6 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
 
     List<Vehicle> findAll();
     Optional<Vehicle> findById(String Long);
+    boolean existsById(String Long);
 
 }
