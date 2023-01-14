@@ -39,22 +39,14 @@ public class RideController{
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseRideDTO> postRide(@RequestBody RequestRideDTO requestRideDTO){
 
-        //TODO Skontati kako sam objekat da izgenerise id preko baze
-        //GORA OPCIJA
-        long size = rideService.getSize()+1;
-        Ride ride = requestRideDTO.parseToRide(size);
+        Ride ride = new Ride();
+        ride.setLocations(requestRideDTO.getLocations());
+        ride.setPassengers(requestRideDTO.getPassengers());
+        ride.setVehicle(new Vehicle(new VehicleType(requestRideDTO.getVehicleType())));
+        ride.setBabyTransport(requestRideDTO.isBabyTransport());
+        ride.setPetTransport(requestRideDTO.isPetTransport());
         ride.setDriver(new Driver());
         ride.setLetter(new RejectionLetter());
-
-        //BOLJA OPCIJA
-//        Ride ride = new Ride();
-//        ride.setLocations(requestRideDTO.getLocations());
-//        ride.setPassengers(requestRideDTO.getPassengers());
-//        ride.setVehicleType(new VehicleType(requestRideDTO.getVehicleType()));
-//        ride.setBabyTransport(requestRideDTO.isBabyTransport());
-//        ride.setPetTransport(requestRideDTO.isPetTransport());
-//        ride.setDriver(new Driver());
-//        ride.setLetter(new RejectionLetter());
 
         rideService.add(ride);
         return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
@@ -65,7 +57,30 @@ public class RideController{
 
         Ride ride = rideService.getRideByDriverId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
+            ResponseRideDTO response = ride.parseToResponseDefault();
+//            response.setId(123L);
+//            response.getStartTime();
+//            response.getEndTime();
+//            response.setTotalCost(12345);
+//            response.getDriver().setId(123L);
+//            response.getDriver().setEmail("user@example.com");
+//            response.getPassengers().get(0).setId(123L);
+//            response.getPassengers().get(0).setEmail("user@example.com");
+//            response.setEstimatedTimeInMinutes(5);
+//            response.setVehicleType(Type.STANDARD);
+//            response.setBabyTransport(true);
+//            response.setPetTransport(true);
+//            response.getRejection().setReason("Ride is canceled due to previous problems with the passenger");
+//            response.getRejection().getTimeOfRejection();
+//            response.getLocations().get(0).getDeparture().setAddress("Bulevar oslobodjenja 46");
+//            response.getLocations().get(0).getDeparture().setLatitude(45.267136);
+//            response.getLocations().get(0).getDeparture().setLongitude(19.833549);
+//            response.getLocations().get(0).getDestination().setAddress("Bulevar oslobodjenja 46");
+//            response.getLocations().get(0).getDestination().setLatitude(45.267136);
+//            response.getLocations().get(0).getDestination().setLongitude(19.833549);
+//            response.setStatus(RideStatus.PENDING);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -77,7 +92,30 @@ public class RideController{
 
         Ride ride = rideService.getRideByPassengerId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
+            ResponseRideDTO response = ride.parseToResponseDefault();
+//            response.setId(123L);
+//            response.getStartTime();
+//            response.getEndTime();
+//            response.setTotalCost(12345);
+//            response.getDriver().setId(123L);
+//            response.getDriver().setEmail("user@example.com");
+//            response.getPassengers().get(0).setId(123L);
+//            response.getPassengers().get(0).setEmail("user@example.com");
+//            response.setEstimatedTimeInMinutes(5);
+//            response.setVehicleType(Type.STANDARD);
+//            response.setBabyTransport(true);
+//            response.setPetTransport(true);
+//            response.getRejection().setReason("Ride is canceled due to previous problems with the passenger");
+//            response.getRejection().getTimeOfRejection();
+//            response.getLocations().get(0).getDeparture().setAddress("Bulevar oslobodjenja 46");
+//            response.getLocations().get(0).getDeparture().setLatitude(45.267136);
+//            response.getLocations().get(0).getDeparture().setLongitude(19.833549);
+//            response.getLocations().get(0).getDestination().setAddress("Bulevar oslobodjenja 46");
+//            response.getLocations().get(0).getDestination().setLatitude(45.267136);
+//            response.getLocations().get(0).getDestination().setLongitude(19.833549);
+//            response.setStatus(RideStatus.PENDING);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -136,19 +174,13 @@ public class RideController{
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseFavoriteLocationsDTO> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
 
-        //TODO Skontati kako sam objekat da izgenerise id preko baze
-        //GORA OPCIJA
-        long size = favouriteLocationService.getSize()+1;
-        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations(size);
-
-        //BOLJA OPCIJA
-//        FavoriteLocations favoriteLocations = new FavoriteLocations();
-//        favoriteLocations.setFavoriteName(requestFavouriteLocationDTO.getFavoriteName());
-//        favoriteLocations.setLocations(requestFavouriteLocationDTO.getLocations());
-//        favoriteLocations.setPassengers(requestFavouriteLocationDTO.getPassengers());
-//        favoriteLocations.setVehicleType(requestFavouriteLocationDTO.getVehicleType());
-//        favoriteLocations.setPetTransport(requestFavouriteLocationDTO.isPetTransport());
-//        favoriteLocations.setBabyTransport(requestFavouriteLocationDTO.isBabyTransport());
+        FavoriteLocations favoriteLocations = new FavoriteLocations();
+        favoriteLocations.setFavoriteName(requestFavouriteLocationDTO.getFavoriteName());
+        favoriteLocations.setLocations(requestFavouriteLocationDTO.getLocations());
+        favoriteLocations.setPassengers(requestFavouriteLocationDTO.getPassengers());
+        favoriteLocations.setVehicleType(requestFavouriteLocationDTO.getVehicleType());
+        favoriteLocations.setPetTransport(requestFavouriteLocationDTO.isPetTransport());
+        favoriteLocations.setBabyTransport(requestFavouriteLocationDTO.isBabyTransport());
 
         favouriteLocationService.add(favoriteLocations);
         return new ResponseEntity<>(favoriteLocations.parseToResponse(), HttpStatus.OK);

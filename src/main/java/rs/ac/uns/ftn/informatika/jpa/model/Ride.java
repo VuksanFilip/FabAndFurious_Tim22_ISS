@@ -18,11 +18,18 @@ public class Ride {
     private Date endTime;
     private int totalCost;
 
+
     @OneToOne(cascade = {CascadeType.ALL})
     private Driver driver;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
+    @Column(name = "passenger_id")
+    @JoinTable(name = "Ride_Passenger",
+            joinColumns = { @JoinColumn(name = "ride_id") },
+            inverseJoinColumns = { @JoinColumn(name = "passenger_id") }
+    )
     private List<Passenger> passengers;
+
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Location> locations;
@@ -318,7 +325,7 @@ public class Ride {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle, this.babyTransport, this.petTransport, responseLocationDTOS);
+        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.type.type, this.babyTransport, this.petTransport, responseLocationDTOS);
         return rideResponse;
     }
 

@@ -17,9 +17,15 @@ public class FavoriteLocations {
     private Long id;
     private String favoriteName;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Location> locations;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @ManyToMany
+    @Column(name = "passenger_id")
+    @JoinTable(name = "Passenger_FavoriteLocation",
+            joinColumns = { @JoinColumn(name = "favoritepath_id") },
+            inverseJoinColumns = { @JoinColumn(name = "passenger_id") }
+    )
     private List<Passenger> passengers;
 
     @Enumerated
