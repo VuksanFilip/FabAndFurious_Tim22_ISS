@@ -1,7 +1,9 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
+import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 
 public class RequestReviewDTO {
 
@@ -38,9 +40,8 @@ public class RequestReviewDTO {
         return reviewResponse;
     }
 
-
-    public Review parseToReviewVehicle(Long rideId, Long vehicleId){
-        return new Review(this.rating, this.comment, null, rideId, vehicleId);
+    public Review parseToReviewVehicle(Ride ride){
+        return new Review(this.rating, this.comment, ride, new Passenger());
     }
 
     public Review parseToReviewDriver(Long rideId, Long driverId){

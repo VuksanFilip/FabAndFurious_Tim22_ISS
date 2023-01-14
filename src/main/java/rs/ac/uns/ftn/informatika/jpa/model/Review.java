@@ -3,14 +3,11 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDriverDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewVehicleDTO;
 
 import javax.persistence.*;
 
 @Entity
 public class Review {
-
-     int totalCount;
 
      @Id
      @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -21,18 +18,23 @@ public class Review {
      @ManyToOne
      Ride ride;
 
-     @ManyToOne(cascade = {CascadeType.ALL})
+     @OneToOne(cascade = {CascadeType.ALL})
      Passenger passenger;
 
      Long vehicleId;
      Long driverId;
 
-     public Review() {
+     public Review(float rating, String comment, Ride ride) {
+          this.rating = rating;
+          this.comment = comment;
+          this.ride = ride;
      }
 
      public Review(Long id) {
           this.id = id;
      }
+
+     public Review(){}
 
      public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, Long vehicleId, String str) {
           this.id = id;
@@ -149,10 +151,6 @@ public class Review {
 
      public void setVehicleId(Long vehicleId) {
           this.vehicleId = vehicleId;
-     }
-
-     public ResponseReviewVehicleDTO parseToResponseVehicle(){
-          return new ResponseReviewVehicleDTO(totalCount, id, this.rating, this.comment);
      }
 
      public ResponseReviewDriverDTO parseToResponseDriver(int totalCount, Long id){
