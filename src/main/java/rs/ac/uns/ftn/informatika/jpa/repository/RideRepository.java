@@ -17,6 +17,5 @@ public interface RideRepository extends CrudRepository<Ride, Long> {
     long count();
     Ride save(Ride ride);
     Page<Ride> findAll(Pageable pageable);
-
-
+    boolean existsById(String Long);
 }

@@ -5,9 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.PassengerRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,18 @@ public class PassengerServiceImpl implements IPassengerService {
 
     public List<Passenger> getAll() {
         return this.passengerRepository.findAll();
+    }
+
+    public List<Passenger> getAllWithStatusPending() {
+        List<Passenger> passengers = new ArrayList<>();
+        for (Passenger p : getAll()) {
+            for (Ride r : p.getRides()) {
+                if (r.getStatus() == RideStatus.PENDING) {
+                    passengers.add(p);
+                }
+            }
+        }
+        return passengers;
     }
 
     public Page<Passenger> findAll(Pageable page) {

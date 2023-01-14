@@ -26,7 +26,7 @@ public class Driver{
     @OneToMany(cascade = {CascadeType.ALL})
     List<Document> documents;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     List<Ride> rides;
 
     @OneToOne

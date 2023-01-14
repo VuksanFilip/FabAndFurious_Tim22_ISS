@@ -31,6 +31,11 @@ public class FavoriteLocationsServiceImpl implements IFavoriteLocationsService {
         return  this.favoriteLocationsRepository.findById(Long.parseLong(id));
     }
 
+    public boolean existsById(String id) {
+        return  this.favoriteLocationsRepository.existsById(Long.parseLong(id));
+    }
+
+
     public void add(FavoriteLocations favoriteLocations) {
         this.favoriteLocationsRepository.save(favoriteLocations);
     }

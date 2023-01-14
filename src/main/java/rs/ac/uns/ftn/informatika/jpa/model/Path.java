@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Path {
@@ -11,6 +13,17 @@ public class Path {
     double startingPoint;
     double endingPoint;
     float km;
+
+    @ManyToMany
+    private List<Passenger> passengers = new ArrayList<>();
+
+    public List<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<Passenger> passengers) {
+        this.passengers = passengers;
+    }
 
     public Long getId() {
         return id;

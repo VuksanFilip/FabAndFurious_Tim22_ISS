@@ -14,7 +14,7 @@ public class ResponseRideNoStatusDTO {
     private ResponseDriverIdEmailDTO driver;
     private ArrayList<ResponsePassengerIdEmailDTO> passengers;
     private int estimatedTimeInMinutes;
-    private Vehicle vehicle;
+    private Type vehicleType;
     private boolean babyTransport;
     private boolean petTransport;
     private ResponseRejectionReasonTimeOfDetectionDTO rejection;
@@ -23,10 +23,10 @@ public class ResponseRideNoStatusDTO {
     public ResponseRideNoStatusDTO() {
     }
 
-    public ResponseRideNoStatusDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Vehicle vehicle, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
+    public ResponseRideNoStatusDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Type type, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
         this.id = id;
         this.passengers = passengers;
-        this.vehicle = vehicle;
+        this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
@@ -94,12 +94,12 @@ public class ResponseRideNoStatusDTO {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Type getVehicleType() {
+        return vehicleType;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setVehicleType(Type vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public boolean isBabyTransport() {

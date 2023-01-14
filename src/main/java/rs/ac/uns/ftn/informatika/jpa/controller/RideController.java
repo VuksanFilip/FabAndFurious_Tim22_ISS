@@ -6,16 +6,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.jpa.ValidateData;
+import rs.ac.uns.ftn.informatika.jpa.dto.messages.Message;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicSmallerDataDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IFavoriteLocationsService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPanicService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 
 import java.util.List;
@@ -25,98 +27,160 @@ import java.util.Optional;
 @RequestMapping("/api/ride")
 public class RideController{
 
+    private ValidateData validateData= new ValidateData();
     private IRideService rideService;
     private IPanicService panicService;
     private IFavoriteLocationsService favouriteLocationService;
+    private IPassengerService passengerService;
 
     @Autowired
-    public RideController(IRideService rideService, IPanicService panicService, IFavoriteLocationsService favouriteLocationService) {
+    public RideController(IRideService rideService, IPanicService panicService, IFavoriteLocationsService favouriteLocationService, IPassengerService passengerService) {
         this.rideService = rideService;
         this.panicService = panicService;
         this.favouriteLocationService = favouriteLocationService;
+        this.passengerService = passengerService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> postRide(@RequestBody RequestRideDTO requestRideDTO){
+    public ResponseEntity<?> postRide(@RequestBody RequestRideDTO requestRideDTO){
 
-        //TODO Skontati kako sam objekat da izgenerise id preko baze
-        //GORA OPCIJA
-        long size = rideService.getSize()+1;
-        Ride ride = requestRideDTO.parseToRide(size);
-        ride.setDriver(new Driver());
-        ride.setLetter(new RejectionLetter());
+        List<Passenger> pendingPassengers = passengerService.getAllWithStatusPending();
+        for(Passenger ridePassenger : requestRideDTO.getPassengers()){
+            for(Passenger pendingPassenger: pendingPassengers){
+                if(ridePassenger.getId() == pendingPassenger.getId()){
+                    return new ResponseEntity<>("Cannot create a ride while you have one already pending!", HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
 
-        //BOLJA OPCIJA
-//        Ride ride = new Ride();
-//        ride.setLocations(requestRideDTO.getLocations());
-//        ride.setPassengers(requestRideDTO.getPassengers());
-//        ride.setVehicleType(new VehicleType(requestRideDTO.getVehicleType()));
-//        ride.setBabyTransport(requestRideDTO.isBabyTransport());
-//        ride.setPetTransport(requestRideDTO.isPetTransport());
-//        ride.setDriver(new Driver());
-//        ride.setLetter(new RejectionLetter());
-
+        //TODO SKONTATI JOS KAKO BIRAMO DRIVERA(JA SAM PRAVIO NOVOG)
+        Ride ride = requestRideDTO.parseToRide();
         rideService.add(ride);
         return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> getActiveDriver(@PathVariable("driverId") String id) {
+    public ResponseEntity<?> getActiveDriver(@PathVariable("driverId") String id) {
 
-        Ride ride = rideService.getRideByDriverId(id);
+        Ride ride = rideService.getaActiveRideByDriverId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
+            ResponseRideDTO response = ride.parseToResponseDefault();
+//            response.setDefaultResponse();
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Active ride does not exist!", HttpStatus.NOT_FOUND);
     }
 
 
     @GetMapping(value = "/passenger/{passengerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> getActivePassenger(@PathVariable("passengerId") String id) {
+    public ResponseEntity<?> getActivePassenger(@PathVariable("passengerId") String id) {
 
-        Ride ride = rideService.getRideByPassengerId(id);
+        Ride ride = rideService.getActiveRideByPassengerId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseDefault(), HttpStatus.OK);
+            ResponseRideDTO response = ride.parseToResponseDefault();
+//            response.setDefaultResponse();
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Active ride does not exist!", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> getActiveRide(@PathVariable("id") String id) {
+    public ResponseEntity<?> getActiveRide(@PathVariable("id") String id) {
 
-        Optional<Ride> ride = rideService.getRide(id);
-        if (ride == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(validateData.isNumericOrNegativeLong(id) == false){
+            return new ResponseEntity<>("Invalid data. For example bad Id format", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(ride.get().parseToResponseWithStatus(), HttpStatus.OK);
+        else if(rideService.existsById(id) == false){
+            return new ResponseEntity<>(new Message("Message placeholder (Ride does not exist)"), HttpStatus.NOT_FOUND);
+        }
+        Ride ride = rideService.getRide(id).get();
+        return new ResponseEntity<>(ride.parseToResponseWithStatus(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> withdrawRide(@PathVariable String id) throws Exception {
+    public ResponseEntity<?> withdrawRide(@PathVariable String id){
 
+        if(rideService.existsById(id) == false){
+            return new ResponseEntity<>(new Message("Message placeholder (Ride does not exist)"), HttpStatus.NOT_FOUND);
+        }
+        Ride ride = rideService.getRide(id).get();
+        if((ride.getStatus() != RideStatus.PENDING) && (ride.getStatus() != RideStatus.STARTED)){
+            return new ResponseEntity<>("Cannot cancel a ride that is not in status PENDING or STARTED!", HttpStatus.NOT_FOUND);
+
+        }
         rideService.updateRideByStatus(id, RideStatus.CANCELED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> acceptRide(@PathVariable String id) throws Exception {
+    @PutMapping(value = "/{id}/start", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> startRide(@PathVariable String id){
 
+        if(rideService.existsById(id) == false){
+            return new ResponseEntity<>(new Message("Message placeholder (Ride does not exist)"), HttpStatus.NOT_FOUND);
+        }
+        Ride ride = rideService.getRide(id).get();
+        if((ride.getStatus() != RideStatus.ACCEPTED)){
+            return new ResponseEntity<>("Cannot start a ride that is not in status ACCEPTED!", HttpStatus.NOT_FOUND);
+
+        }
+        rideService.updateRideByStatus(id, RideStatus.STARTED);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> acceptRide(@PathVariable String id){
+
+        if(rideService.existsById(id) == false){
+            return new ResponseEntity<>(new Message("Message placeholder (Ride does not exist)"), HttpStatus.NOT_FOUND);
+        }
+        Ride ride = rideService.getRide(id).get();
+        if((ride.getStatus() != RideStatus.PENDING)){
+            return new ResponseEntity<>("Cannot start a ride that is not in status PENDING!", HttpStatus.NOT_FOUND);
+
+        }
         rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/end", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> endRide(@PathVariable String id) throws Exception {
+    public ResponseEntity<?> endRide(@PathVariable String id) {
+
+        if(rideService.existsById(id) == false){
+            return new ResponseEntity<>(new Message("Message placeholder (Ride does not exist)"), HttpStatus.NOT_FOUND);
+        }
+        Ride ride = rideService.getRide(id).get();
+        if((ride.getStatus() != RideStatus.FINISHED)){
+            return new ResponseEntity<>("Cannot end a ride that is not in status FINISHED!", HttpStatus.NOT_FOUND);
+        }
 
         rideService.updateRideByStatus(id, RideStatus.FINISHED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseDefault(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponsePanicSmallerDataDTO> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
+    @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) {
 
+        if(rideService.existsById(id) == false){
+            return new ResponseEntity<>(new Message("Message placeholder (Ride does not exist)"), HttpStatus.NOT_FOUND);
+        }
+        Ride ride = rideService.getRide(id).get();
+        if((ride.getStatus() != RideStatus.PENDING)){
+            return new ResponseEntity<>("Cannot cancel a ride that is not in status PENDING!", HttpStatus.NOT_FOUND);
+        }
+        RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
+
+        rideService.updateRideByRejectionLetter(id, rejectionLetter);
+        rideService.updateRideByStatus(id, RideStatus.FINISHED);
+
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseWithStatusAndReason(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
+
+        if(rideService.existsById(id) == false){
+            return new ResponseEntity<>("Message placeholder (Ride does not exist)", HttpStatus.NOT_FOUND);
+        }
         Optional<Ride> ride = rideService.getRide(id);
         Panic panic = panicService.createPanicByRide(ride.get(),reason.getReason());
 
@@ -124,38 +188,24 @@ public class RideController{
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseRideDTO> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) throws Exception {
-
-        RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
-
-        rideService.updateRideByRejectionLetter(id, rejectionLetter);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseWithStatusAndReason(), HttpStatus.OK);
-    }
-
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseFavoriteLocationsDTO> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
+    public ResponseEntity<?> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
 
-        //TODO Skontati kako sam objekat da izgenerise id preko baze
-        //GORA OPCIJA
-        long size = favouriteLocationService.getSize()+1;
-        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations(size);
-
-        //BOLJA OPCIJA
-//        FavoriteLocations favoriteLocations = new FavoriteLocations();
-//        favoriteLocations.setFavoriteName(requestFavouriteLocationDTO.getFavoriteName());
-//        favoriteLocations.setLocations(requestFavouriteLocationDTO.getLocations());
-//        favoriteLocations.setPassengers(requestFavouriteLocationDTO.getPassengers());
-//        favoriteLocations.setVehicleType(requestFavouriteLocationDTO.getVehicleType());
-//        favoriteLocations.setPetTransport(requestFavouriteLocationDTO.isPetTransport());
-//        favoriteLocations.setBabyTransport(requestFavouriteLocationDTO.isBabyTransport());
+        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations();
+        List<Passenger> passengers = favoriteLocations.getPassengers();
+        for(Passenger p : passengers){
+            Passenger passenger = passengerService.getPassenger((p.getId()).toString()).get();
+            if(passenger.getFavoriteLocations().size()+1 > 10){
+                    return new ResponseEntity<>("Message placeholder (Number of favorite rides cannot exceed 10!)", HttpStatus.BAD_REQUEST);
+            }
+        }
 
         favouriteLocationService.add(favoriteLocations);
         return new ResponseEntity<>(favoriteLocations.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ResponseFavoriteLocationsDTO>> getFavoriteLocations() {
+    public ResponseEntity<?> getFavoriteLocations() {
 
         List<FavoriteLocations> favoriteLocations = favouriteLocationService.getAll();
         List<ResponseFavoriteLocationsDTO> responseFavoriteLocations = new FavoriteLocations().parseToResponseList(favoriteLocations);
@@ -164,9 +214,13 @@ public class RideController{
     }
 
     @DeleteMapping(value = "/favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ResponseFavoriteLocationsDTO>> getFavoriteLocations(@PathVariable("id") String id) {
+    public ResponseEntity<?> getFavoriteLocations(@PathVariable("id") String id) {
+
+        if(favouriteLocationService.existsById(id) == false){
+            return new ResponseEntity<>("Message placeholder (Favorite location does not exist)", HttpStatus.NOT_FOUND);
+        }
 
         favouriteLocationService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Successful deletion of favorite location!", HttpStatus.NO_CONTENT);
     }
 }

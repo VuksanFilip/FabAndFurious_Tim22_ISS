@@ -70,7 +70,7 @@ public class RequestFavoriteLocationDTO {
         this.petTransport = petTransport;
     }
 
-    public FavoriteLocations parseToFavoriteLocations(Long id){
-        return new FavoriteLocations(id, this.favoriteName, this.locations, this.passengers, this.vehicleType, this.babyTransport, this.petTransport);
+    public FavoriteLocations parseToFavoriteLocations(){
+        return new FavoriteLocations(this.favoriteName, this.locations, this.passengers, this.vehicleType, this.babyTransport, this.petTransport);
     }
 }

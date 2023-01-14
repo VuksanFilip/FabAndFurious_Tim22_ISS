@@ -14,4 +14,5 @@ public interface FavoriteLocationsRepository extends CrudRepository<FavoriteLoca
     Optional<FavoriteLocations> findById(String Long);
     long count();
     FavoriteLocations deleteById(String Long);
+    boolean existsById(String Long);
 }

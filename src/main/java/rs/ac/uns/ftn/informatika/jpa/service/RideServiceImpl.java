@@ -33,6 +33,11 @@ public class RideServiceImpl implements IRideService {
         return  this.rideRepository.findById(Long.parseLong(id));
     }
 
+    @Override
+    public boolean existsById(String id) {
+        return  this.rideRepository.existsById(Long.parseLong(id));
+    }
+
     public Page<Ride> findAll(Pageable page) {
         return rideRepository.findAll(page);
     }
@@ -48,19 +53,19 @@ public class RideServiceImpl implements IRideService {
 
     public long getSize() { return this.rideRepository.count(); }
 
-    public Ride getRideByDriverId(String id){
+    public Ride getaActiveRideByDriverId(String id){
         for(Ride ride : getAll()){
-            if(Long.parseLong(id) == ride.getDriver().getId()){
+            if((ride.getDriver().getId() == Long.parseLong(id)) && (ride.getStatus() == RideStatus.STARTED)){
                 return ride;
             }
         }
         return null;
     }
 
-    public Ride getRideByPassengerId(String id){
+    public Ride getActiveRideByPassengerId(String id){
         for(Ride ride : getAll()){
             for(Passenger passenger : ride.getPassengers()){
-                if(passenger.getId() == Long.parseLong(id)){
+                if(passenger.getId() == Long.parseLong(id) && (ride.getStatus() == RideStatus.STARTED)){
                     return ride;
                 }
             }

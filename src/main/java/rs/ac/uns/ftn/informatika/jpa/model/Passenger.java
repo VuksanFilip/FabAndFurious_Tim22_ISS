@@ -11,7 +11,7 @@ import java.util.List;
 public class Passenger{
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
@@ -23,11 +23,12 @@ public class Passenger{
     private boolean blocked;
     private boolean active;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "passengers")
+    @Column(name = "ride_id")
     List<Ride> rides;
 
-    @OneToMany
-    List<Path> favoritePaths;
+    @ManyToMany(mappedBy = "passengers")
+    List<FavoriteLocations> favoriteLocations;
 
     public Passenger() {
     }
@@ -87,7 +88,7 @@ public class Passenger{
         this.blocked = blocked;
         this.active = active;
         this.rides = new ArrayList<>();
-        this.favoritePaths = new ArrayList<>();
+        this.favoriteLocations = new ArrayList<>();
     }
 
     public Long getId() {
@@ -178,12 +179,12 @@ public class Passenger{
         this.rides = rides;
     }
 
-    public List<Path> getFavoriteRides() {
-        return favoritePaths;
+    public List<FavoriteLocations> getFavoriteLocations() {
+        return favoriteLocations;
     }
 
-    public void setFavoriteRides(ArrayList<Path> favoriteRides) {
-        this.favoritePaths = favoriteRides;
+    public void setFavoriteLocations(ArrayList<FavoriteLocations> favoriteLocations) {
+        this.favoriteLocations = favoriteLocations;
     }
 
     public void update(Passenger passenger){

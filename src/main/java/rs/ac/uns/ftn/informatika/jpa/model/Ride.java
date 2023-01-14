@@ -18,11 +18,18 @@ public class Ride {
     private Date endTime;
     private int totalCost;
 
+
     @OneToOne(cascade = {CascadeType.ALL})
     private Driver driver;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
+    @Column(name = "passenger_id")
+    @JoinTable(name = "Ride_Passenger",
+            joinColumns = { @JoinColumn(name = "ride_id") },
+            inverseJoinColumns = { @JoinColumn(name = "passenger_id") }
+    )
     private List<Passenger> passengers;
+
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Location> locations;
@@ -67,6 +74,17 @@ public class Ride {
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.vehicle = vehicle;
+    }
+
+    public Ride(List<Location> locations, ArrayList<Passenger> passengers, Vehicle vehicle, boolean babyTransport, boolean petTransport, Driver driver, RejectionLetter letter, RideStatus status) {
+        this.passengers = passengers;
+        this.locations = locations;
+        this.babyTransport = babyTransport;
+        this.petTransport = petTransport;
+        this.vehicle = vehicle;
+        this.driver = driver;
+        this.letter = letter;
+        this.status = status;
     }
 
     public Ride(Long id, List<Location> locations, List<Passenger> passengers, Vehicle vehicle, boolean babyTransport, boolean petTransport, Driver driver){
@@ -274,8 +292,6 @@ public class Ride {
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
 
-        ResponseDriverIdEmailDTO responsPassengerIdEmailDTO = new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail());
-
         ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.type.type, this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
 
         return rideResponse;
@@ -318,7 +334,7 @@ public class Ride {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle, this.babyTransport, this.petTransport, responseLocationDTOS);
+        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.type.type, this.babyTransport, this.petTransport, responseLocationDTOS);
         return rideResponse;
     }
 
