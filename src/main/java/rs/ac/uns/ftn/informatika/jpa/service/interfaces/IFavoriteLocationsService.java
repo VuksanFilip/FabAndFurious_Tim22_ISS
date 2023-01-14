@@ -17,4 +17,5 @@ public interface IFavoriteLocationsService {
 
     void deleteById(String id);
 
+    boolean existsById(String id);
 }

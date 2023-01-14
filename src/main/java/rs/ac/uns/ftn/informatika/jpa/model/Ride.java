@@ -76,6 +76,17 @@ public class Ride {
         this.vehicle = vehicle;
     }
 
+    public Ride(List<Location> locations, ArrayList<Passenger> passengers, Vehicle vehicle, boolean babyTransport, boolean petTransport, Driver driver, RejectionLetter letter, RideStatus status) {
+        this.passengers = passengers;
+        this.locations = locations;
+        this.babyTransport = babyTransport;
+        this.petTransport = petTransport;
+        this.vehicle = vehicle;
+        this.driver = driver;
+        this.letter = letter;
+        this.status = status;
+    }
+
     public Ride(Long id, List<Location> locations, List<Passenger> passengers, Vehicle vehicle, boolean babyTransport, boolean petTransport, Driver driver){
         this.id = id;
         this.passengers = passengers;
@@ -280,8 +291,6 @@ public class Ride {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-
-        ResponseDriverIdEmailDTO responsPassengerIdEmailDTO = new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail());
 
         ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.type.type, this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
 

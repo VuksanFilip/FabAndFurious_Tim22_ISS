@@ -200,4 +200,28 @@ public class ResponseRideDTO {
     public void setRejection(ResponseRejectionReasonTimeOfDetectionDTO rejection) {
         this.rejection = rejection;
     }
+
+    public void setDefaultResponse(){
+        this.setId(123L);
+        this.getStartTime();
+        this.getEndTime();
+        this.setTotalCost(12345);
+        this.getDriver().setId(123L);
+        this.getDriver().setEmail("user@example.com");
+        this.getPassengers().get(0).setId(123L);
+        this.getPassengers().get(0).setEmail("user@example.com");
+        this.setEstimatedTimeInMinutes(5);
+        this.setVehicleType(Type.STANDARD);
+        this.setBabyTransport(true);
+        this.setPetTransport(true);
+        this.getRejection().setReason("Ride is canceled due to previous problems with the passenger");
+        this.getRejection().getTimeOfRejection();
+        this.getLocations().get(0).getDeparture().setAddress("Bulevar oslobodjenja 46");
+        this.getLocations().get(0).getDeparture().setLatitude(45.267136);
+        this.getLocations().get(0).getDeparture().setLongitude(19.833549);
+        this.getLocations().get(0).getDestination().setAddress("Bulevar oslobodjenja 46");
+        this.getLocations().get(0).getDestination().setLatitude(45.267136);
+        this.getLocations().get(0).getDestination().setLongitude(19.833549);
+        this.setStatus(RideStatus.PENDING);
+    }
 }

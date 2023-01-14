@@ -79,7 +79,16 @@ public class RequestRideDTO {
 //        return rideResponse;
 //    }
 
-    public Ride parseToRide(Long id){
-        return new Ride(id, this.locations, this.passengers, new Vehicle(new VehicleType(this.vehicleType)), this.babyTransport, this.petTransport);
+//    Ride ride = new Ride();
+//        ride.setLocations(requestRideDTO.getLocations());
+//        ride.setPassengers(requestRideDTO.getPassengers());
+//        ride.setVehicle(new Vehicle(new VehicleType(requestRideDTO.getVehicleType())));
+//        ride.setBabyTransport(requestRideDTO.isBabyTransport());
+//        ride.setPetTransport(requestRideDTO.isPetTransport());
+//        ride.setDriver(new Driver());
+//        ride.setLetter(new RejectionLetter());
+//        ride.setStatus(RideStatus.PENDING);
+    public Ride parseToRide(){
+        return new Ride(this.locations, this.passengers, new Vehicle(new VehicleType(this.vehicleType)), this.babyTransport, this.petTransport, new Driver(), new RejectionLetter(), RideStatus.PENDING);
     }
 }

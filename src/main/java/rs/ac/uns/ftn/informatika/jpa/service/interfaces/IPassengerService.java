@@ -19,4 +19,6 @@ public interface IPassengerService {
 
     Passenger findByEmail(String email);
 
+    List<Passenger> getAllWithStatusPending();
+
 }

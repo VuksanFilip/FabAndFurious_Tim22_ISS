@@ -15,15 +15,17 @@ public interface IRideService {
 
     Optional<Ride> getRide(String id);
 
+    boolean existsById(String id);
+
     Ride updateRide(Ride ride);
 
     void add(Ride ride);
 
     long getSize();
 
-    Ride getRideByDriverId(String id);
+    Ride getaActiveRideByDriverId(String id);
 
-    Ride getRideByPassengerId(String id);
+    Ride getActiveRideByPassengerId(String id);
 
     void updateRideByStatus(String id, RideStatus status);
 
