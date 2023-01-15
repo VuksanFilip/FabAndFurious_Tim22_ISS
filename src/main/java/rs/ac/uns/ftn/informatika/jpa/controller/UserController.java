@@ -73,7 +73,7 @@ public class UserController {
         return new ResponseEntity<>("Code is expired or not correct!", HttpStatus.BAD_REQUEST);
     }
 
-    //TODO NAPRAVITI DA BUDE PAGEBLE
+    //TODO NAPRAVITI DA BUDE PAGEBLE (ZAJEBANO)
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
@@ -145,6 +145,18 @@ public class UserController {
         return new ResponseEntity<>("User is successfully ublocked", HttpStatus.NO_CONTENT);
     }
 
+    //TODO IMA VEZE SA TOKENIMA
+    @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserMessages(@PathVariable("id") String id){
+        return null;
+    }
+
+    //TODO IMA VEZE SA TOKENIMA
+    @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
+        return null;
+    }
+
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createNote(@PathVariable("id") String id, @RequestBody RequestNoteDTO requestNoteDTO){
         if(userService.existsById(id) == false){
@@ -171,14 +183,5 @@ public class UserController {
             }
         }
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseNoteDTOS.toArray())), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseAllMessagesDTO> getUserMessages(@PathVariable("id") Long id) throws Exception{
-        ArrayList<ResponseMessageDTO> responseMessageDTOS = new ArrayList<ResponseMessageDTO>();
-        for(Message m : userDummy.getMessages(id)){
-            responseMessageDTOS.add(m.parseToDTO());
-        }
-        return new ResponseEntity<>(new ResponseAllMessagesDTO(responseMessageDTOS.size(), responseMessageDTOS), HttpStatus.OK);
     }
 }
