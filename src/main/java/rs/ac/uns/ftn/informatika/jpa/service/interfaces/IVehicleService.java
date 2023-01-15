@@ -13,5 +13,8 @@ public interface IVehicleService {
 
     void add(Vehicle getVehicle);
 
+
     void deleteById(Long id);
+    boolean existsById(String id);
+
 }

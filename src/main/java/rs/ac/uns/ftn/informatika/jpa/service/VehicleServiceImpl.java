@@ -28,6 +28,10 @@ public class VehicleServiceImpl implements IVehicleService {
         return  this.vehicleRepository.findById(Long.parseLong(id));
     }
 
+    public boolean existsById(String id) {
+        return  this.vehicleRepository.existsById(Long.parseLong(id));
+    }
+
     public void add(Vehicle vehicle) {
         this.vehicleRepository.save(vehicle);
     }

@@ -13,7 +13,10 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Review;
+import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IReviewService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
 
 import java.util.ArrayList;
@@ -24,19 +27,23 @@ import java.util.List;
 @RequestMapping("/api/review")
 public class ReviewController {
 
+    private IRideService rideService;
     private IReviewService reviewService;
     private IVehicleService vehicleService;
 
     @Autowired
-    public ReviewController(IReviewService reviewService, IVehicleService vehicleService) {
+    public ReviewController(IReviewService reviewService, IVehicleService vehicleService, IRideService rideService) {
         this.reviewService = reviewService;
         this.vehicleService = vehicleService;
+        this.rideService = rideService;
     }
 
-    @PostMapping(value = "{rideId}/vehicle/{vehicleId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseReviewDTO> createVehicleReview(@PathVariable("rideId") Long rideId, @PathVariable("vehicleId") Long vehicleId, @RequestBody RequestReviewDTO requestReviewDTO) throws Exception {
-        Review review = requestReviewDTO.parseToReviewVehicle(rideId, vehicleId);
-        review.setPassenger(new Passenger());
+    @PostMapping(value = "{rideId}/vehicle",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseReviewDTO> createVehicleReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO) throws Exception {
+        Ride ride = rideService.getRide(rideId).get();
+        Review review = requestReviewDTO.parseToReviewVehicle(ride);
+        Vehicle vehicle = vehicleService.getVehicle(ride.getVehicle().getId().toString()).get();
+        vehicle.getReviews().add(review);
         reviewService.add(review);
 
         return new ResponseEntity<>(review.parseToResponse(), HttpStatus.OK);
