@@ -62,27 +62,27 @@ public class PassengerController{
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
         if(!this.passengerService.getPassenger(id).isPresent()){
-            return new ResponseEntity<>(new Message("Passenger does not exist!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
         Optional<Passenger> passenger = this.passengerService.getPassenger(id);
         return new ResponseEntity<>(passenger.get().parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/activate/{activationId}")
-    public ResponseEntity<Message> activatePassenger(@PathVariable("activationId") String id) {
+    public ResponseEntity<?> activatePassenger(@PathVariable("activationId") String id) {
         if(this.passengerService.getPassenger(id).isPresent()){
             Passenger passenger = this.passengerService.getPassenger(id).get();
             passenger.activate();
             this.passengerService.add(passenger);
             return new ResponseEntity<>(new Message("Successful account activation!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new Message("Activation with entered id does not exist!"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Activation with entered id does not exist!", HttpStatus.NOT_FOUND);
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
         if(!this.passengerService.getPassenger(id).isPresent()){
-            return new ResponseEntity<>(new Message("Passenger does not exist!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
         Passenger passengerForUpdate = passengerService.getPassenger(id).get();
         Passenger passenger = requestPassengerDTO.parseToPassenger();
