@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.ValidateData;
-import rs.ac.uns.ftn.informatika.jpa.dto.messages.Message;
+import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
@@ -88,7 +88,7 @@ public class RideController{
     public ResponseEntity<?> getRide(@PathVariable("id") String id) {
 
         if(!validateData.isNumericOrNegativeLong(id)){
-            return new ResponseEntity<>(new Message("Invalid data. For example bad Id format."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Invalid data. For example bad Id format."), HttpStatus.BAD_REQUEST);
         }
         else if(!rideService.existsById(id)){
             return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
@@ -105,7 +105,7 @@ public class RideController{
         }
         Ride ride = rideService.getRide(id).get();
         if((ride.getStatus() != RideStatus.PENDING) && (ride.getStatus() != RideStatus.STARTED)){
-            return new ResponseEntity<>(new Message("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.NOT_FOUND);
 
         }
         rideService.updateRideByStatus(id, RideStatus.CANCELED);
@@ -133,7 +133,7 @@ public class RideController{
         }
         Ride ride = rideService.getRide(id).get();
         if((ride.getStatus() != RideStatus.ACCEPTED)){
-            return new ResponseEntity<>(new Message("Cannot start a ride that is not in status ACCEPTED!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status ACCEPTED!"), HttpStatus.NOT_FOUND);
 
         }
         rideService.updateRideByStatus(id, RideStatus.STARTED);
@@ -148,7 +148,7 @@ public class RideController{
         }
         Ride ride = rideService.getRide(id).get();
         if((ride.getStatus() != RideStatus.PENDING)){
-            return new ResponseEntity<>(new Message("Cannot start a ride that is not in status PENDING!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status PENDING!"), HttpStatus.NOT_FOUND);
 
         }
         rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
@@ -163,7 +163,7 @@ public class RideController{
         }
         Ride ride = rideService.getRide(id).get();
         if((ride.getStatus() != RideStatus.FINISHED)){
-            return new ResponseEntity<>(new Message("Cannot end a ride that is not in status FINISHED!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Cannot end a ride that is not in status FINISHED!"), HttpStatus.NOT_FOUND);
         }
 
         rideService.updateRideByStatus(id, RideStatus.FINISHED);
@@ -178,7 +178,7 @@ public class RideController{
         }
         Ride ride = rideService.getRide(id).get();
         if((ride.getStatus() != RideStatus.PENDING)){
-            return new ResponseEntity<>(new Message("Cannot cancel a ride that is not in status PENDING!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING!"), HttpStatus.NOT_FOUND);
         }
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
 
@@ -196,7 +196,7 @@ public class RideController{
         for(Passenger p : passengers){
             Passenger passenger = passengerService.getPassenger((p.getId()).toString()).get();
             if(passenger.getFavoriteLocations().size()+1 > 10){
-                    return new ResponseEntity<>(new Message("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
             }
         }
 

@@ -18,4 +18,6 @@ public interface IDriverService {
     Page<Driver> findAll(Pageable page);
 
     Driver findByEmail(String email);
+
+    boolean existsById(String id);
 }

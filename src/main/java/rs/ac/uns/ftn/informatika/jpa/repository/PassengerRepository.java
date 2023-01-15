@@ -16,4 +16,5 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     Optional<Passenger> findById(String Long);
     Page<Passenger> findAll(Pageable pageable);
     Passenger findByEmail(String email);
+    boolean existsById(String Long);
 }

@@ -4,12 +4,6 @@ import java.util.Date;
 
 public class ResponseNoteDTO {
 
-//    {
-//        "id": 10,
-//            "date": "2022-11-25T17:32:28Z",
-//            "message": "The passenger has requested and after that aborted the ride"
-//    }
-
     private Long id;
     private Date date;
     private String message;

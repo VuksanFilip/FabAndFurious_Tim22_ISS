@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.messages.Message;
+import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
@@ -39,7 +39,7 @@ public class PassengerController{
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createPassenger(@RequestBody RequestPassengerDTO requestPassengerDTO) throws Exception {
         if(this.passengerService.findByEmail(requestPassengerDTO.getEmail()) != null){
-            return new ResponseEntity<>(new Message("User with that email already exists!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
         Passenger passenger =  requestPassengerDTO.parseToPassenger();
         passengerService.add(passenger);
@@ -74,7 +74,7 @@ public class PassengerController{
             Passenger passenger = this.passengerService.getPassenger(id).get();
             passenger.activate();
             this.passengerService.add(passenger);
-            return new ResponseEntity<>(new Message("Successful account activation!"), HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successful account activation!"), HttpStatus.OK);
         }
         return new ResponseEntity<>("Activation with entered id does not exist!", HttpStatus.NOT_FOUND);
     }

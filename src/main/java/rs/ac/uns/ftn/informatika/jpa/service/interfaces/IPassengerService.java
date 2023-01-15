@@ -21,4 +21,6 @@ public interface IPassengerService {
 
     List<Passenger> getAllWithStatusPending();
 
+    boolean existsById(String id);
+
 }

@@ -15,6 +15,6 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
     List<Driver> findAll();
     Optional<Driver> findById(String Long);
     Page<Driver> findAll(Pageable pageable);
-
     Driver findByEmail(String email);
+    boolean existsById(String Long);
 }

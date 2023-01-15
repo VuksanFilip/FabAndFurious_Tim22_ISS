@@ -99,6 +99,6 @@ public class RequestDriverDTO {
     }
 
     public Driver parseToDriver(){
-        return new Driver(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password);
+        return new Driver(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password, false, false);
     }
 }

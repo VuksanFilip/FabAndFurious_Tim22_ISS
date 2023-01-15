@@ -1,13 +1,13 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.messages;
 
-public class Message {
+public class MessageDTO {
 
     private String message;
 
-    public Message() {
+    public MessageDTO() {
     }
 
-    public Message(String message) {
+    public MessageDTO(String message) {
         this.message = message;
     }
 

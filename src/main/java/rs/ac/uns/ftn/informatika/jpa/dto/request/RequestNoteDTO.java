@@ -1,10 +1,11 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-public class RequestNoteDTO {
+import rs.ac.uns.ftn.informatika.jpa.model.Note;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 
-//    {
-//        "message": "The passenger has requested and after that aborted the ride"
-//    }
+import java.util.Date;
+
+public class RequestNoteDTO {
 
     private String message;
 
@@ -23,5 +24,7 @@ public class RequestNoteDTO {
         this.message = message;
     }
 
-
+    public Note parseToNote(User user){
+        return new Note(this.message, new Date(), user);
+    }
 }

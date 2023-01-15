@@ -39,6 +39,10 @@ public class DriverServiceImpl implements IDriverService {
         return  this.driverRepository.findById(Long.parseLong(id));
     }
 
+    public boolean existsById(String id) {
+        return  this.driverRepository.existsById(Long.parseLong(id));
+    }
+
     public void add(Driver driver) {
         this.driverRepository.save(driver);
     }

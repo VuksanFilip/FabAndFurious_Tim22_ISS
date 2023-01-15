@@ -1,16 +1,20 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseNoteDTO;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Note {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String message;
+
+    private Date date;
 
     @OneToOne
     private User user;
@@ -26,9 +30,18 @@ public class Note {
     public Note() {
     }
 
-    public Note(String message, User user) {
+    public Note(String message, Date date, User user) {
         this.message = message;
+        this.date = date;
         this.user = user;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getMessage() {
@@ -45,5 +58,9 @@ public class Note {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ResponseNoteDTO parseToResponse(){
+        return new ResponseNoteDTO(this.id, this.date, this.message);
     }
 }

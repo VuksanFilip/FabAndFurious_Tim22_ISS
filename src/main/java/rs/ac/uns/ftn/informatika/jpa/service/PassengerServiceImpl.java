@@ -44,6 +44,10 @@ public class PassengerServiceImpl implements IPassengerService {
         return passengerRepository.findAll(page);
     }
 
+    public boolean existsById(String id) {
+        return  this.passengerRepository.existsById(Long.parseLong(id));
+    }
+
     @Override
     public Passenger findByEmail(String email) {
         return passengerRepository.findByEmail(email);

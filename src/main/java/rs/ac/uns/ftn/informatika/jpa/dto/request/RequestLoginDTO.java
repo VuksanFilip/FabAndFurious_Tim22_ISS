@@ -4,11 +4,6 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLoginDTO;
 
 public class RequestLoginDTO {
 
-//    {
-//        "email": "pera.peric@email.com",
-//            "password": "sifra123"
-//    }
-
     private String email;
     private String password;
 

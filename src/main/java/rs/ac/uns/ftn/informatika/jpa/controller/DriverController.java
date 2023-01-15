@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.messages.Message;
+import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
@@ -40,7 +40,7 @@ public class DriverController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
         if(this.driverService.findByEmail(requestDriverDTO.getEmail()) != null){
-            return new ResponseEntity<>(new Message("User with that email already exists!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
         Driver driver = requestDriverDTO.parseToDriver();
         driverService.add(driver);
@@ -123,7 +123,7 @@ public class DriverController {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         if(this.driverService.getDriver(id).get().getVehicle() == null){
-            return new ResponseEntity<>(new Message("Vehicle is not assigned!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Vehicle is not assigned!"), HttpStatus.BAD_REQUEST);
         }
         Vehicle vehicle = driverService.getDriver(id).get().getVehicle();
         return new ResponseEntity<>(vehicle.parseToResponse(), HttpStatus.OK);
@@ -171,7 +171,7 @@ public class DriverController {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         if(this.driverService.getDriver(driverId).get().getVehicle() == null){
-            return new ResponseEntity<>(new Message("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         Driver driver = this.driverService.getDriver(driverId).get();
         WorkHour workHour = new WorkHour(driver, requestWorkingHour);
@@ -203,7 +203,7 @@ public class DriverController {
         }
         WorkHour workHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
         if(this.driverService.getDriver(workHour.getDriver().getId().toString()).get().getVehicle() == null){
-            return new ResponseEntity<>(new Message("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         WorkHour updatedWorkHour = new WorkHour(workHour.getId(), workHour.getStart(), requestWorkingHour.getEnd(), workHour.getDriver());
         this.workHourService.add(updatedWorkHour);

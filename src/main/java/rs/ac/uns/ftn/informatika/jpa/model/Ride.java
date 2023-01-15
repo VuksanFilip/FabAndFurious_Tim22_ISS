@@ -338,6 +338,23 @@ public class Ride {
         return rideResponse;
     }
 
+    public ResponseRideNoStatusDTO parseToResponseNoStatusForUser(){
+        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
+        for(Passenger p : passengers){
+            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
+        }
+        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
+        for(Location l : locations){
+            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+        }
+        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id,
+                this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()),
+                responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.
+                vehicleType.type, this.babyTransport, this.petTransport,
+                new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time), responseLocationDTOS);
+        return rideResponse;
+    }
+
     public ResponsePanicRideDTO parseToPanicResponse(){
         ConcurrentHashMap<String, ResponsePanicRideLocationDTO> locations = new ConcurrentHashMap<>();
         locations.put("departure", new ResponsePanicRideLocationDTO());

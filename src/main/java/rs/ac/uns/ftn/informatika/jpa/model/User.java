@@ -2,14 +2,17 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
 
 import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY, generator = "ConfirmationCodeGenerator")
+    @TableGenerator(table = "SEQUENCES", name = "ConfirmationCodeGenerator")
     private Long id;
     private String firstName;
     private String lastName;
@@ -31,6 +34,18 @@ public class User {
     public User(Long id, String email) {
         this.id = id;
         this.email = email;
+    }
+
+    public User(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = blocked;
+        this.active = active;
     }
 
     public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
@@ -57,6 +72,16 @@ public class User {
         this.password = password;
         this.blocked = false;
         this.active = false;
+    }
+
+    public User(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
     }
 
     public Long getId() {
@@ -141,6 +166,10 @@ public class User {
 
     public ResponseUserDTO parseToResponseUser(){
         return new ResponseUserDTO(this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
+    }
+
+    public ResponseUserWithIdDTO parseToResponseUserWithId(){
+        return new ResponseUserWithIdDTO(this.id, this.firstName, this.lastName, this.picture, this.phoneNumber, this.email, this.address);
     }
 
     public ResponsePanicUserDTO parseToPanicResponse(){
