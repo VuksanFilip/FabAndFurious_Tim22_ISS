@@ -12,4 +12,6 @@ public interface IVehicleService {
     Optional<Vehicle> getVehicle(String id);
 
     void add(Vehicle getVehicle);
+
+    void deleteById(Long id);
 }

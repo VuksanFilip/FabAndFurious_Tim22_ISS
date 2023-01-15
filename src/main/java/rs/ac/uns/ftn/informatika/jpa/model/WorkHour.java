@@ -1,18 +1,19 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverWorkingHourStartDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class WorkHour {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long id;
-    String start;
-    String end;
+    Date start;
+    Date end;
 
     @OneToOne
     Driver driver;
@@ -20,17 +21,30 @@ public class WorkHour {
     public WorkHour() {
     }
 
-    public WorkHour(String start, String end, Driver driver) {
+    public WorkHour(Date start, Date end, Driver driver) {
         this.start = start;
         this.end = end;
         this.driver = driver;
     }
 
-    public WorkHour(Long id, String start, String end) {
+    public WorkHour(Long id, Date start, Date end) {
         this.id = id;
         this.start = start;
         this.end = end;
         this.driver = new Driver();
+    }
+
+    public WorkHour(Driver driver, RequestDriverWorkingHourStartDTO dto){
+        this.start = dto.getStart();
+        this.end = new Date();
+        this.driver = driver;
+    }
+
+    public WorkHour(Long id, Date start, Date end, Driver driver) {
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.driver = driver;
     }
 
     public Long getId() {
@@ -41,19 +55,19 @@ public class WorkHour {
         this.id = id;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Date end) {
         this.end = end;
     }
 
@@ -65,7 +79,7 @@ public class WorkHour {
         this.driver = driver;
     }
 
-    public ResponseDriverWorkingHourDTO parseToResponse(){
-        return new ResponseDriverWorkingHourDTO(this.getId(), this.getStart(), this.getEnd());
+    public ResponseDriverWorkingHourDTO parseToResponse() {
+        return new ResponseDriverWorkingHourDTO(this.id, this.start, this.end);
     }
 }

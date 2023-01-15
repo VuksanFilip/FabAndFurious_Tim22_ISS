@@ -276,7 +276,7 @@ public class Ride {
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
 
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.type.type, this.babyTransport, this.petTransport, responseLocationDTOS);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS);
 
         return rideResponse;
     }
@@ -292,7 +292,7 @@ public class Ride {
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
 
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.type.type, this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
 
         return rideResponse;
     }
@@ -307,7 +307,7 @@ public class Ride {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.type.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status);
         return rideResponse;
     }
 
@@ -321,7 +321,7 @@ public class Ride {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.type.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
         return rideResponse;
     }
 
@@ -334,7 +334,7 @@ public class Ride {
         for(Location l : locations){
             responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.type.type, this.babyTransport, this.petTransport, responseLocationDTOS);
+        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS);
         return rideResponse;
     }
 
@@ -346,7 +346,7 @@ public class Ride {
         for (Passenger p:this.passengers) {
             passengers.add(p.parseToPanicPassengersDTO());
         }
-        return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicle.type, this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date()), locations);
+        return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicle.vehicleType, this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date()), locations);
     }
 
 }

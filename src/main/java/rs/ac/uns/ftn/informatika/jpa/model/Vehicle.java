@@ -20,8 +20,8 @@ public class Vehicle {
     String vehicleModel;
 
     @OneToOne(cascade = {CascadeType.ALL})
-    VehicleType type;
-    String registarskeTablice;
+    VehicleType vehicleType;
+    String licenseNumber;
     int seats;
 
     @OneToOne(cascade = {CascadeType.ALL})
@@ -44,49 +44,49 @@ public class Vehicle {
     }
 
     public Vehicle(VehicleType vehicleType) {
-        this.type = vehicleType;
+        this.vehicleType = vehicleType;
     }
 
-    public Vehicle(Long id, Long driverId, VehicleType type, String vehicleModel, String registarskeTablice, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
+    public Vehicle(Long id, Long driverId, VehicleType vehicleType, String vehicleModel, String licenseNumber, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
         this.id = id;
         this.driver = new Driver(driverId);
         this.vehicleModel = vehicleModel;
-        this.type = type;
-        this.registarskeTablice = registarskeTablice;
+        this.vehicleType = vehicleType;
+        this.licenseNumber = licenseNumber;
         this.seats = seats;
         this.location = location;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Driver driver, VehicleType type, String vehicleModel, String registarskeTablice, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
+    public Vehicle(Driver driver, VehicleType vehicleType, String vehicleModel, String licenseNumber, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
         this.driver = driver;
         this.vehicleModel = vehicleModel;
-        this.type = type;
-        this.registarskeTablice = registarskeTablice;
+        this.vehicleType = vehicleType;
+        this.licenseNumber = licenseNumber;
         this.seats = seats;
         this.location = location;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Driver driver, VehicleType type, String vehicleModel, String registarskeTablice, CurrentLocation currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
+    public Vehicle(Driver driver, VehicleType vehicleType, String vehicleModel, String licenseNumber, CurrentLocation currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
         this.driver = driver;
         this.vehicleModel = vehicleModel;
-        this.type = type;
-        this.registarskeTablice = registarskeTablice;
+        this.vehicleType = vehicleType;
+        this.licenseNumber = licenseNumber;
         this.seats = seats;
         this.currentLocation = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType type, String registarskeTablice, int seats, Location location, boolean babyFriendly, boolean petFriendly, List<Review> reviews) {
+    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType vehicleType, String licenseNumber, int seats, Location location, boolean babyFriendly, boolean petFriendly, List<Review> reviews) {
         this.id = id;
         this.driver = driver;
         this.vehicleModel = vehicleModel;
-        this.type = type;
-        this.registarskeTablice = registarskeTablice;
+        this.vehicleType = vehicleType;
+        this.licenseNumber = licenseNumber;
         this.seats = seats;
         this.location = location;
         this.babyFriendly = babyFriendly;
@@ -126,20 +126,20 @@ public class Vehicle {
         this.vehicleModel = vehicleModel;
     }
 
-    public VehicleType getType() {
-        return type;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setType(VehicleType tip) {
-        this.type = tip;
+    public void setVehicleType(VehicleType tip) {
+        this.vehicleType = tip;
     }
 
-    public String getRegistarskeTablice() {
-        return registarskeTablice;
+    public String getLicenseNumber() {
+        return licenseNumber;
     }
 
-    public void setRegistarskeTablice(String registarskeTablice) {
-        this.registarskeTablice = registarskeTablice;
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
     }
 
     public int getSeats() {
@@ -180,12 +180,7 @@ public class Vehicle {
     }
 
     public ResponseDriverVehicleDTO parseToResponse(){
-        ResponseDepartureDTO responseDepartureDTO = this.location.getDeparture().parseToResponse();
-        ResponseDestinationDTO responseDestinationDTO = this.location.getDestination().parseToResponse();
-
-        ResponseLocationDTO locationResponseDTO=new ResponseLocationDTO(responseDepartureDTO, responseDestinationDTO);
-
-        return new ResponseDriverVehicleDTO(this.getId(), this.getDriver().getId(), this.type.type, this.getVehicleModel(), this.getRegistarskeTablice(), locationResponseDTO, this.getSeats(), this.isBabyFriendly(), this.isPetFriendly());
+        return new ResponseDriverVehicleDTO(this.id, this.driver.getId(), this.vehicleType.getType(), this.vehicleModel, this.licenseNumber, this.currentLocation.parseToResponse(), this.seats, this.babyFriendly, this.petFriendly);
     }
 
 }

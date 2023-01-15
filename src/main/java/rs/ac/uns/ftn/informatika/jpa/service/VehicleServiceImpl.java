@@ -31,4 +31,9 @@ public class VehicleServiceImpl implements IVehicleService {
     public void add(Vehicle vehicle) {
         this.vehicleRepository.save(vehicle);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        this.vehicleRepository.deleteById(id);
+    }
 }

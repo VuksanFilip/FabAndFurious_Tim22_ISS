@@ -6,8 +6,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 public class RequestDriverVehicleDTO {
 
-    private Long id;
-    private Type type;
+    private Type vehicleType;
     private String model;
     private String licenseNumber;
     private CurrentLocation currentLocation;
@@ -15,20 +14,12 @@ public class RequestDriverVehicleDTO {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public Type getType() {
-        return type;
+    public Type getVehicleType() {
+        return vehicleType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setVehicleType(Type vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public String getModel() {
@@ -79,14 +70,8 @@ public class RequestDriverVehicleDTO {
         this.petTransport = petTransport;
     }
 
-    public ResponseDriverVehicleDTO parseToResponse(Long id, Long driverId){
-        ResponseLocationDTO responseDestinationDTO = new ResponseLocationDTO();
-        ResponseDriverVehicleDTO driverVehicleResponse = new ResponseDriverVehicleDTO(id, driverId, this.type, this.model, this.licenseNumber, responseDestinationDTO, this.passengerSeats, this.babyTransport, this.petTransport);
-        driverVehicleResponse.setId(id);
-        return driverVehicleResponse;
-    }
 
     public Vehicle parseToVehicle(Driver driver){
-        return new Vehicle(driver, new VehicleType(this.type), this.model, this.licenseNumber, this.currentLocation, this.passengerSeats, this.babyTransport, this.petTransport);
+        return new Vehicle(driver, new VehicleType(this.vehicleType), this.model, this.licenseNumber, this.currentLocation, this.passengerSeats, this.babyTransport, this.petTransport);
     }
 }

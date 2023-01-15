@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseCurrentLocationDTO;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -54,5 +56,9 @@ public class CurrentLocation {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public ResponseCurrentLocationDTO parseToResponse() {
+        return new ResponseCurrentLocationDTO(this.address, this.latitude, this.longitude);
     }
 }

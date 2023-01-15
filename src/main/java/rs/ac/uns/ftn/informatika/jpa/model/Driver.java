@@ -211,6 +211,10 @@ public class Driver{
         this.address = driver.getAddress();
     }
 
+    public void addVehicle(Vehicle vehicle){
+        this.vehicle = vehicle;
+    }
+
     public ResponseDriverDTO parseToResponse(){
         return new ResponseDriverDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getPicture(), this.getPhoneNumber(), this.getEmail(), this.getAddress());
     }
@@ -218,4 +222,5 @@ public class Driver{
     public ResponsePanicRideDriverDTO parseToPanicDriverResponse(){
         return new ResponsePanicRideDriverDTO(this.getId(), this.getEmail());
     }
+
 }

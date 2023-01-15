@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import java.util.Date;
+
 public class ResponseDriverWorkingHourDTO {
 
 //    {
@@ -9,13 +11,13 @@ public class ResponseDriverWorkingHourDTO {
 //    }
 
     private Long id;
-    private String start;
-    private String end;
+    private Date start;
+    private Date end;
 
     public ResponseDriverWorkingHourDTO() {
     }
 
-    public ResponseDriverWorkingHourDTO(Long id, String start, String end) {
+    public ResponseDriverWorkingHourDTO(Long id, Date start, Date end) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -29,19 +31,19 @@ public class ResponseDriverWorkingHourDTO {
         this.id = id;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Date end) {
         this.end = end;
     }
 }

@@ -6,21 +6,21 @@ public class ResponseDriverVehicleDTO {
 
     private Long id;
     private Long driverId;
-    private Type type;
+    private Type vehicleType;
     private String model;
     private String licenseNumber;
-    private ResponseLocationDTO location;
+    private ResponseCurrentLocationDTO currentLocation;
     private int passengerSeats;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public ResponseDriverVehicleDTO(Long id, Long driverId, Type type, String model, String licenseNumber, ResponseLocationDTO location, int passengerSeats, boolean babyTransport, boolean petTransport) {
+    public ResponseDriverVehicleDTO(Long id, Long driverId, Type vehicleType, String model, String licenseNumber, ResponseCurrentLocationDTO currentLocation, int passengerSeats, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.driverId = driverId;
-        this.type = type;
+        this.vehicleType = vehicleType;
         this.model = model;
         this.licenseNumber = licenseNumber;
-        this.location = location;
+        this.currentLocation = currentLocation;
         this.passengerSeats = passengerSeats;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
@@ -42,12 +42,12 @@ public class ResponseDriverVehicleDTO {
         this.driverId = driverId;
     }
 
-    public Type getType() {
-        return type;
+    public Type getVehicleType() {
+        return vehicleType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setVehicleType(Type vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public String getModel() {
@@ -66,12 +66,12 @@ public class ResponseDriverVehicleDTO {
         this.licenseNumber = licenseNumber;
     }
 
-    public ResponseLocationDTO getLocation() {
-        return location;
+    public ResponseCurrentLocationDTO getCurrentLocation() {
+        return currentLocation;
     }
 
-    public void setLocation(ResponseLocationDTO location) {
-        this.location = location;
+    public void setCurrentLocation(ResponseCurrentLocationDTO currentLocation) {
+        this.currentLocation = currentLocation;
     }
 
     public int getPassengerSeats() {
