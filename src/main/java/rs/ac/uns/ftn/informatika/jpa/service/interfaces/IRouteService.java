@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Route;
 import java.util.List;
 import java.util.Optional;
 
-public interface IPathService {
+public interface IRouteService {
 
     List<Route> getAll();
 

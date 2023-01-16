@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PathRepository extends CrudRepository<Route, Long> {
+public interface RouteRepository extends CrudRepository<Route, Long> {
 
     List<Route> findAll();
     Optional<Route> findById(String Long);
