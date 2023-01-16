@@ -41,8 +41,20 @@ insert into DOCUMENT(id, image, name, driver_id) values (4, 'image', 'licna kart
 --TIMESTAMP '1999-01-31 10:00:00'
 
 --ride 1
-insert into RIDE(id, baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (1, true, TIMESTAMP '1999-01-31 10:00:00', 10, false, true, TIMESTAMP '1999-01-31 10:00:00', 'FINISHED', 2500, 5, null, 1)
+insert into RIDE(id, baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (1, true, TIMESTAMP '1999-01-31 10:00:00', 10, true, true, TIMESTAMP '1999-01-31 10:00:00', 'FINISHED', 2500, 5, null, 1)
 insert into ROUTE(id, km, departure_id, destination_id) values (1, 12, 1, 2)
 insert into RIDE_ROUTES(ride_id, routes_id) values (1, 1)
 insert into RIDE_PASSENGER(ride_id, passenger_id) values (1, 2)
 insert into RIDE_PASSENGER(ride_id, passenger_id) values (1, 3)
+
+--review for vehicle
+insert into REVIEW(id, comment, rating, review_type, passenger_id, ride_id) values (1, 'Vozilo je prljavo', 3.5, 'VEHICLE', 2, 1)
+insert into RIDE_REVIEWS(ride_id, reviews_id) values (1, 1)
+insert into VEHICLE_REVIEWS(vehicle_id, reviews_id) values (1, 1)
+
+--review for driver
+insert into REVIEW(id, comment, rating, review_type, passenger_id, ride_id) values (2, 'Vozac vrlo ljubazan', 4.5, 'DRIVER', 3, 1)
+insert into RIDE_REVIEWS(ride_id, reviews_id) values (1, 2)
+
+--panic
+insert into PANIC(id, reason, time, ride_id, user_id) values (1, 'Putnici se nisu pojavili', TIMESTAMP '1999-01-31 10:00:00', 1, 5)
