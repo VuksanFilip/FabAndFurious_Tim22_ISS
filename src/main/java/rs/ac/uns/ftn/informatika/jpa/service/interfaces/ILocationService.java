@@ -12,4 +12,6 @@ public interface ILocationService {
     Optional<Location> getLocation(String id);
 
     void add(Location location);
+
+    Location getLocationByAddress(String address);
 }

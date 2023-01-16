@@ -41,7 +41,7 @@ public class Ride {
     private List<Route> routes;
     private int estimatedTimeInMinutes;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private List<Review> reviews;
 
     @OneToOne(cascade = {CascadeType.ALL})

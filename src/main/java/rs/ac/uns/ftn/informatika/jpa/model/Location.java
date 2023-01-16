@@ -27,6 +27,12 @@ public class Location {
         this.longitude = longitude;
     }
 
+    public Location(String address, double latitude, double longitude) {
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public Long getId() {
         return id;
     }

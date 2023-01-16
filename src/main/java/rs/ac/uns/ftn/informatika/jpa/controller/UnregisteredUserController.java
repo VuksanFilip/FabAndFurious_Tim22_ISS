@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUnregisteredUserDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUnregisteredUserDTO;
 
 @RestController
@@ -16,8 +16,7 @@ public class UnregisteredUserController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseUnregisteredUserDTO> createUnregisteredUser(@RequestBody RequestUnregisteredUserDTO unregisteredUser) throws Exception {
-        ResponseUnregisteredUserDTO unregisteredUserResponse = unregisteredUser.parseToResponse();
-        return new ResponseEntity<>(unregisteredUserResponse, HttpStatus.OK);
+    public ResponseEntity<?> getAssumption(@RequestBody RequestAssumptionDTO requestAssumptionDTO) {
+        return new ResponseEntity<>(requestAssumptionDTO.getAssumption(), HttpStatus.OK);
     }
 }
