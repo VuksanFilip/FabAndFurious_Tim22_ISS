@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRejectionReasonTimeOfDetectionDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -75,5 +77,9 @@ public class RejectionLetter {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public ResponseRejectionReasonTimeOfDetectionDTO parseToResponse() {
+        return new ResponseRejectionReasonTimeOfDetectionDTO(this.reason, this.time);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface RideRepository extends CrudRepository<Ride, Long> {
     Ride save(Ride ride);
     Page<Ride> findAll(Pageable pageable);
     boolean existsById(String Long);
+
 }

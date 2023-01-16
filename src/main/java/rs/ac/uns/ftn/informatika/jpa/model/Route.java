@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +22,10 @@ public class Route {
     public Route() {
     }
 
-    public Route(Location departure, Location destination, float km) {
+    public Route(Location departure, Location destination) {
         this.departure = departure;
         this.destination = destination;
-        this.km = km;
+        this.km = 0;
     }
 
     public Long getId() {
@@ -56,5 +58,9 @@ public class Route {
 
     public void setKm(double km) {
         this.km = km;
+    }
+
+    public RequestLocationDTO parseToResponse() {
+        return new RequestLocationDTO(this.getDeparture().parseToResponse(), this.getDestination().parseToResponse());
     }
 }

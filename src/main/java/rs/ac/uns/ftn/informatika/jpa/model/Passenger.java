@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRidePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -77,5 +78,9 @@ public class Passenger extends User{
 
     public ResponsePanicRidePassengerDTO parseToPanicPassengersDTO(){
         return new ResponsePanicRidePassengerDTO(this.getId(), this.getEmail());
+    }
+
+    public ResponsePassengerIdEmailDTO parseToResponseIdEmail() {
+        return new ResponsePassengerIdEmailDTO(this.getId(), this.getEmail());
     }
 }

@@ -42,7 +42,7 @@ public class PanicServiceImpl implements IPanicService {
         this.panicRepository.save(panic);
     }
 
-    public Panic createPanicByRide(Ride ride, String reason){
-        return new Panic(new User(), ride, new Date(Calendar.getInstance().getTime().getTime()), reason);
+    public Panic createPanicByRide(User user, Ride ride, String reason){
+        return new Panic(user, ride, new Date(Calendar.getInstance().getTime().getTime()), reason);
     }
 }

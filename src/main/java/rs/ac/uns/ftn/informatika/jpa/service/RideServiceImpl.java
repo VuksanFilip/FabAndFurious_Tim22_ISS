@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
@@ -11,6 +12,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +42,17 @@ public class RideServiceImpl implements IRideService {
 
     public Page<Ride> findAll(Pageable page) {
         return rideRepository.findAll(page);
+    }
+
+    @Override
+    public List<Ride> getRidesOfDriver(Driver driver) {
+        List<Ride> allRides = new ArrayList<>();
+        for(Ride r : getAll()){
+            if(r.getDriver() == driver){
+                allRides.add(r);
+            }
+        }
+        return allRides;
     }
 
     @Override

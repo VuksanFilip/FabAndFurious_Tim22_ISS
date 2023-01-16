@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationWithAddressDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDepartureDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
@@ -65,9 +66,8 @@ public class Location {
         this.longitude = longitude;
     }
 
-    //    public ResponseLocationDTO parseToResponse(){
-//        ResponseDepartureDTO departure = this.departure.parseToResponse();
-//        ResponseDestinationDTO destination = this.destination.parseToResponse();
-//        return new ResponseLocationDTO(departure, destination);
-//    }
+    public RequestLocationWithAddressDTO parseToResponse() {
+        return new RequestLocationWithAddressDTO(this.address, this.latitude, this.longitude);
+    }
+
 }

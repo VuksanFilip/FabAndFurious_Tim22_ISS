@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRideDriverDTO;
 
 import javax.persistence.*;
@@ -90,4 +91,7 @@ public class Driver extends User{
         return new ResponsePanicRideDriverDTO(this.getId(), this.getEmail());
     }
 
+    public ResponseDriverIdEmailDTO parseToResponseIdEmail() {
+        return new ResponseDriverIdEmailDTO(this.getId(), this.getEmail());
+    }
 }

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.ReviewType;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
@@ -120,6 +121,16 @@ public class Ride {
         this.petTransport = petTransport;
         this.vehicle = vehicle;
         this.status = status;
+    }
+
+    public Ride(Driver driver, List<Passenger> passengers, List<Route> routes, boolean babyTransport, boolean petTransport){
+        this.driver = driver;
+        this.passengers = passengers;
+        this.routes = routes;
+        this.panic = false;
+        this.babyTransport = babyTransport;
+        this.petTransport = petTransport;
+        this.status = RideStatus.PENDING;
     }
 
     public Date getStartTime() {
@@ -384,5 +395,20 @@ public class Ride {
             }
         }
         return new ResponseRideReviewsDTO(vehicleReviews.get(0).parseToResponse(), driverReviews.get(0).parseToResponse());
+    }
+
+    public ResponseRideNewDTO parseToResponseNew(Date scheduledTime) {
+        List<ResponsePassengerIdEmailDTO> passengers = new ArrayList<>();
+        for(Passenger p : this.passengers){
+            passengers.add(p.parseToResponseIdEmail());
+        }
+        List<RequestLocationDTO> locations = new ArrayList<>();
+        for(Route r : this.routes){
+            locations.add(r.parseToResponse());
+        }
+        if(this.letter != null){
+            return new ResponseRideNewDTO(this.id, null, null, 0, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getType(), this.babyTransport, this.petTransport, this.letter.parseToResponse(), locations, this.status, scheduledTime);
+        }
+        return new ResponseRideNewDTO(this.id, null, null, 0, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getType(), this.babyTransport, this.petTransport, null, locations, this.status, scheduledTime);
     }
 }

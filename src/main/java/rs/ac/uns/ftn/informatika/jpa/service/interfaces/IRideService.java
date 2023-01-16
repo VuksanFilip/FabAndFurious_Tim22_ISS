@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
@@ -33,4 +34,5 @@ public interface IRideService {
 
     Page<Ride> findAll(Pageable page);
 
+    List<Ride> getRidesOfDriver(Driver driver);
 }

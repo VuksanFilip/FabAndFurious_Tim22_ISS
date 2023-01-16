@@ -1,52 +1,80 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.model.*;
-import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
-import java.util.ArrayList;
-
+import java.util.List;
+import java.util.Date;
 public class RequestRideDTO {
 
-    private ArrayList<Location> locations;
-    private ArrayList<Passenger> passengers;
-    private VehicleName vehicleVehicleName;
+//    {
+//        "locations": [
+//        {
+//            "departure": {
+//            "address": "Bulevar oslobodjenja 46",
+//                    "latitude": 45.267136,
+//                    "longitude": 19.833549
+//        },
+//            "destination": {
+//            "address": "Bulevar oslobodjenja 46",
+//                    "latitude": 45.267136,
+//                    "longitude": 19.833549
+//        }
+//        }
+//  ],
+//        "passengers": [
+//        {
+//            "id": 123,
+//                "email": "user@example.com"
+//        }
+//  ],
+//        "vehicleType": "STANDARD",
+//            "babyTransport": true,
+//            "petTransport": true,
+//            "scheduledTime": "2023-01-11T17:45:00Z"
+//    }
+
+    private List<RequestLocationDTO> locations;
+    private List<ResponsePassengerIdEmailDTO> passengers;
+    private VehicleName vehicleType;
     private boolean babyTransport;
     private boolean petTransport;
+    private Date scheduledTime;
 
     public RequestRideDTO() {
     }
 
-    public RequestRideDTO(ArrayList<Location> locations, ArrayList<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
+    public RequestRideDTO(List<RequestLocationDTO> locations, List<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport, Date scheduledTime) {
         this.locations = locations;
         this.passengers = passengers;
-        this.vehicleVehicleName = vehicleVehicleName;
+        this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
+        this.scheduledTime = scheduledTime;
     }
 
-    public ArrayList<Location> getLocations() {
+    public List<RequestLocationDTO> getLocations() {
         return locations;
     }
 
-    public void setLocations(ArrayList<Location> locations) {
+    public void setLocations(List<RequestLocationDTO> locations) {
         this.locations = locations;
     }
 
-    public ArrayList<Passenger> getPassengers() {
+    public List<ResponsePassengerIdEmailDTO> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(ArrayList<Passenger> passengers) {
+    public void setPassengers(List<ResponsePassengerIdEmailDTO> passengers) {
         this.passengers = passengers;
     }
 
     public VehicleName getVehicleType() {
-        return vehicleVehicleName;
+        return vehicleType;
     }
 
-    public void setVehicleType(VehicleName vehicleName) {
-        this.vehicleVehicleName = vehicleName;
+    public void setVehicleType(VehicleName vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public boolean isBabyTransport() {
@@ -65,32 +93,11 @@ public class RequestRideDTO {
         this.petTransport = petTransport;
     }
 
-//    public ResponseRideDTO parseToResponse(Long id){
-//        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-//        for(Passenger p : passengers){
-//            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-//        }
-//
-//        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-//        ResponseLocationDTO responseDepartureDTO = new ResponseLocationDTO();
-//        ResponseLocationDTO responseDestinationDTO = new ResponseLocationDTO();
-//        responseLocationDTOS.add(responseDepartureDTO);
-//        responseLocationDTOS.add(responseDestinationDTO);
-//
-//        ResponseRideDTO rideResponse = new ResponseRideDTO(id, responsPassengerIdEmailDTOS, new Vehicle(new VehicleType(this.vehicleType)), this.babyTransport, this.petTransport, responseLocationDTOS);
-//        return rideResponse;
-//    }
+    public Date getScheduledTime() {
+        return scheduledTime;
+    }
 
-//    Ride ride = new Ride();
-//        ride.setLocations(requestRideDTO.getLocations());
-//        ride.setPassengers(requestRideDTO.getPassengers());
-//        ride.setVehicle(new Vehicle(new VehicleType(requestRideDTO.getVehicleType())));
-//        ride.setBabyTransport(requestRideDTO.isBabyTransport());
-//        ride.setPetTransport(requestRideDTO.isPetTransport());
-//        ride.setDriver(new Driver());
-//        ride.setLetter(new RejectionLetter());
-//        ride.setStatus(RideStatus.PENDING);
-    public Ride parseToRide(){
-        return new Ride(this.locations, this.passengers, new Vehicle(new VehicleType(this.vehicleVehicleName)), this.babyTransport, this.petTransport, new Driver(), new RejectionLetter(), RideStatus.PENDING);
+    public void setScheduledTime(Date scheduledTime) {
+        this.scheduledTime = scheduledTime;
     }
 }
