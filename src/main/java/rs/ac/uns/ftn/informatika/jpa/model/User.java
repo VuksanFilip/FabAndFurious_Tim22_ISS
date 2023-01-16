@@ -5,6 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -23,6 +24,8 @@ public class User {
     private String password;
     private boolean blocked;
     private boolean active;
+    private String resetPasswordToken;
+    private LocalDateTime resetPasswordTokenExpiration;
 
     public User() {
     }
@@ -59,6 +62,21 @@ public class User {
         this.password = password;
         this.blocked = blocked;
         this.active = active;
+    }
+
+    public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, String resetPasswordToken, LocalDateTime resetPasswordTokenExpiration) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = blocked;
+        this.active = active;
+        this.resetPasswordToken = resetPasswordToken;
+        this.resetPasswordTokenExpiration = resetPasswordTokenExpiration;
     }
 
     public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password) {
@@ -162,6 +180,22 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public LocalDateTime getResetPasswordTokenExpiration() {
+        return resetPasswordTokenExpiration;
+    }
+
+    public void setResetPasswordTokenExpiration(LocalDateTime resetPasswordTokenExpiration) {
+        this.resetPasswordTokenExpiration = resetPasswordTokenExpiration;
     }
 
     public ResponseUserDTO parseToResponseUser(){

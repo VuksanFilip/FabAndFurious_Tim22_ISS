@@ -23,9 +23,11 @@ import rs.ac.uns.ftn.informatika.jpa.service.NoteServiceImpl;
 import rs.ac.uns.ftn.informatika.jpa.service.PassengerServiceImpl;
 import rs.ac.uns.ftn.informatika.jpa.service.UserServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/user")
@@ -60,9 +62,16 @@ public class UserController {
 
     @GetMapping(value = "/{id}/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPassword(@PathVariable("id") String id){
+
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
+
+        User user = userService.getUser(id).get();
+        String token = String.valueOf(new Random().nextInt(900000) + 100000);
+        user.setResetPasswordToken(token);
+        user.setResetPasswordTokenExpiration(LocalDateTime.now().plusMinutes(10));
+
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
 
