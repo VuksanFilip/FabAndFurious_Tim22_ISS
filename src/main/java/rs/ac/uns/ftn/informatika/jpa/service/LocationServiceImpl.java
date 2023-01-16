@@ -31,4 +31,9 @@ public class LocationServiceImpl implements ILocationService {
     public void add(Location location) {
         this.locationRepository.save(location);
     }
+
+    @Override
+    public Location getLocationByAddress(String address) {
+        return this.locationRepository.findByAddress(address);
+    }
 }
