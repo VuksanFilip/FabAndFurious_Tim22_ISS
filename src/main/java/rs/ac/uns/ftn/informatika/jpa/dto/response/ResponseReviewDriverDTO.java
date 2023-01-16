@@ -4,33 +4,15 @@ import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
 public class ResponseReviewDriverDTO {
 
-    private int totalCount;
-
     private Long id;
 
     private float rating;
 
     private String comment;
 
-    private Passenger passenger;
+    private ResponseReviewPassengerDTO passenger;
 
     public ResponseReviewDriverDTO() {
-    }
-
-    public ResponseReviewDriverDTO(int totalCount, Long id , float rating, String comment) {
-        this.id = id;
-        this.totalCount = totalCount;
-        this.rating = rating;
-        this.comment = comment;
-        this.passenger = null;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
     }
 
     public Long getId() {
@@ -57,11 +39,11 @@ public class ResponseReviewDriverDTO {
         this.comment = comment;
     }
 
-    public Passenger getPassenger() {
+    public ResponseReviewPassengerDTO getPassenger() {
         return passenger;
     }
 
-    public void setPassenger(Passenger passenger) {
+    public void setPassenger(ResponseReviewPassengerDTO passenger) {
         this.passenger = passenger;
     }
 }

@@ -2,7 +2,8 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewPassengerDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.ReviewType;
 
 import javax.persistence.*;
 
@@ -15,11 +16,14 @@ public class Review {
      private float rating;
      private String comment;
 
-     @ManyToOne
+     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
      private Ride ride;
 
      @OneToOne(cascade = {CascadeType.ALL})
      private Passenger passenger;
+
+     @Enumerated(EnumType.STRING)
+     private ReviewType reviewType;
 
      public Review(float rating, String comment, Ride ride) {
           this.rating = rating;
@@ -31,7 +35,6 @@ public class Review {
           this.id = id;
      }
 
-     public Review(){}
 
      public Review(Long id, float rating, String comment, Passenger passenger, Long rideId, Long vehicleId, String str) {
           this.id = id;
@@ -102,6 +105,19 @@ public class Review {
           this.passenger = passenger;
      }
 
+     public Review(float rating, String comment, Ride ride, Passenger passenger, ReviewType reviewType) {
+          this.rating = rating;
+          this.comment = comment;
+          this.ride = ride;
+          this.passenger = passenger;
+          this.reviewType = reviewType;
+     }
+
+
+     public Review(){
+
+     }
+
      public float getRating() {
           return rating;
      }
@@ -134,12 +150,24 @@ public class Review {
           this.passenger = passenger;
      }
 
-     public ResponseReviewDriverDTO parseToResponseDriver(int totalCount, Long id){
-          return new ResponseReviewDriverDTO(totalCount, id, this.rating, this.comment);
+     public Long getId() {
+          return id;
+     }
+
+     public void setId(Long id) {
+          this.id = id;
+     }
+
+     public ReviewType getReviewType() {
+          return reviewType;
+     }
+
+     public void setReviewType(ReviewType reviewType) {
+          this.reviewType = reviewType;
      }
 
      public ResponseReviewDTO parseToResponse(){
-          return new ResponseReviewDTO(this.id, this.rating, this.comment, new ResponsePassengerIdEmailDTO(this.passenger));
+          return new ResponseReviewDTO(this.id, this.rating, this.comment, new ResponsePassengerIdEmailDTO(this.passenger.getId(), this.passenger.getEmail()));
      }
 
 }

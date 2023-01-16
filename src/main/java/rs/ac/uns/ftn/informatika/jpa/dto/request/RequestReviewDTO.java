@@ -44,7 +44,4 @@ public class RequestReviewDTO {
         return new Review(this.rating, this.comment, ride, new Passenger());
     }
 
-    public Review parseToReviewDriver(Long rideId, Long driverId){
-        return new Review(this.rating, this.comment, null, rideId, null,driverId);
-    }
 }

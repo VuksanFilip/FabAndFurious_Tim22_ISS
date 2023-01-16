@@ -11,8 +11,8 @@ insert into USER(id, active, address, blocked, email, first_name, last_name, pas
 insert into PASSENGER(id) values (4)
 
 --vehicle type
-insert into VEHICLE_TYPE(id, price_per_km, vehicle_name) values (1, 500, 'standard')
-insert into VEHICLE_TYPE(id, price_per_km, vehicle_name) values (2, 570, 'van')
+insert into VEHICLE_TYPE(id, price_per_km, vehicle_name) values (1, 500, 'STANDARD')
+insert into VEHICLE_TYPE(id, price_per_km, vehicle_name) values (2, 570, 'VAN')
 
 --location
 insert into LOCATION(id, address, latitude, longitude) values (1, 'Radnicka 19, Novi Sad', 45.249101856630546, 19.848034)
@@ -41,7 +41,7 @@ insert into DOCUMENT(id, image, name, driver_id) values (4, 'image', 'licna kart
 --TIMESTAMP '1999-01-31 10:00:00'
 
 --ride 1
-insert into RIDE(id, baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (1, true, TIMESTAMP '1999-01-31 10:00:00', 10, false, true, TIMESTAMP '1999-01-31 10:00:00', 'finished', 2500, 5, null, 1)
+insert into RIDE(id, baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (1, true, TIMESTAMP '1999-01-31 10:00:00', 10, false, true, TIMESTAMP '1999-01-31 10:00:00', 'FINISHED', 2500, 5, null, 1)
 insert into ROUTE(id, km, departure_id, destination_id) values (1, 12, 1, 2)
 insert into RIDE_ROUTES(ride_id, routes_id) values (1, 1)
 insert into RIDE_PASSENGER(ride_id, passenger_id) values (1, 2)
