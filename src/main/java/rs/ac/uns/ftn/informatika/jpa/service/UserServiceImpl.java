@@ -4,17 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseMessageDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.Message;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
+import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
     private UserRepository userRepository;
+    private MessageRepository messageRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -40,5 +46,20 @@ public class UserServiceImpl implements IUserService {
 
     public boolean existsById(String id) {
         return  this.userRepository.existsById(Long.parseLong(id));
+    }
+
+    @Override
+    public Set<ResponseMessageDTO> findMessagesOfUser(String id) {
+        Optional<User> userO = userRepository.findById(id);
+        if(!userO.isPresent()){
+            return null;
+        }
+        User user = userO.get();
+        Set<Message> messages = messageRepository.findBySender(user);
+        Set<ResponseMessageDTO> messageDTOS = new HashSet<>();
+        for(Message m : messages){
+            messageDTOS.add(m.parseToDTO());
+        }
+        return messageDTOS;
     }
 }

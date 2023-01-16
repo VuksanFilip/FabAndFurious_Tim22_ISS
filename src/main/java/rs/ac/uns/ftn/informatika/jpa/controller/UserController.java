@@ -11,10 +11,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestNoteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserChangePasswordDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserResetPasswordDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseNoteDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
@@ -24,10 +21,7 @@ import rs.ac.uns.ftn.informatika.jpa.service.PassengerServiceImpl;
 import rs.ac.uns.ftn.informatika.jpa.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -72,7 +66,7 @@ public class UserController {
         user.setResetPasswordToken(token);
         user.setResetPasswordTokenExpiration(LocalDateTime.now().plusMinutes(10));
 
-        //TODO TU POSLATI MAIL
+        //TODO TU POSLATI MAIL(Ne radi nesto MailServiceImpl-po komentarom je)
 
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
@@ -168,13 +162,13 @@ public class UserController {
         return new ResponseEntity<>("User is successfully ublocked", HttpStatus.NO_CONTENT);
     }
 
-    //TODO IMA VEZE SA TOKENIMA
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserMessages(@PathVariable("id") String id){
-        return null;
+        Set<ResponseMessageDTO> messageDTOS = userService.findMessagesOfUser(id);
+        return new ResponseEntity<>(new ResponseMessagePageDTO(messageDTOS.size(), messageDTOS), HttpStatus.OK);
     }
 
-    //TODO IMA VEZE SA TOKENIMA
+    //TODO IMA VEZE SA TOKENIMA(ZAJEBANO)
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
         return null;
