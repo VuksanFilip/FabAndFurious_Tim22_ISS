@@ -12,4 +12,6 @@ public interface IUserActivationService {
     Optional<UserActivation> getUserActivation(String id);
 
     void add(UserActivation userActivation);
+
+    void delete(UserActivation activation);
 }

@@ -15,8 +15,10 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,11 +31,13 @@ public class PassengerController{
 
     private IPassengerService passengerService;
     private IRideService rideService;
+    private IUserActivationService userActivationService;
 
     @Autowired
-    public PassengerController(IPassengerService passengerService, IRideService rideService) {
+    public PassengerController(IPassengerService passengerService, IRideService rideService, IUserActivationService userActivationService) {
         this.passengerService = passengerService;
         this.rideService = rideService;
+        this.userActivationService = userActivationService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,13 +74,22 @@ public class PassengerController{
 
     @GetMapping(value = "/activate/{activationId}")
     public ResponseEntity<?> activatePassenger(@PathVariable("activationId") String id) {
-        if(this.passengerService.getPassenger(id).isPresent()){
-            Passenger passenger = this.passengerService.getPassenger(id).get();
-            passenger.activate();
-            this.passengerService.add(passenger);
-            return new ResponseEntity<>(new MessageDTO("Successful account activation!"), HttpStatus.OK);
+
+        UserActivation activation = userActivationService.getUserActivation(id).get();
+        if (activation.checkIfExpired()) {
+            userActivationService.delete(activation);
+            UserActivation renewed = new UserActivation(activation.getUser());
+            userActivationService.add(renewed);
+            return new ResponseEntity<>(new MessageDTO("Activation expired!"), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Activation with entered id does not exist!", HttpStatus.NOT_FOUND);
+
+        Passenger toActivate = (Passenger) activation.getUser();
+        if (toActivate.isActive()) {
+            return new ResponseEntity<>(new MessageDTO("Activation already activated!"), HttpStatus.BAD_REQUEST);
+        }
+        toActivate.setActive(true);
+        passengerService.add(toActivate);
+        return new ResponseEntity<>(new MessageDTO("Successful account activation!"), HttpStatus.OK);
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

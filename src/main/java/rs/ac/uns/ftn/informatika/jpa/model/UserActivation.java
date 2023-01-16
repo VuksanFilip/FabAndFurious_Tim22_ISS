@@ -3,7 +3,8 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class UserActivation {
@@ -13,17 +14,23 @@ public class UserActivation {
 
     @OneToOne
     private User user;
-    private Date date;
+    private LocalDateTime date;
     private int lifespan;
 
     public UserActivation() {
     }
 
-    public UserActivation(int id, User user, Date date, int lifespan) {
+    public UserActivation(int id, User user, LocalDateTime date, int lifespan) {
         this.id = id;
         this.user = user;
         this.date = date;
         this.lifespan = lifespan;
+    }
+
+    public UserActivation(User user) {
+        this.date = LocalDateTime.now();
+        this.lifespan = 3;
+        this.user = user;
     }
 
     public int getId() {
@@ -42,11 +49,11 @@ public class UserActivation {
         this.user = user;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -56,5 +63,11 @@ public class UserActivation {
 
     public void setLifespan(int lifespan) {
         this.lifespan = lifespan;
+    }
+
+    public boolean checkIfExpired() {
+        LocalDateTime expiryDate = date.plus(lifespan, ChronoUnit.MINUTES);
+        if (expiryDate.isBefore(LocalDateTime.now())) return true;
+        return false;
     }
 }

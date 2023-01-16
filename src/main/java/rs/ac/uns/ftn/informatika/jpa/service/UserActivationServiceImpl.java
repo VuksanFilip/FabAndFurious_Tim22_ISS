@@ -31,4 +31,9 @@ public class UserActivationServiceImpl implements IUserActivationService {
     public void add(UserActivation userActivation) {
         this.userActivationRepository.save(userActivation);
     }
+
+    @Override
+    public void delete(UserActivation activation) {
+        userActivationRepository.delete(activation);
+    }
 }
