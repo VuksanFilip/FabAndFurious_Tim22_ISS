@@ -11,15 +11,15 @@ public class Panic {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    User user;
+    private User user;
 
     @OneToOne
-    Ride ride;
-    Date time;
-    String reason;
+    private Ride ride;
+    private Date time;
+    private String reason;
 
     public Panic() {
     }

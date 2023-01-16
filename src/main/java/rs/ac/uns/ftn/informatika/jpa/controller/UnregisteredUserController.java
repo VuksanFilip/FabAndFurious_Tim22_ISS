@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUnregisteredUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUnregisteredUserDTO;
-import rs.ac.uns.ftn.informatika.jpa.dummy.UnregisteredUserDummy;
 
 @RestController
 @RequestMapping("/api/unregisteredUser/")
 public class UnregisteredUserController {
-    private UnregisteredUserDummy unregisteredUserDummy = new UnregisteredUserDummy();
+
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseUnregisteredUserDTO> createUnregisteredUser(@RequestBody RequestUnregisteredUserDTO unregisteredUser) throws Exception {

@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.MessageType;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.MessageType;
 
 import java.util.Date;
 

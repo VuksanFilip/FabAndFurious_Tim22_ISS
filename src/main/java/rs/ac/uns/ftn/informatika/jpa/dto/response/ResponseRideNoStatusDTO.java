@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +14,7 @@ public class ResponseRideNoStatusDTO {
     private ResponseDriverIdEmailDTO driver;
     private ArrayList<ResponsePassengerIdEmailDTO> passengers;
     private int estimatedTimeInMinutes;
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
     private ResponseRejectionReasonTimeOfDetectionDTO rejection;
@@ -23,10 +23,10 @@ public class ResponseRideNoStatusDTO {
     public ResponseRideNoStatusDTO() {
     }
 
-    public ResponseRideNoStatusDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Type vehicleType, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
+    public ResponseRideNoStatusDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
         this.id = id;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
@@ -38,7 +38,7 @@ public class ResponseRideNoStatusDTO {
         this.estimatedTimeInMinutes = 0;
     }
 
-    public ResponseRideNoStatusDTO(Long id, Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petTransport, ResponseRejectionReasonTimeOfDetectionDTO rejection, ArrayList<ResponseLocationDTO> locations) {
+    public ResponseRideNoStatusDTO(Long id, Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ResponseRejectionReasonTimeOfDetectionDTO rejection, ArrayList<ResponseLocationDTO> locations) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -46,7 +46,7 @@ public class ResponseRideNoStatusDTO {
         this.driver = driver;
         this.passengers = passengers;
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.rejection = rejection;
@@ -109,12 +109,12 @@ public class ResponseRideNoStatusDTO {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public boolean isBabyTransport() {

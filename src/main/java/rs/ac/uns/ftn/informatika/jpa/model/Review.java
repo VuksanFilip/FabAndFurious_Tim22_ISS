@@ -12,17 +12,14 @@ public class Review {
      @Id
      @GeneratedValue(strategy= GenerationType.IDENTITY)
      private Long id;
-     float rating;
-     String comment;
+     private float rating;
+     private String comment;
 
      @ManyToOne
-     Ride ride;
+     private Ride ride;
 
      @OneToOne(cascade = {CascadeType.ALL})
-     Passenger passenger;
-
-     Long vehicleId;
-     Long driverId;
+     private Passenger passenger;
 
      public Review(float rating, String comment, Ride ride) {
           this.rating = rating;
@@ -113,14 +110,6 @@ public class Review {
           this.rating = rating;
      }
 
-     public Long getDriverId() {
-          return driverId;
-     }
-
-     public void setDriverId(Long driverId) {
-          this.driverId = driverId;
-     }
-
      public String getComment() {
           return comment;
      }
@@ -143,14 +132,6 @@ public class Review {
 
      public void setPassenger(Passenger passenger) {
           this.passenger = passenger;
-     }
-
-     public Long getVehicleId() {
-          return vehicleId;
-     }
-
-     public void setVehicleId(Long vehicleId) {
-          this.vehicleId = vehicleId;
      }
 
      public ResponseReviewDriverDTO parseToResponseDriver(int totalCount, Long id){

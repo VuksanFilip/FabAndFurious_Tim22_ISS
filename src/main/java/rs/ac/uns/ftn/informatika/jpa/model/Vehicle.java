@@ -1,9 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDepartureDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDestinationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,28 +10,25 @@ public class Vehicle {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    @OneToOne
-    Driver driver;
-    String vehicleModel;
-
-    @OneToOne(cascade = {CascadeType.ALL})
-    VehicleType vehicleType;
-    String licenseNumber;
-    int seats;
+    @OneToOne(cascade = {CascadeType.REFRESH}, mappedBy = "vehicle")
+    private Driver driver;
+    private String vehicleModel;
 
     @OneToOne(cascade = {CascadeType.ALL})
-    Location location;
+    private VehicleType vehicleType;
+    private String licenseNumber;
+    private int seats;
 
     @OneToOne(cascade = {CascadeType.ALL})
-    CurrentLocation currentLocation;
+    private Location currentLocation;
 
-    boolean babyFriendly;
-    boolean petFriendly;
+    private boolean babyFriendly;
+    private boolean petFriendly;
 
     @OneToMany
-    List<Review> reviews;
+    private List<Review> reviews;
 
     public Vehicle() {
     }
@@ -47,30 +41,19 @@ public class Vehicle {
         this.vehicleType = vehicleType;
     }
 
-    public Vehicle(Long id, Long driverId, VehicleType vehicleType, String vehicleModel, String licenseNumber, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
+    public Vehicle(Long id, Long driverId, VehicleType vehicleType, String vehicleModel, String licenseNumber, Location currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
         this.id = id;
         this.driver = new Driver(driverId);
         this.vehicleModel = vehicleModel;
         this.vehicleType = vehicleType;
         this.licenseNumber = licenseNumber;
         this.seats = seats;
-        this.location = location;
+        this.currentLocation = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Driver driver, VehicleType vehicleType, String vehicleModel, String licenseNumber, Location location, int seats, boolean babyFriendly, boolean petFriendly) {
-        this.driver = driver;
-        this.vehicleModel = vehicleModel;
-        this.vehicleType = vehicleType;
-        this.licenseNumber = licenseNumber;
-        this.seats = seats;
-        this.location = location;
-        this.babyFriendly = babyFriendly;
-        this.petFriendly = petFriendly;
-    }
-
-    public Vehicle(Driver driver, VehicleType vehicleType, String vehicleModel, String licenseNumber, CurrentLocation currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
+    public Vehicle(Driver driver, VehicleType vehicleType, String vehicleModel, String licenseNumber, Location currentLocation, int seats, boolean babyFriendly, boolean petFriendly) {
         this.driver = driver;
         this.vehicleModel = vehicleModel;
         this.vehicleType = vehicleType;
@@ -81,14 +64,24 @@ public class Vehicle {
         this.petFriendly = petFriendly;
     }
 
-    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType vehicleType, String licenseNumber, int seats, Location location, boolean babyFriendly, boolean petFriendly, List<Review> reviews) {
+    public Vehicle(Driver driver, VehicleType vehicleType, String vehicleModel, String licenseNumber, int seats, boolean babyFriendly, boolean petFriendly) {
+        this.driver = driver;
+        this.vehicleModel = vehicleModel;
+        this.vehicleType = vehicleType;
+        this.licenseNumber = licenseNumber;
+        this.seats = seats;
+        this.babyFriendly = babyFriendly;
+        this.petFriendly = petFriendly;
+    }
+
+    public Vehicle(Long id, Driver driver, String vehicleModel, VehicleType vehicleType, String licenseNumber, int seats, Location currentLocation, boolean babyFriendly, boolean petFriendly, List<Review> reviews) {
         this.id = id;
         this.driver = driver;
         this.vehicleModel = vehicleModel;
         this.vehicleType = vehicleType;
         this.licenseNumber = licenseNumber;
         this.seats = seats;
-        this.location = location;
+        this.currentLocation = currentLocation;
         this.babyFriendly = babyFriendly;
         this.petFriendly = petFriendly;
         this.reviews = reviews;
@@ -102,12 +95,12 @@ public class Vehicle {
         this.id = id;
     }
 
-    public Location getLocation() {
-        return location;
+    public Location getCurrentLocation() {
+        return currentLocation;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
     }
 
     public Driver getDriver() {
@@ -174,13 +167,9 @@ public class Vehicle {
         this.reviews = reviews;
     }
 
-    public void updateLocation(CurrentLocation location){
-
-        this.currentLocation = location;
-    }
 
     public ResponseDriverVehicleDTO parseToResponse(){
-        return new ResponseDriverVehicleDTO(this.id, this.driver.getId(), this.vehicleType.getType(), this.vehicleModel, this.licenseNumber, this.currentLocation.parseToResponse(), this.seats, this.babyFriendly, this.petFriendly);
+        return new ResponseDriverVehicleDTO(this.id, this.driver.getId(), this.vehicleType.getType(), this.vehicleModel, this.licenseNumber, this.currentLocation, this.seats, this.babyFriendly, this.petFriendly);
     }
 
 }

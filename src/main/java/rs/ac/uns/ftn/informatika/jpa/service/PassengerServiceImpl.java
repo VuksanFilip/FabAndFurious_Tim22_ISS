@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
-import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.PassengerRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
 

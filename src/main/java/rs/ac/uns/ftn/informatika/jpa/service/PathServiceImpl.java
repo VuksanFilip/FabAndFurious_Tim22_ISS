@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.informatika.jpa.model.Path;
+import rs.ac.uns.ftn.informatika.jpa.model.Route;
 import rs.ac.uns.ftn.informatika.jpa.repository.PathRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPathService;
 
@@ -19,16 +19,16 @@ public class PathServiceImpl implements IPathService {
         this.pathRepository = pathRepository;
     }
 
-    public List<Path> getAll() {
-        return (List<Path>) this.pathRepository.findAll();
+    public List<Route> getAll() {
+        return (List<Route>) this.pathRepository.findAll();
     }
 
     @Override
-    public Optional<Path> getPath(String id) {
+    public Optional<Route> getPath(String id) {
         return  this.pathRepository.findById(Long.parseLong(id));
     }
 
-    public void add(Path path) {
-        this.pathRepository.save(path);
+    public void add(Route route) {
+        this.pathRepository.save(route);
     }
 }

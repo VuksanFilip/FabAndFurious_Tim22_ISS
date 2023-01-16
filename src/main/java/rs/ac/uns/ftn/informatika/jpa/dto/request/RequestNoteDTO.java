@@ -4,6 +4,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 
 import java.util.Date;
+import java.util.Calendar;
 
 public class RequestNoteDTO {
 

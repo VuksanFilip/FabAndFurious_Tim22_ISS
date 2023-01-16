@@ -10,12 +10,12 @@ public class RejectionLetter {
     private Long id;
 
     @OneToOne
-    Ride ride;
-    String reason;
+    private Ride ride;
+    private String reason;
 
     @OneToOne
-    User user;
-    Date time;
+    private User user;
+    private Date time;
 
     public Long getId() {
         return id;

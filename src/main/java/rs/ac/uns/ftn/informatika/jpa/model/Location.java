@@ -13,25 +13,18 @@ public class Location {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(cascade = {CascadeType.ALL})
-    private Departure departure;
-
-    @OneToOne(cascade = {CascadeType.ALL})
-    private Destination destination;
+    private String address;
+    private double latitude;
+    private double longitude;
 
     public Location() {
     }
 
-    public Location(Long id, Departure departure, Destination destination) {
+    public Location(Long id, String address, double latitude, double longitude) {
         this.id = id;
-        this.departure = departure;
-        this.destination = destination;
-    }
-
-    public Location(Departure departure, Destination destination) {
-        this.departure = departure;
-        this.destination = destination;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Long getId() {
@@ -42,25 +35,33 @@ public class Location {
         this.id = id;
     }
 
-    public Departure getDeparture() {
-        return departure;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDeparture(Departure departure) {
-        this.departure = departure;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public Destination getDestination() {
-        return destination;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setDestination(Destination destination) {
-        this.destination = destination;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public ResponseLocationDTO parseToResponse(){
-        ResponseDepartureDTO departure = this.departure.parseToResponse();
-        ResponseDestinationDTO destination = this.destination.parseToResponse();
-        return new ResponseLocationDTO(departure, destination);
+    public double getLongitude() {
+        return longitude;
     }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    //    public ResponseLocationDTO parseToResponse(){
+//        ResponseDepartureDTO departure = this.departure.parseToResponse();
+//        ResponseDestinationDTO destination = this.destination.parseToResponse();
+//        return new ResponseLocationDTO(departure, destination);
+//    }
 }

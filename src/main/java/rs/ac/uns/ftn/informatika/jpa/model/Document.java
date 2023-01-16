@@ -9,12 +9,12 @@ public class Document {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    Long id;
-    String name;
-    String image;
+    private Long id;
+    private String name;
+    private String image;
 
     @OneToOne(cascade = {CascadeType.ALL})
-    Driver driver;
+    private Driver driver;
 
     public Document() {
     }

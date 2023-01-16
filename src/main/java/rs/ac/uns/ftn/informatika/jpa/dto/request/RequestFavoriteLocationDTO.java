@@ -1,23 +1,24 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.List;
 
 public class RequestFavoriteLocationDTO {
 
     private String favoriteName;
-    private List<Location> locations;
+    private Route route;
     private List<Passenger> passengers;
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public RequestFavoriteLocationDTO(String favoriteName, List<Location> locations, List<Passenger> passengers, Type vehicleType, boolean babyTransport, boolean petTransport) {
+    public RequestFavoriteLocationDTO(String favoriteName, Route route, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
-        this.locations = locations;
+        this.route = route;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
     }
@@ -30,12 +31,20 @@ public class RequestFavoriteLocationDTO {
         this.favoriteName = favoriteName;
     }
 
-    public List<Location> getLocations() {
-        return locations;
+    public Route getRoute() {
+        return route;
     }
 
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public VehicleName getVehicleVehicleName() {
+        return vehicleVehicleName;
+    }
+
+    public void setVehicleVehicleName(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public List<Passenger> getPassengers() {
@@ -46,12 +55,12 @@ public class RequestFavoriteLocationDTO {
         this.passengers = passengers;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public boolean isBabyTransport() {
@@ -70,7 +79,7 @@ public class RequestFavoriteLocationDTO {
         this.petTransport = petTransport;
     }
 
-    public FavoriteLocations parseToFavoriteLocations(){
-        return new FavoriteLocations(this.favoriteName, this.locations, this.passengers, this.vehicleType, this.babyTransport, this.petTransport);
+    public FavoriteRoute parseToFavoriteLocations(){
+        return new FavoriteRoute(this.favoriteName, this.route, this.passengers, this.vehicleVehicleName, this.babyTransport, this.petTransport);
     }
 }

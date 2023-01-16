@@ -15,6 +15,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IFavoriteLocationsService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPanicService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
@@ -191,8 +192,8 @@ public class RideController{
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
 
-        FavoriteLocations favoriteLocations = requestFavouriteLocationDTO.parseToFavoriteLocations();
-        List<Passenger> passengers = favoriteLocations.getPassengers();
+        FavoriteRoute favoriteRoute = requestFavouriteLocationDTO.parseToFavoriteLocations();
+        List<Passenger> passengers = favoriteRoute.getPassengers();
         for(Passenger p : passengers){
             Passenger passenger = passengerService.getPassenger((p.getId()).toString()).get();
             if(passenger.getFavoriteLocations().size()+1 > 10){
@@ -200,15 +201,15 @@ public class RideController{
             }
         }
 
-        favouriteLocationService.add(favoriteLocations);
-        return new ResponseEntity<>(favoriteLocations.parseToResponse(), HttpStatus.OK);
+        favouriteLocationService.add(favoriteRoute);
+        return new ResponseEntity<>(favoriteRoute.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getFavoriteLocations() {
 
-        List<FavoriteLocations> favoriteLocations = favouriteLocationService.getAll();
-        List<ResponseFavoriteLocationsDTO> responseFavoriteLocations = new FavoriteLocations().parseToResponseList(favoriteLocations);
+        List<FavoriteRoute> favoriteLocations = favouriteLocationService.getAll();
+        List<ResponseFavoriteLocationsDTO> responseFavoriteLocations = new FavoriteRoute().parseToResponseList(favoriteLocations);
 
         return new ResponseEntity<>(responseFavoriteLocations, HttpStatus.OK);
     }

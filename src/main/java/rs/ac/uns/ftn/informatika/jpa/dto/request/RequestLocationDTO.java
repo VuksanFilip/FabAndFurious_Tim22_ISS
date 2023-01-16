@@ -1,39 +1,32 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Departure;
-import rs.ac.uns.ftn.informatika.jpa.model.Destination;
-import rs.ac.uns.ftn.informatika.jpa.model.Location;
-
 public class RequestLocationDTO {
 
-    private Departure departure;
-    private Destination destination;
+    private float departure;
+    private float destination;
 
     public RequestLocationDTO() {
     }
 
-    public RequestLocationDTO(Departure departure,  Destination destination) {
+    public RequestLocationDTO(float departure,  float destination) {
         this.departure = departure;
         this.destination = destination;
     }
 
-    public Departure getDeparture() {
+    public float getDeparture() {
         return departure;
     }
 
-    public void setDeparture(Departure departure) {
+    public void setDeparture(float departure) {
         this.departure = departure;
     }
 
-    public Destination getDestination() {
+    public float getDestination() {
         return destination;
     }
 
-    public void setDestination(Destination destination) {
+    public void setDestination(float destination) {
         this.destination = destination;
     }
 
-    public Location parseToLocation(){
-        return new Location(new Departure(), new Destination());
-    }
 }

@@ -3,13 +3,14 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class FavoriteLocations {
+public class FavoriteRoute {
 
 
     @Id
@@ -17,8 +18,8 @@ public class FavoriteLocations {
     private Long id;
     private String favoriteName;
 
-    @OneToMany(cascade = {CascadeType.ALL})
-    private List<Location> locations;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Route route;
 
     @ManyToMany
     @Column(name = "passenger_id")
@@ -29,29 +30,29 @@ public class FavoriteLocations {
     private List<Passenger> passengers;
 
     @Enumerated
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public FavoriteLocations() {
+    public FavoriteRoute() {
 
     }
 
-    public FavoriteLocations(Long id, String favoriteName, List<Location> locations, List<Passenger> passengers, Type vehicleType, boolean babyTransport, boolean petTransport) {
+    public FavoriteRoute(Long id, String favoriteName, Route route, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.favoriteName = favoriteName;
-        this.locations = locations;
+        this.route = route;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
     }
 
-    public FavoriteLocations(String favoriteName, List<Location> locations, List<Passenger> passengers, Type vehicleType, boolean babyTransport, boolean petTransport) {
+    public FavoriteRoute(String favoriteName, Route route, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
-        this.locations = locations;
+        this.route = route;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
     }
@@ -72,12 +73,12 @@ public class FavoriteLocations {
         this.favoriteName = favoriteName;
     }
 
-    public List<Location> getLocations() {
-        return locations;
+    public Route getRoute() {
+        return route;
     }
 
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
     public List<Passenger> getPassengers() {
@@ -88,12 +89,12 @@ public class FavoriteLocations {
         this.passengers = passengers;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public boolean isBabyTransport() {
@@ -119,15 +120,15 @@ public class FavoriteLocations {
             responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
         }
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
-        }
-        return new ResponseFavoriteLocationsDTO(this.id, this.favoriteName, responseLocationDTOS, this.vehicleType, this.babyTransport, this.petTransport);
+//        for(Location l : route){
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//        }
+        return new ResponseFavoriteLocationsDTO(this.id, this.favoriteName, responseLocationDTOS, this.vehicleVehicleName, this.babyTransport, this.petTransport);
     }
 
-    public List<ResponseFavoriteLocationsDTO> parseToResponseList(List<FavoriteLocations> favoriteLocations){
+    public List<ResponseFavoriteLocationsDTO> parseToResponseList(List<FavoriteRoute> favoriteLocations){
         List<ResponseFavoriteLocationsDTO> responseFavoriteLocations = new ArrayList<>();
-        for(FavoriteLocations locations: favoriteLocations){
+        for(FavoriteRoute locations: favoriteLocations){
             responseFavoriteLocations.add(locations.parseToResponse());
         }
         return responseFavoriteLocations;

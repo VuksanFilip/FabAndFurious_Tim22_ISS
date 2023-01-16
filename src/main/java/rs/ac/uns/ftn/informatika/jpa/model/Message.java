@@ -1,11 +1,9 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseMessageDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.MessageType;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -20,40 +18,40 @@ public class Message {
     @OneToOne
     private User reciever;
     private String message;
-    private Date sendingtime;
+    private Date sendingTime;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private MessageType type;
-    private int driveID;
+    private int driveId;
 
     public Message() {
     }
 
-    public Message(User sender, User reciever, MessageType type, String message, Date sendingtime) {
+    public Message(User sender, User reciever, MessageType type, String message, Date sendingTime) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
         this.type = type;
-        this.sendingtime = sendingtime;
+        this.sendingTime = sendingTime;
     }
 
-    public Message(Long id, User sender, User reciever, String message, Date sendingtime, MessageType type, int driveID) {
+    public Message(Long id, User sender, User reciever, String message, Date sendingTime, MessageType type, int driveId) {
         this.id = id;
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
-        this.sendingtime = sendingtime;
+        this.sendingTime = sendingTime;
         this.type = type;
-        this.driveID = driveID;
+        this.driveId = driveId;
     }
 
-    public Message(User sender, User reciever, MessageType type, String message, Date sendingtime, int driveID) {
+    public Message(User sender, User reciever, MessageType type, String message, Date sendingTime, int driveId) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
         this.type = type;
-        this.sendingtime = sendingtime;
-        this.driveID = driveID;
+        this.sendingTime = sendingTime;
+        this.driveId = driveId;
     }
 
     public Long getId() {
@@ -96,23 +94,23 @@ public class Message {
         this.message = message;
     }
 
-    public Date getSendingtime() {
-        return sendingtime;
+    public Date getSendingTime() {
+        return sendingTime;
     }
 
-    public void setSendingtime(Date sendingtime) {
-        this.sendingtime = sendingtime;
+    public void setSendingTime(Date sendingTime) {
+        this.sendingTime = sendingTime;
     }
 
-    public int getDriveID() {
-        return driveID;
+    public int getDriveId() {
+        return driveId;
     }
 
-    public void setDriveID(int driveID) {
-        this.driveID = driveID;
+    public void setDriveId(int driveId) {
+        this.driveId = driveId;
     }
 
     public ResponseMessageDTO parseToDTO(){
-        return new ResponseMessageDTO(this.id, this.sendingtime, this.sender.getId(), this.reciever.getId(), this.message, this.type, Long.valueOf(this.driveID));
+        return new ResponseMessageDTO(this.id, this.sendingTime, this.sender.getId(), this.reciever.getId(), this.message, this.type, Long.valueOf(this.driveId));
     }
 }

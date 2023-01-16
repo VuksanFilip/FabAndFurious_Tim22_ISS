@@ -1,12 +1,13 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Type;
+import rs.ac.uns.ftn.informatika.jpa.model.Location;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 public class ResponseDriverVehicleDTO {
 
     private Long id;
     private Long driverId;
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private String model;
     private String licenseNumber;
     private ResponseCurrentLocationDTO currentLocation;
@@ -14,13 +15,13 @@ public class ResponseDriverVehicleDTO {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public ResponseDriverVehicleDTO(Long id, Long driverId, Type vehicleType, String model, String licenseNumber, ResponseCurrentLocationDTO currentLocation, int passengerSeats, boolean babyTransport, boolean petTransport) {
+    public ResponseDriverVehicleDTO(Long id, Long driverId, VehicleName vehicleVehicleName, String model, String licenseNumber, Location currentLocation, int passengerSeats, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.driverId = driverId;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.model = model;
         this.licenseNumber = licenseNumber;
-        this.currentLocation = currentLocation;
+//        this.currentLocation = currentLocation;
         this.passengerSeats = passengerSeats;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
@@ -42,12 +43,12 @@ public class ResponseDriverVehicleDTO {
         this.driverId = driverId;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public String getModel() {

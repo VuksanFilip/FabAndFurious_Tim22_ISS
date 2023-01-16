@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +15,7 @@ public class ResponseRideDTO {
     private ResponseDriverIdEmailDTO driver;
     private ArrayList<ResponsePassengerIdEmailDTO> passengers;
     private int estimatedTimeInMinutes;
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
     private ResponseRejectionReasonTimeOfDetectionDTO rejection;
@@ -24,14 +25,14 @@ public class ResponseRideDTO {
     public ResponseRideDTO() {
     }
 
-    public ResponseRideDTO(Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations, RideStatus status, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
+    public ResponseRideDTO(Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations, RideStatus status, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
         this.driver = driver;
         this.passengers = passengers;
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
@@ -39,7 +40,7 @@ public class ResponseRideDTO {
         this.rejection = rejection;
     }
 
-    public ResponseRideDTO(Long id, Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, Type vehicleType, boolean babyTransport, boolean petTransport, ResponseRejectionReasonTimeOfDetectionDTO rejection, ArrayList<ResponseLocationDTO> locations, RideStatus status) {
+    public ResponseRideDTO(Long id, Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ResponseRejectionReasonTimeOfDetectionDTO rejection, ArrayList<ResponseLocationDTO> locations, RideStatus status) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -47,7 +48,7 @@ public class ResponseRideDTO {
         this.driver = driver;
         this.passengers = passengers;
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.rejection = rejection;
@@ -55,10 +56,10 @@ public class ResponseRideDTO {
         this.status = status;
     }
 
-    public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Type vehicleType, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
+    public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
         this.id = id;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
@@ -71,20 +72,20 @@ public class ResponseRideDTO {
         this.status = RideStatus.PENDING;
     }
 
-    public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Type vehicleType, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations, RideStatus status) {
+    public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations, RideStatus status) {
         this.id = id;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
         this.status = status;
     }
 
-    public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, Type vehicleType, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations, RideStatus status, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
+    public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations, RideStatus status, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
         this.id = id;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.locations = locations;
@@ -153,12 +154,12 @@ public class ResponseRideDTO {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public boolean isBabyTransport() {
@@ -211,7 +212,7 @@ public class ResponseRideDTO {
         this.getPassengers().get(0).setId(123L);
         this.getPassengers().get(0).setEmail("user@example.com");
         this.setEstimatedTimeInMinutes(5);
-        this.setVehicleType(Type.STANDARD);
+        this.setVehicleType(VehicleName.STANDARD);
         this.setBabyTransport(true);
         this.setPetTransport(true);
         this.getRejection().setReason("Ride is canceled due to previous problems with the passenger");

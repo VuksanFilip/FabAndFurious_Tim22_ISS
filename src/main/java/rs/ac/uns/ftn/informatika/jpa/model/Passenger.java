@@ -12,10 +12,10 @@ public class Passenger extends User{
 
     @ManyToMany(mappedBy = "passengers", cascade = {CascadeType.ALL})
     @Column(name = "ride_id")
-    List<Ride> rides;
+    private List<Ride> rides;
 
     @ManyToMany(mappedBy = "passengers")
-    List<FavoriteLocations> favoriteLocations;
+    private List<FavoriteRoute> favoriteLocations;
 
     public Passenger() {
     }
@@ -36,7 +36,7 @@ public class Passenger extends User{
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }
 
-    public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, ArrayList<FavoriteLocations> favoriteLocations) {
+    public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, ArrayList<FavoriteRoute> favoriteLocations) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
         this.rides = rides;
         this.favoriteLocations = favoriteLocations;
@@ -50,11 +50,11 @@ public class Passenger extends User{
         this.rides = rides;
     }
 
-    public List<FavoriteLocations> getFavoriteLocations() {
+    public List<FavoriteRoute> getFavoriteLocations() {
         return favoriteLocations;
     }
 
-    public void setFavoriteLocations(ArrayList<FavoriteLocations> favoriteLocations) {
+    public void setFavoriteLocations(ArrayList<FavoriteRoute> favoriteLocations) {
         this.favoriteLocations = favoriteLocations;
     }
 

@@ -1,17 +1,17 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
-import rs.ac.uns.ftn.informatika.jpa.model.FavoriteLocations;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IFavoriteLocationsService {
 
-    List<FavoriteLocations> getAll();
+    List<FavoriteRoute> getAll();
 
-    Optional<FavoriteLocations> getFavoriteLocations(String id);
+    Optional<FavoriteRoute> getFavoriteLocations(String id);
 
-    void add(FavoriteLocations favoriteLocations);
+    void add(FavoriteRoute favoriteRoute);
 
     long getSize();
 

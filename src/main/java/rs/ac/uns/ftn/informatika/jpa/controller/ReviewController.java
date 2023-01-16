@@ -55,17 +55,17 @@ public class ReviewController {
         Page<Review> reviews = reviewService.findAll(page);
         List<ResponseReviewDTO> responseReviewDTOS = new ArrayList<>();
         for(Review r: reviews){
-            if(r.getVehicleId() == Long.parseLong(id)){
-                responseReviewDTOS.add(r.parseToResponse());
-            }
+//            if(r.getVehicleId() == Long.parseLong(id)){
+//                responseReviewDTOS.add(r.parseToResponse());
+//            }
         }
 
         List<Review> reviewsForSize = reviewService.getAll();
         int result = 0;
         for(Review r: reviewsForSize){
-            if(r.getVehicleId() == Long.parseLong(id)){
-                result = result + 1;
-            }
+//            if(r.getVehicleId() == Long.parseLong(id)){
+//                result = result + 1;
+//            }
         }
         return new ResponseEntity<>(new ResponsePageDTO(result, Arrays.asList(responseReviewDTOS.toArray())), HttpStatus.OK);
     }
@@ -85,17 +85,17 @@ public class ReviewController {
         Page<Review> reviews = reviewService.findAll(page);
         List<ResponseReviewDTO> responseReviewDTOS = new ArrayList<>();
         for(Review r: reviews){
-            if(r.getDriverId() == Long.parseLong(id)){
-                responseReviewDTOS.add(r.parseToResponse());
-            }
+//            if(r.getDriverId() == Long.parseLong(id)){
+//                responseReviewDTOS.add(r.parseToResponse());
+//            }
         }
 
         List<Review> reviewsForSize = reviewService.getAll();
         int result = 0;
         for(Review r: reviewsForSize){
-            if(r.getVehicleId() == Long.parseLong(id)){
-                result = result + 1;
-            }
+//            if(r.getVehicleId() == Long.parseLong(id)){
+//                result = result + 1;
+//            }
         }
         return new ResponseEntity<>(new ResponsePageDTO(result, Arrays.asList(responseReviewDTOS.toArray())), HttpStatus.OK);
     }

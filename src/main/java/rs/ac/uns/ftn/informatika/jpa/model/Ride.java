@@ -1,10 +1,12 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,7 +37,7 @@ public class Ride {
     private List<Location> locations;
 
     @OneToMany(cascade = {CascadeType.ALL})
-    private List<Path> paths;
+    private List<Route> routes;
     private int estimatedTimeInMinutes;
 
     @OneToMany(cascade = {CascadeType.ALL})
@@ -49,6 +51,8 @@ public class Ride {
 
     @OneToOne(cascade = {CascadeType.ALL})
     private Vehicle vehicle;
+
+    @Enumerated(EnumType.STRING)
     private RideStatus status;
 
     public Ride() {
@@ -99,14 +103,14 @@ public class Ride {
 
 
 
-    public Ride(Date startTime, Date endTime, int totalCost, Driver driver, List<Passenger> passengers, List<Location> locations, List<Path> paths, int estimatedTimeInMinutes, List<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petTransport, Vehicle vehicle, RideStatus status) {
+    public Ride(Date startTime, Date endTime, int totalCost, Driver driver, List<Passenger> passengers, List<Location> locations, List<Route> routes, int estimatedTimeInMinutes, List<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petTransport, Vehicle vehicle, RideStatus status) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalCost = totalCost;
         this.driver = driver;
         this.passengers = passengers;
         this.locations = locations;
-        this.paths = paths;
+        this.routes = routes;
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
         this.reviews = reviews;
         this.letter = letter;
@@ -165,12 +169,12 @@ public class Ride {
         this.locations = locations;
     }
 
-    public List<Path> getPaths() {
-        return paths;
+    public List<Route> getPaths() {
+        return routes;
     }
 
-    public void setPaths(List<Path> paths) {
-        this.paths = paths;
+    public void setPaths(List<Route> routes) {
+        this.routes = routes;
     }
 
     public float getEstimatedTimeInMinutes() {
@@ -254,7 +258,7 @@ public class Ride {
         this.driver = ride.getDriver();
         this.passengers = ride.getPassengers();
         this.locations = ride.getLocations();
-        this.paths = ride.getPaths();
+        this.routes = ride.getPaths();
         this.estimatedTimeInMinutes = (int) ride.getEstimatedTimeInMinutes();
         this.reviews = ride.getReviews();
         this.letter = ride.getLetter();
@@ -273,10 +277,10 @@ public class Ride {
 
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
 
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getType(), this.babyTransport, this.petTransport, responseLocationDTOS);
 
         return rideResponse;
     }
@@ -289,10 +293,10 @@ public class Ride {
 
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
 
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.getVehicleType().getType(), this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
 
         return rideResponse;
     }
@@ -305,9 +309,9 @@ public class Ride {
 
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status);
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getType(), this.babyTransport, this.petTransport, responseLocationDTOS, this.status);
         return rideResponse;
     }
 
@@ -319,9 +323,9 @@ public class Ride {
 
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS, this.status, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time));
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getType(), this.babyTransport, this.petTransport, responseLocationDTOS, this.status, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()));
         return rideResponse;
     }
 
@@ -332,9 +336,9 @@ public class Ride {
         }
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
-        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.vehicleType.type, this.babyTransport, this.petTransport, responseLocationDTOS);
+        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getType(), this.babyTransport, this.petTransport, responseLocationDTOS);
         return rideResponse;
     }
 
@@ -345,13 +349,12 @@ public class Ride {
         }
         ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
         for(Location l : locations){
-            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
+//            responseLocationDTOS.add(new ResponseLocationDTO(l.getDeparture().parseToResponse(), l.getDestination().parseToResponse()));
         }
         ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id,
                 this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()),
-                responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.
-                vehicleType.type, this.babyTransport, this.petTransport,
-                new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.reason, this.letter.time), responseLocationDTOS);
+                responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.getVehicleType().getType(), this.babyTransport, this.petTransport,
+                new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS);
         return rideResponse;
     }
 
@@ -363,7 +366,7 @@ public class Ride {
         for (Passenger p:this.passengers) {
             passengers.add(p.parseToPanicPassengersDTO());
         }
-        return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicle.vehicleType, this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date()), locations);
+        return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicle.getVehicleType(), this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date(Calendar.getInstance().getTime().getTime())), locations);
     }
 
 }

@@ -1,25 +1,24 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 public class RequestDriverVehicleDTO {
 
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private String model;
     private String licenseNumber;
-    private CurrentLocation currentLocation;
+    private Location currentLocation;
     private int passengerSeats;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public String getModel() {
@@ -38,13 +37,13 @@ public class RequestDriverVehicleDTO {
         this.licenseNumber = licenseNumber;
     }
 
-    public CurrentLocation getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(CurrentLocation currentLocation) {
-        this.currentLocation = currentLocation;
-    }
+//    public CurrentLocation getCurrentLocation() {
+//        return currentLocation;
+//    }
+//
+//    public void setCurrentLocation(CurrentLocation currentLocation) {
+//        this.currentLocation = currentLocation;
+//    }
 
     public int getPassengerSeats() {
         return passengerSeats;
@@ -72,6 +71,6 @@ public class RequestDriverVehicleDTO {
 
 
     public Vehicle parseToVehicle(Driver driver){
-        return new Vehicle(driver, new VehicleType(this.vehicleType), this.model, this.licenseNumber, this.currentLocation, this.passengerSeats, this.babyTransport, this.petTransport);
+        return new Vehicle(driver, new VehicleType(this.vehicleVehicleName), this.model, this.licenseNumber, this.currentLocation, this.passengerSeats, this.babyTransport, this.petTransport);
     }
 }

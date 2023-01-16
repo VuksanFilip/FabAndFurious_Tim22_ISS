@@ -11,13 +11,13 @@ import java.util.List;
 public class Driver extends User{
 
     @OneToMany(cascade = {CascadeType.ALL})
-    List<Document> documents;
+    private List<Document> documents;
 
     @OneToMany(cascade = {CascadeType.ALL})
-    List<Ride> rides;
+    private List<Ride> rides;
 
-    @OneToOne
-    Vehicle vehicle;
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private Vehicle vehicle;
 
     public Driver() {
     }

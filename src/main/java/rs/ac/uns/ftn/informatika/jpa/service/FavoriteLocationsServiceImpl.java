@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.informatika.jpa.model.FavoriteLocations;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
 import rs.ac.uns.ftn.informatika.jpa.repository.FavoriteLocationsRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IFavoriteLocationsService;
 
@@ -22,12 +22,12 @@ public class FavoriteLocationsServiceImpl implements IFavoriteLocationsService {
     public long getSize() { return this.favoriteLocationsRepository.count(); }
 
 
-    public List<FavoriteLocations> getAll() {
-        return (List<FavoriteLocations>) this.favoriteLocationsRepository.findAll();
+    public List<FavoriteRoute> getAll() {
+        return (List<FavoriteRoute>) this.favoriteLocationsRepository.findAll();
     }
 
     @Override
-    public Optional<FavoriteLocations> getFavoriteLocations(String id) {
+    public Optional<FavoriteRoute> getFavoriteLocations(String id) {
         return  this.favoriteLocationsRepository.findById(Long.parseLong(id));
     }
 
@@ -36,8 +36,8 @@ public class FavoriteLocationsServiceImpl implements IFavoriteLocationsService {
     }
 
 
-    public void add(FavoriteLocations favoriteLocations) {
-        this.favoriteLocationsRepository.save(favoriteLocations);
+    public void add(FavoriteRoute favoriteRoute) {
+        this.favoriteLocationsRepository.save(favoriteRoute);
     }
 
     @Override

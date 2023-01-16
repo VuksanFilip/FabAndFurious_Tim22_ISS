@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
-import rs.ac.uns.ftn.informatika.jpa.model.RideStatus;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import java.util.List;
 import java.util.Optional;

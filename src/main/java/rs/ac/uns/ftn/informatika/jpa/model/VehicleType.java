@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,24 +10,24 @@ public class VehicleType {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated
-    Type type;
-    float pricePerKm;
+    @Enumerated(EnumType.STRING)
+    private VehicleName vehicleName;
+    private float pricePerKm;
 
     public VehicleType() {
     }
 
-    public VehicleType(Type type){
-        this.type = type;
+    public VehicleType(VehicleName vehicleName){
+        this.vehicleName = vehicleName;
     }
 
-    public VehicleType(Type type, float pricePerKm) {
-        this.type = type;
+    public VehicleType(VehicleName vehicleName, float pricePerKm) {
+        this.vehicleName = vehicleName;
         this.pricePerKm = pricePerKm;
     }
 
     public VehicleType(VehicleType type) {
-        this.type = type.getType();
+        this.vehicleName = type.getType();
     }
 
     public Long getId() {
@@ -36,12 +38,12 @@ public class VehicleType {
         this.id = id;
     }
 
-    public Type getType() {
-        return type;
+    public VehicleName getType() {
+        return vehicleName;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(VehicleName vehicleName) {
+        this.vehicleName = vehicleName;
     }
 
     public float getPricePerKm() {

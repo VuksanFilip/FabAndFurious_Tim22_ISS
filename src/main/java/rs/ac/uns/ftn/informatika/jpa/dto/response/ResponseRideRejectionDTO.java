@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import java.util.ArrayList;
 import java.util.Date;

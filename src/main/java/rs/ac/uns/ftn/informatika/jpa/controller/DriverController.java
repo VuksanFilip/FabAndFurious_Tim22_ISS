@@ -13,7 +13,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDocumentService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDriverService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkHourService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkingHourService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,10 +27,10 @@ public class DriverController {
     private IDriverService driverService;
     private IDocumentService documentService;
     private IVehicleService vehicleService;
-    private IWorkHourService workHourService;
+    private IWorkingHourService workHourService;
 
 
-    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkHourService workHourService){
+    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService){
         this.driverService = driverService;
         this.documentService = documentService;
         this.vehicleService = vehicleService;
@@ -174,9 +174,9 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         Driver driver = this.driverService.getDriver(driverId).get();
-        WorkHour workHour = new WorkHour(driver, requestWorkingHour);
-        this.workHourService.add(workHour);
-        return new ResponseEntity<>(workHour.parseToResponse(), HttpStatus.OK);
+        WorkingHour workingHour = new WorkingHour(driver, requestWorkingHour);
+        this.workHourService.add(workingHour);
+        return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -192,8 +192,8 @@ public class DriverController {
         if(!this.workHourService.getWorkHour(workingHourId.toString()).isPresent()) {
             return new ResponseEntity<>("Working hour does not exist!", HttpStatus.NOT_FOUND);
         }
-        WorkHour workHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
-        return new ResponseEntity<>(workHour.parseToResponse(), HttpStatus.OK);
+        WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
+        return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -201,12 +201,12 @@ public class DriverController {
         if(!this.workHourService.getWorkHour(workingHourId.toString()).isPresent()) {
             return new ResponseEntity<>("Working hour does not exist!", HttpStatus.NOT_FOUND);
         }
-        WorkHour workHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
-        if(this.driverService.getDriver(workHour.getDriver().getId().toString()).get().getVehicle() == null){
+        WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
+        if(this.driverService.getDriver(workingHour.getDriver().getId().toString()).get().getVehicle() == null){
             return new ResponseEntity<>(new MessageDTO("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
-        WorkHour updatedWorkHour = new WorkHour(workHour.getId(), workHour.getStart(), requestWorkingHour.getEnd(), workHour.getDriver());
-        this.workHourService.add(updatedWorkHour);
-        return new ResponseEntity<>(updatedWorkHour.parseToResponse(), HttpStatus.OK);
+        WorkingHour updatedWorkingHour = new WorkingHour(workingHour.getId(), workingHour.getStart(), requestWorkingHour.getEnd(), workingHour.getDriver());
+        this.workHourService.add(updatedWorkingHour);
+        return new ResponseEntity<>(updatedWorkingHour.parseToResponse(), HttpStatus.OK);
     }
 }

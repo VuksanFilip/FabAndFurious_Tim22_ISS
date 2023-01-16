@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Type;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.ArrayList;
 
@@ -10,15 +10,15 @@ public class ResponseFavoriteLocationsDTO {
     private Long id;
     private String favoriteName;
     private ArrayList<ResponseLocationDTO> locations;
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public ResponseFavoriteLocationsDTO(Long id, String favoriteName, ArrayList<ResponseLocationDTO> locations, Type vehicleType, boolean babyTransport, boolean petTransport) {
+    public ResponseFavoriteLocationsDTO(Long id, String favoriteName, ArrayList<ResponseLocationDTO> locations, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.favoriteName = favoriteName;
         this.locations = locations;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
     }
@@ -47,12 +47,12 @@ public class ResponseFavoriteLocationsDTO {
         this.locations = locations;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleType(VehicleName vehicleVehicleName) {
+        this.vehicleVehicleName = vehicleVehicleName;
     }
 
     public boolean isBabyTransport() {

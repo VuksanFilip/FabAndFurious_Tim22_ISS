@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.informatika.jpa.repository.PanicRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPanicService;
 
 import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,6 @@ public class PanicServiceImpl implements IPanicService {
     }
 
     public Panic createPanicByRide(Ride ride, String reason){
-        Panic panic = new Panic(new User(), ride, new Date(), reason);
-        return panic;
+        return new Panic(new User(), ride, new Date(Calendar.getInstance().getTime().getTime()), reason);
     }
 }

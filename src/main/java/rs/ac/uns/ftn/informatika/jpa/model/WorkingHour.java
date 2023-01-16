@@ -5,42 +5,43 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Calendar;
 
 @Entity
-public class WorkHour {
+public class WorkingHour {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    Long id;
-    Date start;
-    Date end;
+    private Long id;
+    private Date start;
+    private Date end;
 
     @OneToOne
-    Driver driver;
+    private Driver driver;
 
-    public WorkHour() {
+    public WorkingHour() {
     }
 
-    public WorkHour(Date start, Date end, Driver driver) {
+    public WorkingHour(Date start, Date end, Driver driver) {
         this.start = start;
         this.end = end;
         this.driver = driver;
     }
 
-    public WorkHour(Long id, Date start, Date end) {
+    public WorkingHour(Long id, Date start, Date end) {
         this.id = id;
         this.start = start;
         this.end = end;
         this.driver = new Driver();
     }
 
-    public WorkHour(Driver driver, RequestDriverWorkingHourStartDTO dto){
+    public WorkingHour(Driver driver, RequestDriverWorkingHourStartDTO dto){
         this.start = dto.getStart();
-        this.end = new Date();
+        this.end = new Date(Calendar.getInstance().getTime().getTime());
         this.driver = driver;
     }
 
-    public WorkHour(Long id, Date start, Date end, Driver driver) {
+    public WorkingHour(Long id, Date start, Date end, Driver driver) {
         this.id = id;
         this.start = start;
         this.end = end;

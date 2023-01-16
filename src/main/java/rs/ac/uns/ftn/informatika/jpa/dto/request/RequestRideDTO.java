@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
 import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.ArrayList;
 
@@ -8,17 +10,17 @@ public class RequestRideDTO {
 
     private ArrayList<Location> locations;
     private ArrayList<Passenger> passengers;
-    private Type vehicleType;
+    private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
 
     public RequestRideDTO() {
     }
 
-    public RequestRideDTO(ArrayList<Location> locations, ArrayList<Passenger> passengers, Type vehicleType, boolean babyTransport, boolean petTransport) {
+    public RequestRideDTO(ArrayList<Location> locations, ArrayList<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.locations = locations;
         this.passengers = passengers;
-        this.vehicleType = vehicleType;
+        this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
     }
@@ -39,12 +41,12 @@ public class RequestRideDTO {
         this.passengers = passengers;
     }
 
-    public Type getVehicleType() {
-        return vehicleType;
+    public VehicleName getVehicleType() {
+        return vehicleVehicleName;
     }
 
-    public void setVehicleType(Type type) {
-        this.vehicleType = type;
+    public void setVehicleType(VehicleName vehicleName) {
+        this.vehicleVehicleName = vehicleName;
     }
 
     public boolean isBabyTransport() {
@@ -89,6 +91,6 @@ public class RequestRideDTO {
 //        ride.setLetter(new RejectionLetter());
 //        ride.setStatus(RideStatus.PENDING);
     public Ride parseToRide(){
-        return new Ride(this.locations, this.passengers, new Vehicle(new VehicleType(this.vehicleType)), this.babyTransport, this.petTransport, new Driver(), new RejectionLetter(), RideStatus.PENDING);
+        return new Ride(this.locations, this.passengers, new Vehicle(new VehicleType(this.vehicleVehicleName)), this.babyTransport, this.petTransport, new Driver(), new RejectionLetter(), RideStatus.PENDING);
     }
 }

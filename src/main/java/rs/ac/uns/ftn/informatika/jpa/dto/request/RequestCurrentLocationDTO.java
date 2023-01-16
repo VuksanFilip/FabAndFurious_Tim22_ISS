@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.model.CurrentLocation;
-
 public class RequestCurrentLocationDTO {
 
     private String address;
@@ -35,8 +33,5 @@ public class RequestCurrentLocationDTO {
         this.longitude = longitude;
     }
 
-    public CurrentLocation parseToCurrentLocation(){
-        return new CurrentLocation(this.address, this.latitude, this.longitude);
-    }
 
 }
