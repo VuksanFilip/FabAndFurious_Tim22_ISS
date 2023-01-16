@@ -11,9 +11,13 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestNoteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserChangePasswordDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserResetPasswordDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
-import rs.ac.uns.ftn.informatika.jpa.dummy.UserDummy;
-import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseNoteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.Note;
+import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.service.DriverServiceImpl;
 import rs.ac.uns.ftn.informatika.jpa.service.NoteServiceImpl;
 import rs.ac.uns.ftn.informatika.jpa.service.PassengerServiceImpl;
@@ -27,7 +31,6 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private UserDummy userDummy = new UserDummy();
     private UserServiceImpl userService;
     private PassengerServiceImpl passengerService;
     private DriverServiceImpl driverService;
