@@ -72,17 +72,28 @@ public class UserController {
         user.setResetPasswordToken(token);
         user.setResetPasswordTokenExpiration(LocalDateTime.now().plusMinutes(10));
 
+        //TODO TU POSLATI MAIL
+
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
 
     @PutMapping (value = "/{id}/resetPassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePasswordWithResetCode(@PathVariable("id") String id, @RequestBody RequestUserResetPasswordDTO requestUserResetPasswordDTO) {
 
-        //TODO OVO NE RADI DOBRO, SKONTATI KAKO FUNCIONISE CODE
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("Code is expired or not correct!", HttpStatus.BAD_REQUEST);
+        User user = userService.getUser(id).get();
+        if (user.getResetPasswordToken() == null || user.getResetPasswordTokenExpiration().isBefore(LocalDateTime.now()) || !user.getResetPasswordToken().equals(requestUserResetPasswordDTO.getCode())) {
+            return new ResponseEntity<>("Code is expired or not correct!", HttpStatus.BAD_REQUEST);
+        }
+
+        user.setPassword(requestUserResetPasswordDTO.getNewPassword());
+        user.setResetPasswordToken(null);
+        user.setResetPasswordTokenExpiration(null);
+        userService.add(user);
+
+        return new ResponseEntity<>("Password successfully changed!", HttpStatus.NO_CONTENT);
     }
 
     //TODO NAPRAVITI DA BUDE PAGEBLE (ZAJEBANO)
