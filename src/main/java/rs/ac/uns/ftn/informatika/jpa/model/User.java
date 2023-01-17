@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicUserDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
 
@@ -13,8 +12,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY, generator = "ConfirmationCodeGenerator")
-    @TableGenerator(table = "SEQUENCES", name = "ConfirmationCodeGenerator")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
