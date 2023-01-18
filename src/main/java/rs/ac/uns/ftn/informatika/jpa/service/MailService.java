@@ -23,7 +23,7 @@
 //        MimeMessage message = mailSender.createMimeMessage();
 //        MimeMessageHelper helper = new MimeMessageHelper(message);
 //
-//        helper.setFrom("cargobrr2023@gmail.com", "CarGoBrr");
+//        helper.setFrom("filipvuksan.iphone", "FAB CAR");
 //        helper.setTo(recipientEmail);
 //
 //        String subject = "Token za reset lozinke";
@@ -47,12 +47,12 @@
 //        MimeMessage message = mailSender.createMimeMessage();
 //        MimeMessageHelper helper = new MimeMessageHelper(message);
 //
-//        helper.setFrom("cargobrr2023@gmail.com", "CarGoBrr");
+//        helper.setFrom("filipvuksan.iphone", "FAB CAR");
 //        helper.setTo(recipientEmail);
 //
 //        String subject = "Aktivacija naloga";
 //
-//        String activationLink = "http://localhost:8080/api/passenger/activate/" + activation.getId();
+//        String activationLink = "http://localhost:8084/api/passenger/activate/" + activation.getId();
 //        String body = this.activationMessage +
 //                "<a href='" + activationLink +"'>" + activationLink;
 //
