@@ -1,10 +1,16 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseNoteDTO;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class Note {
 
@@ -27,36 +33,9 @@ public class Note {
         this.id = id;
     }
 
-    public Note() {
-    }
-
     public Note(String message, Date date, User user) {
         this.message = message;
         this.date = date;
-        this.user = user;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
     }
 

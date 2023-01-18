@@ -1,10 +1,16 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRejectionReasonTimeOfDetectionDTO;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class RejectionLetter {
     @Id
@@ -27,9 +33,6 @@ public class RejectionLetter {
         this.id = id;
     }
 
-    public RejectionLetter() {
-    }
-
     public RejectionLetter(String reason) {
         this.reason = reason;
     }
@@ -44,38 +47,6 @@ public class RejectionLetter {
         this.ride = ride;
         this.reason = reason;
         this.user = user;
-        this.time = time;
-    }
-
-    public Ride getRide() {
-        return ride;
-    }
-
-    public void setRide(Ride ride) {
-        this.ride = ride;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
         this.time = time;
     }
 

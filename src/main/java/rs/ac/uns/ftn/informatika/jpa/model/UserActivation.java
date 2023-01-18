@@ -1,11 +1,18 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class UserActivation {
 
@@ -16,16 +23,6 @@ public class UserActivation {
     private User user;
     private LocalDateTime date;
     private int lifespan;
-
-    public UserActivation() {
-    }
-
-    public UserActivation(int id, User user, LocalDateTime date, int lifespan) {
-        this.id = id;
-        this.user = user;
-        this.date = date;
-        this.lifespan = lifespan;
-    }
 
     public UserActivation(User user) {
         this.date = LocalDateTime.now();

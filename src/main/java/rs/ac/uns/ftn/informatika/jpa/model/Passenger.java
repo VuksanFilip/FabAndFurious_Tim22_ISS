@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRidePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
@@ -8,6 +9,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class Passenger extends User{
 
@@ -17,9 +23,6 @@ public class Passenger extends User{
 
     @ManyToMany(mappedBy = "passengers")
     private List<FavoriteRoute> favoriteLocations;
-
-    public Passenger() {
-    }
 
     public Passenger(Long id, String email) {
         super(id, email);
@@ -40,22 +43,6 @@ public class Passenger extends User{
     public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, ArrayList<FavoriteRoute> favoriteLocations) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
         this.rides = rides;
-        this.favoriteLocations = favoriteLocations;
-    }
-
-    public List<Ride> getRides() {
-        return rides;
-    }
-
-    public void setRides(List<Ride> rides) {
-        this.rides = rides;
-    }
-
-    public List<FavoriteRoute> getFavoriteLocations() {
-        return favoriteLocations;
-    }
-
-    public void setFavoriteLocations(ArrayList<FavoriteRoute> favoriteLocations) {
         this.favoriteLocations = favoriteLocations;
     }
 

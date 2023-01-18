@@ -1,12 +1,17 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewPassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.ReviewType;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class Review {
 
@@ -110,59 +115,6 @@ public class Review {
           this.comment = comment;
           this.ride = ride;
           this.passenger = passenger;
-          this.reviewType = reviewType;
-     }
-
-
-     public Review(){
-
-     }
-
-     public float getRating() {
-          return rating;
-     }
-
-     public void setRating(float rating) {
-          this.rating = rating;
-     }
-
-     public String getComment() {
-          return comment;
-     }
-
-     public void setComment(String comment) {
-          this.comment = comment;
-     }
-
-     public Ride getRide() {
-          return ride;
-     }
-
-     public void setRide(Ride ride) {
-          this.ride = ride;
-     }
-
-     public Passenger getPassenger() {
-          return passenger;
-     }
-
-     public void setPassenger(Passenger passenger) {
-          this.passenger = passenger;
-     }
-
-     public Long getId() {
-          return id;
-     }
-
-     public void setId(Long id) {
-          this.id = id;
-     }
-
-     public ReviewType getReviewType() {
-          return reviewType;
-     }
-
-     public void setReviewType(ReviewType reviewType) {
           this.reviewType = reviewType;
      }
 

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
@@ -9,6 +10,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class FavoriteRoute {
 
@@ -34,82 +40,12 @@ public class FavoriteRoute {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public FavoriteRoute() {
-
-    }
-
-    public FavoriteRoute(Long id, String favoriteName, Route route, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
-        this.id = id;
-        this.favoriteName = favoriteName;
-        this.route = route;
-        this.passengers = passengers;
-        this.vehicleVehicleName = vehicleVehicleName;
-        this.babyTransport = babyTransport;
-        this.petTransport = petTransport;
-    }
-
     public FavoriteRoute(String favoriteName, Route route, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
         this.route = route;
         this.passengers = passengers;
         this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
-        this.petTransport = petTransport;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFavoriteName() {
-        return favoriteName;
-    }
-
-    public void setFavoriteName(String favoriteName) {
-        this.favoriteName = favoriteName;
-    }
-
-    public Route getRoute() {
-        return route;
-    }
-
-    public void setRoute(Route route) {
-        this.route = route;
-    }
-
-    public List<Passenger> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(List<Passenger> passengers) {
-        this.passengers = passengers;
-    }
-
-    public VehicleName getVehicleType() {
-        return vehicleVehicleName;
-    }
-
-    public void setVehicleType(VehicleName vehicleVehicleName) {
-        this.vehicleVehicleName = vehicleVehicleName;
-    }
-
-    public boolean isBabyTransport() {
-        return babyTransport;
-    }
-
-    public void setBabyTransport(boolean babyTransport) {
-        this.babyTransport = babyTransport;
-    }
-
-    public boolean isPetTransport() {
-        return petTransport;
-    }
-
-    public void setPetTransport(boolean petTransport) {
         this.petTransport = petTransport;
     }
 

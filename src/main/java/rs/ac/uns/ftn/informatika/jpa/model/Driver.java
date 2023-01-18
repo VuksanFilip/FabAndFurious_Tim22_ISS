@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
+import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRideDriverDTO;
@@ -8,6 +9,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 @Entity
 public class Driver extends User{
 
@@ -19,9 +25,6 @@ public class Driver extends User{
 
     @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Vehicle vehicle;
-
-    public Driver() {
-    }
 
     public Driver(Long id) {
         super(id);
@@ -43,30 +46,6 @@ public class Driver extends User{
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
         this.documents = documents;
         this.rides = rides;
-        this.vehicle = vehicle;
-    }
-
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
-    }
-
-    public List<Ride> getRides() {
-        return rides;
-    }
-
-    public void setRides(List<Ride> rides) {
-        this.rides = rides;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
 
