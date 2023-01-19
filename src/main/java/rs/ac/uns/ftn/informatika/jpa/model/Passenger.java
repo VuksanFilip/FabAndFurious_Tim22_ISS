@@ -22,7 +22,7 @@ public class Passenger extends User{
     private List<Ride> rides;
 
     @ManyToMany(mappedBy = "passengers")
-    private List<FavoriteRoute> favoriteLocations;
+    private List<FavoriteRoute> favoriteRoutes;
 
     public Passenger(Long id, String email) {
         super(id, email);
@@ -40,10 +40,10 @@ public class Passenger extends User{
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }
 
-    public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, ArrayList<FavoriteRoute> favoriteLocations) {
+    public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, ArrayList<FavoriteRoute> favoriteRoutes) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
         this.rides = rides;
-        this.favoriteLocations = favoriteLocations;
+        this.favoriteRoutes = favoriteRoutes;
     }
 
     public void update(Passenger passenger){
