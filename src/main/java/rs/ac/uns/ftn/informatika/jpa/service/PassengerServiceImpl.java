@@ -65,7 +65,7 @@ public class PassengerServiceImpl implements IPassengerService {
     @Override
     public boolean hasTenFavoriteRoutes(Passenger passenger) {
         if(this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes() != null) {
-            if (this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes().size() + 1 == 10) {
+            if (this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes().size() + 1 > 10) {
                 return true;
             }
         }
