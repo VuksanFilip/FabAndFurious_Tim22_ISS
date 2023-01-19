@@ -1,14 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
-import rs.ac.uns.ftn.informatika.jpa.model.Location;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
-import rs.ac.uns.ftn.informatika.jpa.model.Route;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RequestFavoriteRouteDTO {

@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @ToString
 @Entity
-public class FavoriteRoute {
+public class FavoriteRoutes {
 
 
     @Id
@@ -37,7 +37,7 @@ public class FavoriteRoute {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public FavoriteRoute(String favoriteName, List<Route> route, List<Passenger> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
+    public FavoriteRoutes(String favoriteName, List<Route> route, List<Passenger> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
         this.route = route;
         this.passengers = passengers;

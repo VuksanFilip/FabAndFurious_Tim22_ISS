@@ -2,17 +2,17 @@ package rs.ac.uns.ftn.informatika.jpa.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FavoriteRouteRepository extends CrudRepository<FavoriteRoute, Long> {
+public interface FavoriteRouteRepository extends CrudRepository<FavoriteRoutes, Long> {
 
-    List<FavoriteRoute> findAll();
-    Optional<FavoriteRoute> findById(String Long);
+    List<FavoriteRoutes> findAll();
+    Optional<FavoriteRoutes> findById(String Long);
     long count();
-    FavoriteRoute deleteById(String Long);
+    FavoriteRoutes deleteById(String Long);
     boolean existsById(String Long);
 }

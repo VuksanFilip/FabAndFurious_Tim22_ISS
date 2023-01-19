@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Route;
@@ -38,12 +38,12 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
     public long getSize() { return this.favoriteRouteRepository.count(); }
 
 
-    public List<FavoriteRoute> getAll() {
-        return (List<FavoriteRoute>) this.favoriteRouteRepository.findAll();
+    public List<FavoriteRoutes> getAll() {
+        return (List<FavoriteRoutes>) this.favoriteRouteRepository.findAll();
     }
 
     @Override
-    public Optional<FavoriteRoute> getFavoriteLocations(String id) {
+    public Optional<FavoriteRoutes> getFavoriteLocations(String id) {
         return  this.favoriteRouteRepository.findById(Long.parseLong(id));
     }
 
@@ -52,8 +52,8 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
     }
 
 
-    public void add(FavoriteRoute favoriteRoute) {
-        this.favoriteRouteRepository.save(favoriteRoute);
+    public void add(FavoriteRoutes favoriteRoutes) {
+        this.favoriteRouteRepository.save(favoriteRoutes);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
         this.favoriteRouteRepository.deleteById(Long.parseLong(id));
     }
 
-    public FavoriteRoute postFavoriteRoute(Passenger passenger, RequestFavoriteRouteDTO requestFavoriteRoute){
+    public FavoriteRoutes postFavoriteRoute(Passenger passenger, RequestFavoriteRouteDTO requestFavoriteRoute){
         List<Route> routes = new ArrayList<>();
         for (RequestLocationDTO l : requestFavoriteRoute.getLocations()) {
             Location l1 = new Location(l.getDeparture().getAddress(), l.getDeparture().getLatitude(), l.getDeparture().getLongitude());
@@ -76,10 +76,10 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()) {
             passengers.add(this.passengerService.findByEmail(p.getEmail()));
         }
-        FavoriteRoute favoriteRoute = new FavoriteRoute(requestFavoriteRoute.getFavoriteName(), routes, passengers, requestFavoriteRoute.getVehicleType(), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
-        add(favoriteRoute);
-        passenger.getFavoriteRoutes().add(favoriteRoute);
+        FavoriteRoutes favoriteRoutes = new FavoriteRoutes(requestFavoriteRoute.getFavoriteName(), routes, passengers, requestFavoriteRoute.getVehicleType(), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
+        add(favoriteRoutes);
+        passenger.setFavoriteRoutes(favoriteRoutes);
         this.passengerService.add(passenger);
-        return favoriteRoute;
+        return favoriteRoutes;
     }
 }

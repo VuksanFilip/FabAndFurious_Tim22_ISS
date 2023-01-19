@@ -172,8 +172,8 @@ public class RideController{
         if (this.passengerService.hasTenFavoriteRoutes(passenger)){
             return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
         }
-        FavoriteRoute favoriteRoute = this.favoriteRouteService.postFavoriteRoute(passenger, requestFavoriteRoute);
-        return new ResponseEntity<>(favoriteRoute.parseToResponse(), HttpStatus.OK);
+        FavoriteRoutes favoriteRoutes = this.favoriteRouteService.postFavoriteRoute(passenger, requestFavoriteRoute);
+        return new ResponseEntity<>(favoriteRoutes.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)

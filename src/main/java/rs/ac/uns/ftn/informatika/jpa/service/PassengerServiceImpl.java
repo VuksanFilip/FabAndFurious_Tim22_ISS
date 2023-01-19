@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
@@ -63,20 +63,12 @@ public class PassengerServiceImpl implements IPassengerService {
         this.passengerRepository.save(passenger);
     }
 
-    public boolean checkIfNumberOfFavoriteRoutesExceed(FavoriteRoute favoriteRoute, int size){
-        for(Passenger p : favoriteRoute.getPassengers()) {
-            Passenger passenger = getPassenger((p.getId()).toString()).get();
-            if (passenger.getFavoriteRoutes().size() + 1 > size) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public boolean hasTenFavoriteRoutes(Passenger passenger) {
-        if(this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes().size()+1 == 10){
-            return true;
+        if(this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes() != null){
+            if(this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes().getRoute().size()+1 == 10){
+                return true;
+            }
         }
         return false;
     }
