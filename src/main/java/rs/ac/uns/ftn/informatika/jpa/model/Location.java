@@ -30,5 +30,4 @@ public class Location {
     public RequestLocationWithAddressDTO parseToResponse() {
         return new RequestLocationWithAddressDTO(this.address, this.latitude, this.longitude);
     }
-
 }

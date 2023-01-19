@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
@@ -60,5 +61,15 @@ public class PassengerServiceImpl implements IPassengerService {
 
     public void add(Passenger passenger) {
         this.passengerRepository.save(passenger);
+    }
+
+    public boolean checkIfNumberOfFavoriteRoutesExceed(FavoriteRoute favoriteRoute, int size){
+        for(Passenger p : favoriteRoute.getPassengers()) {
+            Passenger passenger = getPassenger((p.getId()).toString()).get();
+            if (passenger.getFavoriteLocations().size() + 1 > size) {
+                return true;
+            }
+        }
+        return false;
     }
 }

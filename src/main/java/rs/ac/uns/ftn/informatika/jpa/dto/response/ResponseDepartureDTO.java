@@ -9,6 +9,12 @@ public class ResponseDepartureDTO {
     public ResponseDepartureDTO() {
     }
 
+    public void ResponseLocationDTO(ResponseDepartureDTO responseDepartureDTO) {
+        this.address = responseDepartureDTO.address;
+        this.latitude = responseDepartureDTO.latitude;
+        this.longitude = responseDepartureDTO.longitude;
+    }
+
     public ResponseDepartureDTO(String address, double latitude, double longitude) {
         this.address = address;
         this.latitude = latitude;

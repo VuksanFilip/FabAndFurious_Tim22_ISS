@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoute;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
 import java.util.List;
@@ -23,4 +24,5 @@ public interface IPassengerService {
 
     boolean existsById(String id);
 
+    boolean checkIfNumberOfFavoriteRoutesExceed(FavoriteRoute favoriteRoute, int size);
 }

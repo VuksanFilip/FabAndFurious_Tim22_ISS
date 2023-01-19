@@ -19,7 +19,6 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ride")
@@ -54,7 +53,6 @@ public class RideController{
         if(rideService.checkIfDriverHasPandingRides(driver)){
             return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
         }
-
         Ride newRide = this.rideService.parseToRide(requestRideDTO, driver);
         return new ResponseEntity<>(newRide.parseToResponseNew(requestRideDTO.getScheduledTime()), HttpStatus.OK);
     }
@@ -66,9 +64,8 @@ public class RideController{
         if(ride != null){
             return new ResponseEntity<>(ride.parseToResponseNew(new Date()), HttpStatus.OK);
         }
-        return new ResponseEntity<>("Active ride does not exist!", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MessageDTO("Active ride does not exist!"), HttpStatus.NOT_FOUND);
     }
-
 
     @GetMapping(value = "/passenger/{passengerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getActivePassenger(@PathVariable("passengerId") String id) {
@@ -77,7 +74,7 @@ public class RideController{
         if(ride != null){
             return new ResponseEntity<>(ride.parseToResponseNew(new Date()), HttpStatus.OK);
         }
-        return new ResponseEntity<>("Active ride does not exist!", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MessageDTO("Active ride does not exist!"), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,7 +84,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Invalid data. For example bad Id format."), HttpStatus.BAD_REQUEST);
         }
         else if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getRide(id).get();
         return new ResponseEntity<>(ride.parseToResponseNew(new Date()), HttpStatus.OK);
@@ -97,12 +94,10 @@ public class RideController{
     public ResponseEntity<?> withdrawRide(@PathVariable String id){
 
         if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
-        Ride ride = rideService.getRide(id).get();
-        if((ride.getStatus() != RideStatus.PENDING) && (ride.getStatus() != RideStatus.STARTED)){
+        if(rideService.checkIfNotPendingAndNotStartedById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.BAD_REQUEST);
-
         }
         rideService.updateRideByStatus(id, RideStatus.CANCELED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
@@ -112,11 +107,11 @@ public class RideController{
     public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
 
         if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist"), HttpStatus.NOT_FOUND);
         }
-        Optional<Ride> ride = rideService.getRide(id);
+        Ride ride = rideService.getRide(id).get();
         //TODO promeniti usera
-        Panic panic = panicService.createPanicByRide(this.driverService.getDriver("5").get(), ride.get(), reason.getReason());
+        Panic panic = panicService.createPanicByRide(this.driverService.getDriver("5").get(), ride, reason.getReason());
 
         panicService.add(panic);
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);
@@ -126,12 +121,10 @@ public class RideController{
     public ResponseEntity<?> startRide(@PathVariable String id){
 
         if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
-        Ride ride = rideService.getRide(id).get();
-        if(ride.getStatus() != RideStatus.ACCEPTED){
+        if(rideService.checkIfNotAcceptedById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status ACCEPTED!"), HttpStatus.BAD_REQUEST);
-
         }
         rideService.updateRideByStatus(id, RideStatus.STARTED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
@@ -141,12 +134,10 @@ public class RideController{
     public ResponseEntity<?> acceptRide(@PathVariable String id){
 
         if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
-        Ride ride = rideService.getRide(id).get();
-        if(ride.getStatus() != RideStatus.PENDING){
+        if(rideService.checkIfNotPendingById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status PENDING!"), HttpStatus.BAD_REQUEST);
-
         }
         rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
@@ -156,13 +147,11 @@ public class RideController{
     public ResponseEntity<?> endRide(@PathVariable String id) {
 
         if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
-        Ride ride = rideService.getRide(id).get();
-        if((ride.getStatus() != RideStatus.STARTED)){
+        if(rideService.checkIfNotStartedById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot end a ride that is not in status STARTED!"), HttpStatus.BAD_REQUEST);
         }
-
         rideService.updateRideByStatus(id, RideStatus.FINISHED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
     }
@@ -171,17 +160,14 @@ public class RideController{
     public ResponseEntity<?> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) {
 
         if(!rideService.existsById(id)){
-            return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
-        Ride ride = rideService.getRide(id).get();
-        if((ride.getStatus() != RideStatus.PENDING) && (ride.getStatus() != RideStatus.ACCEPTED)){
+        if(rideService.checkIfNotPendingAndNotAcceptedById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or ACCEPTED!"), HttpStatus.BAD_REQUEST);
         }
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
 
-        rideService.updateRideByRejectionLetter(id, rejectionLetter);
-        rideService.updateRideByStatus(id, RideStatus.REJECTED);
-
+        rideService.updateRideByRejectionLetterAndStatus(id, rejectionLetter, RideStatus.CANCELED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
     }
 
@@ -189,16 +175,11 @@ public class RideController{
     public ResponseEntity<?> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
 
         FavoriteRoute favoriteRoute = requestFavouriteLocationDTO.parseToFavoriteLocations();
-        List<Passenger> passengers = favoriteRoute.getPassengers();
-        for(Passenger p : passengers){
-            Passenger passenger = passengerService.getPassenger((p.getId()).toString()).get();
-            if(passenger.getFavoriteLocations().size()+1 > 10){
-                    return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
-            }
+        if(passengerService.checkIfNumberOfFavoriteRoutesExceed(favoriteRoute, 10)){
+            return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
         }
-
         favouriteLocationService.add(favoriteRoute);
-        return new ResponseEntity<>(favoriteRoute.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(favoriteRoute, HttpStatus.OK);
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -216,7 +197,6 @@ public class RideController{
         if(!favouriteLocationService.existsById(id)){
             return new ResponseEntity<>("Favorite location does not exist!", HttpStatus.NOT_FOUND);
         }
-
         favouriteLocationService.deleteById(id);
         return new ResponseEntity<>("Successful deletion of favorite location!", HttpStatus.NO_CONTENT);
     }

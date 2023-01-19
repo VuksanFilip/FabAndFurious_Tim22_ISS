@@ -40,7 +40,6 @@ public class Ride {
     )
     private List<Passenger> passengers;
 
-
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Location> locations;
 

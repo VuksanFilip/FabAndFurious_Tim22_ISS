@@ -1,8 +1,10 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResponseFavoriteLocationsDTO {
 
@@ -10,14 +12,16 @@ public class ResponseFavoriteLocationsDTO {
     private Long id;
     private String favoriteName;
     private ArrayList<ResponseLocationDTO> locations;
+    private List<Passenger> passengers;
     private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public ResponseFavoriteLocationsDTO(Long id, String favoriteName, ArrayList<ResponseLocationDTO> locations, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
+    public ResponseFavoriteLocationsDTO(Long id, String favoriteName, ArrayList<ResponseLocationDTO> locations, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, List<Passenger> passengers) {
         this.id = id;
         this.favoriteName = favoriteName;
         this.locations = locations;
+        this.passengers = passengers;
         this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;

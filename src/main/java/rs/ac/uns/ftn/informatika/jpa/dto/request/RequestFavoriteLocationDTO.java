@@ -8,15 +8,19 @@ import java.util.List;
 public class RequestFavoriteLocationDTO {
 
     private String favoriteName;
-    private Route route;
+    private List<Location> locations;
     private List<Passenger> passengers;
     private VehicleName vehicleVehicleName;
     private boolean babyTransport;
     private boolean petTransport;
 
-    public RequestFavoriteLocationDTO(String favoriteName, Route route, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
+    public RequestFavoriteLocationDTO(){
+
+    }
+
+    public RequestFavoriteLocationDTO(String favoriteName, List<Location> locations, List<Passenger> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
-        this.route = route;
+        this.locations = locations;
         this.passengers = passengers;
         this.vehicleVehicleName = vehicleVehicleName;
         this.babyTransport = babyTransport;
@@ -31,12 +35,12 @@ public class RequestFavoriteLocationDTO {
         this.favoriteName = favoriteName;
     }
 
-    public Route getRoute() {
-        return route;
+    public List<Location> getLocations() {
+        return locations;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     public VehicleName getVehicleVehicleName() {
@@ -80,6 +84,6 @@ public class RequestFavoriteLocationDTO {
     }
 
     public FavoriteRoute parseToFavoriteLocations(){
-        return new FavoriteRoute(this.favoriteName, this.route, this.passengers, this.vehicleVehicleName, this.babyTransport, this.petTransport);
+        return new FavoriteRoute(this.favoriteName, this.locations, this.passengers, this.vehicleVehicleName, this.babyTransport, this.petTransport);
     }
 }

@@ -41,12 +41,12 @@ public class RideServiceImpl implements IRideService {
 
     @Override
     public Optional<Ride> getRide(String id) {
-        return  this.rideRepository.findById(Long.parseLong(id));
+        return this.rideRepository.findById(Long.parseLong(id));
     }
 
     @Override
     public boolean existsById(String id) {
-        return  this.rideRepository.existsById(Long.parseLong(id));
+        return this.rideRepository.existsById(Long.parseLong(id));
     }
 
     public Page<Ride> findAll(Pageable page) {
@@ -56,8 +56,8 @@ public class RideServiceImpl implements IRideService {
     @Override
     public List<Ride> getRidesOfDriver(Driver driver) {
         List<Ride> allRides = new ArrayList<>();
-        for(Ride r : getAll()){
-            if(r.getDriver() == driver){
+        for (Ride r : getAll()) {
+            if (r.getDriver() == driver) {
                 allRides.add(r);
             }
         }
@@ -66,28 +66,30 @@ public class RideServiceImpl implements IRideService {
 
     @Override
     public Ride updateRide(Ride ride) {
-        return  this.rideRepository.save(ride);
+        return this.rideRepository.save(ride);
     }
 
     public void add(Ride ride) {
         this.rideRepository.save(ride);
     }
 
-    public long getSize() { return this.rideRepository.count(); }
+    public long getSize() {
+        return this.rideRepository.count();
+    }
 
-    public Ride getaActiveRideByDriverId(String id){
-        for(Ride ride : getAll()){
-            if((ride.getDriver().getId() == Long.parseLong(id)) && (ride.getStatus() == RideStatus.STARTED)){
+    public Ride getaActiveRideByDriverId(String id) {
+        for (Ride ride : getAll()) {
+            if ((ride.getDriver().getId() == Long.parseLong(id)) && (ride.getStatus() == RideStatus.STARTED)) {
                 return ride;
             }
         }
         return null;
     }
 
-    public Ride getActiveRideByPassengerId(String id){
-        for(Ride ride : getAll()){
-            for(Passenger passenger : ride.getPassengers()){
-                if(passenger.getId() == Long.parseLong(id) && (ride.getStatus() == RideStatus.STARTED)){
+    public Ride getActiveRideByPassengerId(String id) {
+        for (Ride ride : getAll()) {
+            for (Passenger passenger : ride.getPassengers()) {
+                if (passenger.getId() == Long.parseLong(id) && (ride.getStatus() == RideStatus.STARTED)) {
                     return ride;
                 }
             }
@@ -95,13 +97,13 @@ public class RideServiceImpl implements IRideService {
         return null;
     }
 
-    public void updateRideByStatus(String id, RideStatus status){
+    public void updateRideByStatus(String id, RideStatus status) {
         Optional<Ride> ride = getRide(id);
         ride.get().setStatus(status);
         this.rideRepository.save(ride.get());
     }
 
-    public void updateRideByRejectionLetter(String id, RejectionLetter letter){
+    public void updateRideByRejectionLetter(String id, RejectionLetter letter) {
         Optional<Ride> ride = getRide(id);
         ride.get().setLetter(letter);
         this.rideRepository.save(ride.get());
@@ -120,7 +122,7 @@ public class RideServiceImpl implements IRideService {
 
     public Ride parseToRide(RequestRideDTO requestRideDTO, Driver driver) {
         List<Route> routes = new ArrayList<>();
-        for(RequestLocationDTO l : requestRideDTO.getLocations()){
+        for (RequestLocationDTO l : requestRideDTO.getLocations()) {
             Location l1 = new Location(l.getDeparture().getAddress(), l.getDeparture().getLatitude(), l.getDeparture().getLongitude());
             Location l2 = new Location(l.getDestination().getAddress(), l.getDestination().getLatitude(), l.getDestination().getLongitude());
             this.locationService.add(l1);
@@ -130,7 +132,7 @@ public class RideServiceImpl implements IRideService {
             routes.add(r);
         }
         List<Passenger> passengers = new ArrayList<>();
-        for(ResponsePassengerIdEmailDTO p : requestRideDTO.getPassengers()){
+        for (ResponsePassengerIdEmailDTO p : requestRideDTO.getPassengers()) {
             passengers.add(this.passengerService.findByEmail(p.getEmail()));
         }
         Ride newRide = new Ride(driver, passengers, routes, requestRideDTO.isBabyTransport(), requestRideDTO.isPetTransport(), requestRideDTO.getScheduledTime());
@@ -139,5 +141,50 @@ public class RideServiceImpl implements IRideService {
         this.driverService.add(driver);
 
         return newRide;
+    }
+
+    public boolean checkIfNotPendingAndNotStartedById(String id) {
+        Ride ride = getRide(id).get();
+        if((ride.getStatus() != RideStatus.PENDING) && (ride.getStatus() != RideStatus.STARTED)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfNotAcceptedById(String id) {
+        Ride ride = getRide(id).get();
+        if(ride.getStatus() != RideStatus.ACCEPTED) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfNotPendingById(String id) {
+        Ride ride = getRide(id).get();
+        if (ride.getStatus() != RideStatus.PENDING) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfNotStartedById(String id) {
+        Ride ride = getRide(id).get();
+        if (ride.getStatus() != RideStatus.STARTED) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfNotPendingAndNotAcceptedById(String id) {
+        Ride ride = getRide(id).get();
+        if((ride.getStatus() != RideStatus.PENDING) && (ride.getStatus() != RideStatus.ACCEPTED)){
+            return true;
+        }
+        return false;
+    }
+
+    public void updateRideByRejectionLetterAndStatus(String id, RejectionLetter rejectionLetter, RideStatus rideStatus){
+        updateRideByRejectionLetter(id, rejectionLetter);
+        updateRideByStatus(id, rideStatus);
     }
 }

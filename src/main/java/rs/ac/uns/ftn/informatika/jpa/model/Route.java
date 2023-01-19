@@ -21,6 +21,7 @@ public class Route {
 
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Location destination;
+
     private double km;
 
     public Route(Location departure, Location destination) {

@@ -41,4 +41,15 @@ public interface IRideService {
 
     Ride parseToRide(RequestRideDTO requestRideDTO, Driver driver);
 
+    boolean checkIfNotPendingAndNotStartedById(String id);
+
+    boolean checkIfNotAcceptedById(String id);
+
+    boolean checkIfNotPendingById(String id);
+
+    boolean checkIfNotStartedById(String id);
+
+    boolean checkIfNotPendingAndNotAcceptedById(String id);
+
+    void updateRideByRejectionLetterAndStatus(String id, RejectionLetter rejectionLetter, RideStatus rideStatus);
 }
