@@ -9,11 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.ValidateData;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteWithScheduledTimeDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ride")
@@ -173,12 +177,17 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
         }
         FavoriteRoutes favoriteRoutes = this.favoriteRouteService.postFavoriteRoute(passenger, requestFavoriteRoute);
-        return new ResponseEntity<>(favoriteRoutes.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(favoriteRoutes.parseToResponseWithScheduledTime(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getFavoriteRoute() {
-        return new ResponseEntity<>("", HttpStatus.OK);
+    public ResponseEntity<?> getFavoriteRoutes() {
+        List<FavoriteRoutes> favoriteRoutes = this.favoriteRouteService.getAll();
+        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = new ArrayList<>();
+        for(FavoriteRoutes r : favoriteRoutes){
+            responseFavoriteRoutes.add(r.parseToResponse());
+        }
+        return new ResponseEntity<>(responseFavoriteRoutes, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
