@@ -61,7 +61,7 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
         this.favoriteRouteRepository.deleteById(Long.parseLong(id));
     }
 
-    public FavoriteRoutes postFavoriteRoute(Passenger passenger, RequestFavoriteRouteDTO requestFavoriteRoute){
+    public FavoriteRoutes postFavoriteRoute(List<Passenger> passengers, RequestFavoriteRouteDTO requestFavoriteRoute){
         List<Route> routes = new ArrayList<>();
         for (RequestLocationDTO l : requestFavoriteRoute.getLocations()) {
             Location l1 = new Location(l.getDeparture().getAddress(), l.getDeparture().getLatitude(), l.getDeparture().getLongitude());
@@ -72,14 +72,17 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
             this.routeService.add(r);
             routes.add(r);
         }
-        List<Passenger> passengers = new ArrayList<>();
+        List<Passenger> allPassengers = new ArrayList<>();
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()) {
-            passengers.add(this.passengerService.findByEmail(p.getEmail()));
+            allPassengers.add(this.passengerService.findByEmail(p.getEmail()));
         }
-        FavoriteRoutes favoriteRoutes = new FavoriteRoutes(requestFavoriteRoute.getFavoriteName(), routes, passengers, requestFavoriteRoute.getVehicleType(), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
+        FavoriteRoutes favoriteRoutes = new FavoriteRoutes(requestFavoriteRoute.getFavoriteName(), routes, allPassengers, requestFavoriteRoute.getVehicleType(), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
         add(favoriteRoutes);
-        passenger.setFavoriteRoutes(favoriteRoutes);
-        this.passengerService.add(passenger);
+        for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()){
+            Passenger passenger = this.passengerService.findByEmail(p.getEmail());
+            passenger.getFavoriteRoutes().add(favoriteRoutes);
+            this.passengerService.add(passenger);
+        }
         return favoriteRoutes;
     }
 }

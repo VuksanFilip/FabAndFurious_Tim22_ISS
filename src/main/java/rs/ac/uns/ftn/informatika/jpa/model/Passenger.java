@@ -21,8 +21,8 @@ public class Passenger extends User{
     @Column(name = "ride_id")
     private List<Ride> rides;
 
-    @OneToOne
-    private FavoriteRoutes favoriteRoutes;
+    @ManyToMany(mappedBy = "passengers")
+    private List<FavoriteRoutes> favoriteRoutes;
 
     public Passenger(Long id, String email) {
         super(id, email);
@@ -40,7 +40,7 @@ public class Passenger extends User{
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }
 
-    public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, FavoriteRoutes favoriteRoutes) {
+    public Passenger(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, ArrayList<Ride> rides, List<FavoriteRoutes> favoriteRoutes) {
         super(id, firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
         this.rides = rides;
         this.favoriteRoutes = favoriteRoutes;
