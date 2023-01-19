@@ -66,9 +66,17 @@ public class PassengerServiceImpl implements IPassengerService {
     public boolean checkIfNumberOfFavoriteRoutesExceed(FavoriteRoute favoriteRoute, int size){
         for(Passenger p : favoriteRoute.getPassengers()) {
             Passenger passenger = getPassenger((p.getId()).toString()).get();
-            if (passenger.getFavoriteLocations().size() + 1 > size) {
+            if (passenger.getFavoriteRoutes().size() + 1 > size) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasTenFavoriteRoutes(Passenger passenger) {
+        if(this.passengerRepository.findById(passenger.getId()).get().getFavoriteRoutes().size()+1 == 10){
+            return true;
         }
         return false;
     }

@@ -8,17 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.ValidateData;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteLocationDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/ride")
@@ -27,7 +22,7 @@ public class RideController{
     private ValidateData validateData= new ValidateData();
     private IRideService rideService;
     private IPanicService panicService;
-    private IFavoriteLocationsService favouriteLocationService;
+    private IFavoriteRouteService favoriteRouteService;
     private IPassengerService passengerService;
     private IDriverService driverService;
     private ILocationService locationService;
@@ -35,10 +30,10 @@ public class RideController{
     private IUserService userService;
 
     @Autowired
-    public RideController(IRideService rideService, IPanicService panicService, IFavoriteLocationsService favouriteLocationService, IPassengerService passengerService, IDriverService driverService, ILocationService locationService, IRouteService routeService, IUserService userService) {
+    public RideController(IRideService rideService, IPanicService panicService, IFavoriteRouteService favoriteRouteService, IPassengerService passengerService, IDriverService driverService, ILocationService locationService, IRouteService routeService, IUserService userService) {
         this.rideService = rideService;
         this.panicService = panicService;
-        this.favouriteLocationService = favouriteLocationService;
+        this.favoriteRouteService = favoriteRouteService;
         this.passengerService = passengerService;
         this.driverService = driverService;
         this.locationService = locationService;
@@ -172,32 +167,23 @@ public class RideController{
     }
 
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postFavouriteLocation(@RequestBody RequestFavoriteLocationDTO requestFavouriteLocationDTO){
-
-        FavoriteRoute favoriteRoute = requestFavouriteLocationDTO.parseToFavoriteLocations();
-        if(passengerService.checkIfNumberOfFavoriteRoutesExceed(favoriteRoute, 10)){
+    public ResponseEntity<?> postFavoriteRoute(@RequestBody RequestFavoriteRouteDTO requestFavoriteRoute){
+        Passenger passenger = this.passengerService.getPassenger("2").get(); //TODO promeniti
+        if (this.passengerService.hasTenFavoriteRoutes(passenger)){
             return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
         }
-        favouriteLocationService.add(favoriteRoute);
-        return new ResponseEntity<>(favoriteRoute, HttpStatus.OK);
+        FavoriteRoute favoriteRoute = this.favoriteRouteService.postFavoriteRoute(passenger, requestFavoriteRoute);
+        return new ResponseEntity<>(favoriteRoute.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getFavoriteLocations() {
-
-        List<FavoriteRoute> favoriteLocations = favouriteLocationService.getAll();
-        List<ResponseFavoriteLocationsDTO> responseFavoriteLocations = new FavoriteRoute().parseToResponseList(favoriteLocations);
-
-        return new ResponseEntity<>(responseFavoriteLocations, HttpStatus.OK);
+    public ResponseEntity<?> getFavoriteRoute() {
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getFavoriteLocations(@PathVariable("id") String id) {
+    public ResponseEntity<?> getFavoriteRoute(@PathVariable("id") String id) {
 
-        if(!favouriteLocationService.existsById(id)){
-            return new ResponseEntity<>("Favorite location does not exist!", HttpStatus.NOT_FOUND);
-        }
-        favouriteLocationService.deleteById(id);
-        return new ResponseEntity<>("Successful deletion of favorite location!", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
     }
 }

@@ -25,4 +25,6 @@ public interface IPassengerService {
     boolean existsById(String id);
 
     boolean checkIfNumberOfFavoriteRoutesExceed(FavoriteRoute favoriteRoute, int size);
+
+    boolean hasTenFavoriteRoutes(Passenger passenger);
 }

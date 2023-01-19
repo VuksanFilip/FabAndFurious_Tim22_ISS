@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FavoriteLocationsRepository extends CrudRepository<FavoriteRoute, Long> {
+public interface FavoriteRouteRepository extends CrudRepository<FavoriteRoute, Long> {
 
     List<FavoriteRoute> findAll();
     Optional<FavoriteRoute> findById(String Long);
