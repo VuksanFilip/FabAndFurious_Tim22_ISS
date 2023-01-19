@@ -14,4 +14,6 @@ public interface ILocationService {
     void add(Location location);
 
     Location getLocationByAddress(String address);
+
+    void addLocations(List<Location> locations);
 }

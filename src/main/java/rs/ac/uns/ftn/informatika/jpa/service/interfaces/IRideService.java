@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
@@ -35,4 +36,9 @@ public interface IRideService {
     Page<Ride> findAll(Pageable page);
 
     List<Ride> getRidesOfDriver(Driver driver);
+
+    boolean checkIfDriverHasPandingRides(Driver driver);
+
+    Ride parseToRide(RequestRideDTO requestRideDTO, Driver driver);
+
 }

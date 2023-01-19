@@ -8,13 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.ValidateData;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteLocationDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteLocationsDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
-import rs.ac.uns.ftn.informatika.jpa.model.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,30 +50,12 @@ public class RideController{
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postRide(@RequestBody RequestRideDTO requestRideDTO){
         Driver driver = this.driverService.getDriver("6").get();
-        List<Ride> allRidesOfDriver = this.rideService.getRidesOfDriver(driver);
-        for(Ride r : allRidesOfDriver){
-            if(r.getStatus() == RideStatus.PENDING){
-                return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
-            }
+
+        if(rideService.checkIfDriverHasPandingRides(driver)){
+            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
         }
-        List<Route> routes = new ArrayList<>();
-        for(RequestLocationDTO l : requestRideDTO.getLocations()){
-            Location l1 = new Location(l.getDeparture().getAddress(), l.getDeparture().getLatitude(), l.getDeparture().getLongitude());
-            Location l2 = new Location(l.getDestination().getAddress(), l.getDestination().getLatitude(), l.getDestination().getLongitude());
-            this.locationService.add(l1);
-            this.locationService.add(l2);
-            Route r = new Route(l1, l2);
-            this.routeService.add(r);
-            routes.add(r);
-        }
-        List<Passenger> passengers = new ArrayList<>();
-        for(ResponsePassengerIdEmailDTO p : requestRideDTO.getPassengers()){
-            passengers.add(this.passengerService.findByEmail(p.getEmail()));
-        }
-        Ride newRide = new Ride(driver, passengers, routes, requestRideDTO.isBabyTransport(), requestRideDTO.isPetTransport());
-        this.rideService.add(newRide);
-        driver.getRides().add(newRide);
-        this.driverService.add(driver);
+
+        Ride newRide = this.rideService.parseToRide(requestRideDTO, driver);
         return new ResponseEntity<>(newRide.parseToResponseNew(requestRideDTO.getScheduledTime()), HttpStatus.OK);
     }
 

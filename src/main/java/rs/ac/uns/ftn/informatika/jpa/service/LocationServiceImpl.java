@@ -36,4 +36,10 @@ public class LocationServiceImpl implements ILocationService {
     public Location getLocationByAddress(String address) {
         return this.locationRepository.findByAddress(address);
     }
+
+    public void addLocations(List<Location> locations){
+        for(Location l: locations){
+            add(l);
+        }
+    }
 }

@@ -3,36 +3,9 @@ package rs.ac.uns.ftn.informatika.jpa.dto.request;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 public class RequestRideDTO {
-
-//    {
-//        "locations": [
-//        {
-//            "departure": {
-//            "address": "Bulevar oslobodjenja 46",
-//                    "latitude": 45.267136,
-//                    "longitude": 19.833549
-//        },
-//            "destination": {
-//            "address": "Bulevar oslobodjenja 46",
-//                    "latitude": 45.267136,
-//                    "longitude": 19.833549
-//        }
-//        }
-//  ],
-//        "passengers": [
-//        {
-//            "id": 123,
-//                "email": "user@example.com"
-//        }
-//  ],
-//        "vehicleType": "STANDARD",
-//            "babyTransport": true,
-//            "petTransport": true,
-//            "scheduledTime": "2023-01-11T17:45:00Z"
-//    }
 
     private List<RequestLocationDTO> locations;
     private List<ResponsePassengerIdEmailDTO> passengers;
@@ -100,4 +73,7 @@ public class RequestRideDTO {
     public void setScheduledTime(Date scheduledTime) {
         this.scheduledTime = scheduledTime;
     }
+
+
+
 }

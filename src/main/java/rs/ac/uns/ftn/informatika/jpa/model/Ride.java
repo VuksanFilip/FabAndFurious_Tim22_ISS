@@ -63,6 +63,8 @@ public class Ride {
     @Enumerated(EnumType.STRING)
     private RideStatus status;
 
+    private Date scheduledTime;
+
     public Ride(Driver driver, List<Passenger> passengers) {
         this.driver = driver;
         this.passengers = passengers;
@@ -126,7 +128,7 @@ public class Ride {
         this.status = status;
     }
 
-    public Ride(Driver driver, List<Passenger> passengers, List<Route> routes, boolean babyTransport, boolean petTransport){
+    public Ride(Driver driver, List<Passenger> passengers, List<Route> routes, boolean babyTransport, boolean petTransport, Date scheduledTime){
         this.driver = driver;
         this.passengers = passengers;
         this.routes = routes;
@@ -134,6 +136,7 @@ public class Ride {
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.status = RideStatus.PENDING;
+        this.scheduledTime = scheduledTime;
     }
 
     public void copyValues(Ride ride) {
