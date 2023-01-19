@@ -20,5 +20,5 @@ public interface IFavoriteRouteService {
     void deleteById(String id);
 
     boolean existsById(String id);
-    FavoriteRoutes postFavoriteRoute(Passenger passenger, RequestFavoriteRouteDTO requestFavoriteRoute);
+    FavoriteRoutes postFavoriteRoute(List<Passenger> passengers, RequestFavoriteRouteDTO requestFavoriteRoute);
 }
