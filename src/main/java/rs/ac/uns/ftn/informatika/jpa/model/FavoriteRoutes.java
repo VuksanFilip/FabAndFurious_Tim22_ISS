@@ -26,7 +26,7 @@ public class FavoriteRoutes {
 
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
     @JoinTable(name = "favourite_route_route", joinColumns = @JoinColumn(name = "favourite_route_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "route_id", referencedColumnName = "id"))
-    private List<Route> route;
+    private List<Route> routes;
 
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
     @JoinTable(name = "favourite_route_passenger", joinColumns = @JoinColumn(name = "favourite_route_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "passenger_id", referencedColumnName = "id"))
@@ -37,9 +37,9 @@ public class FavoriteRoutes {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public FavoriteRoutes(String favoriteName, List<Route> route, List<Passenger> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
+    public FavoriteRoutes(String favoriteName, List<Route> routes, List<Passenger> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
         this.favoriteName = favoriteName;
-        this.route = route;
+        this.routes = routes;
         this.passengers = passengers;
         this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
@@ -47,15 +47,27 @@ public class FavoriteRoutes {
     }
 
 
-    public ResponseFavoriteRouteDTO parseToResponse() {
+    public ResponseFavoriteRouteWithScheduledTimeDTO parseToResponseWithScheduledTime() {
         List<RequestLocationDTO> routes = new ArrayList<>();
-        for(Route r : this.route){
+        for(Route r : this.routes){
             routes.add(r.parseToResponse());
         }
         List<ResponsePassengerIdEmailDTO> allPassengers = new ArrayList<>();
         for(Passenger p : this.passengers){
             allPassengers.add(p.parseToResponseIdEmail());
         }
-        return new ResponseFavoriteRouteDTO(this.id, this.favoriteName, new Date(), routes, allPassengers, this.vehicleType, this.babyTransport, this.petTransport);
+        return new ResponseFavoriteRouteWithScheduledTimeDTO(this.id, this.favoriteName, new Date(), routes, allPassengers, this.vehicleType, this.babyTransport, this.petTransport);
+    }
+
+    public ResponseFavoriteRouteDTO parseToResponse() {
+        List<RequestLocationDTO> routes = new ArrayList<>();
+        for(Route r : this.routes){
+            routes.add(r.parseToResponse());
+        }
+        List<ResponsePassengerIdEmailDTO> allPassengers = new ArrayList<>();
+        for(Passenger p : this.passengers){
+            allPassengers.add(p.parseToResponseIdEmail());
+        }
+        return new ResponseFavoriteRouteDTO(this.id, this.favoriteName, routes, allPassengers, this.vehicleType, this.babyTransport, this.petTransport);
     }
 }
