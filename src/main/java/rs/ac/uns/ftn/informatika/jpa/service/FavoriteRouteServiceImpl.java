@@ -63,7 +63,7 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
 
     public FavoriteRoute postFavoriteRoute(Passenger passenger, RequestFavoriteRouteDTO requestFavoriteRoute){
         List<Route> routes = new ArrayList<>();
-        for (RequestLocationDTO l : requestRideDTO.getLocations()) {
+        for (RequestLocationDTO l : requestFavoriteRoute.getLocations()) {
             Location l1 = new Location(l.getDeparture().getAddress(), l.getDeparture().getLatitude(), l.getDeparture().getLongitude());
             Location l2 = new Location(l.getDestination().getAddress(), l.getDestination().getLatitude(), l.getDestination().getLongitude());
             this.locationService.add(l1);
@@ -73,7 +73,7 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
             routes.add(r);
         }
         List<Passenger> passengers = new ArrayList<>();
-        for (ResponsePassengerIdEmailDTO p : requestRideDTO.getPassengers()) {
+        for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()) {
             passengers.add(this.passengerService.findByEmail(p.getEmail()));
         }
         FavoriteRoute favoriteRoute = new FavoriteRoute(requestFavoriteRoute.getFavoriteName(), routes, passengers, requestFavoriteRoute.getVehicleType(), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());

@@ -1,11 +1,13 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -45,5 +47,15 @@ public class FavoriteRoute {
     }
 
 
-
+    public ResponseFavoriteRouteDTO parseToResponse() {
+        List<RequestLocationDTO> routes = new ArrayList<>();
+        for(Route r : this.route){
+            routes.add(r.parseToResponse());
+        }
+        List<ResponsePassengerIdEmailDTO> allPassengers = new ArrayList<>();
+        for(Passenger p : this.passengers){
+            allPassengers.add(p.parseToResponseIdEmail());
+        }
+        return new ResponseFavoriteRouteDTO(this.id, this.favoriteName, new Date(), routes, allPassengers, this.vehicleType, this.babyTransport, this.petTransport);
+    }
 }

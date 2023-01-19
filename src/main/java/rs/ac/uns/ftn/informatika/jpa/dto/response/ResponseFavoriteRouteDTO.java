@@ -48,8 +48,10 @@ public class ResponseFavoriteRouteDTO {
     public ResponseFavoriteRouteDTO() {
     }
 
-    public ResponseFavoriteRouteDTO(String favoriteName, List<RequestLocationDTO> locations, List<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
+    public ResponseFavoriteRouteDTO(Long id, String favoriteName, Date scheduledTime, List<RequestLocationDTO> locations, List<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
+        this.id = id;
         this.favoriteName = favoriteName;
+        this.scheduledTime = scheduledTime;
         this.locations = locations;
         this.passengers = passengers;
         this.vehicleType = vehicleType;
@@ -103,5 +105,21 @@ public class ResponseFavoriteRouteDTO {
 
     public void setPetTransport(boolean petTransport) {
         this.petTransport = petTransport;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getScheduledTime() {
+        return scheduledTime;
+    }
+
+    public void setScheduledTime(Date scheduledTime) {
+        this.scheduledTime = scheduledTime;
     }
 }

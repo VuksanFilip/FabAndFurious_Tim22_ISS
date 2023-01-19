@@ -106,12 +106,4 @@ public class RequestFavoriteRouteDTO {
         this.petTransport = petTransport;
     }
 
-    public FavoriteRoute parseToFavoriteRoute(){
-        List<Route> routes = new ArrayList<>();
-        List<Passenger> passengers = new ArrayList<>();
-        for(RequestLocationDTO r : this.locations){
-            Location departure = new Location(r.getDeparture().getAddress());
-        }
-        return new FavoriteRoute(this.favoriteName, routes, passengers, this.vehicleType, this.babyTransport, this.petTransport);
-    }
 }
