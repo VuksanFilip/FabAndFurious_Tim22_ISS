@@ -20,4 +20,6 @@ public interface IUserService {
     void add(User user);
 
     Set<ResponseMessageDTO> findMessagesOfUser(String id);
+
+    boolean existsById(String id);
 }

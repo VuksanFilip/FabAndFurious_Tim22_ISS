@@ -5,6 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
@@ -15,11 +19,11 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
-import rs.ac.uns.ftn.informatika.jpa.service.DriverServiceImpl;
-import rs.ac.uns.ftn.informatika.jpa.service.NoteServiceImpl;
-import rs.ac.uns.ftn.informatika.jpa.service.PassengerServiceImpl;
-import rs.ac.uns.ftn.informatika.jpa.service.UserServiceImpl;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -27,16 +31,19 @@ import java.util.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private UserServiceImpl userService;
-    private PassengerServiceImpl passengerService;
-    private DriverServiceImpl driverService;
-    private NoteServiceImpl noteService;
+    private AuthenticationManager authenticationManager;
+    private IUserService userService;
+    private IPassengerService passengerService;
+    private IDriverService driverService;
+    private INoteService noteService;
+    private IMailService mailService;
 
-    public UserController(UserServiceImpl userService, PassengerServiceImpl passengerService, DriverServiceImpl driverService, NoteServiceImpl noteService){
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
         this.noteService = noteService;
+        this.mailService = mailService;
     }
 
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +62,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> resetPassword(@PathVariable("id") String id){
+    public ResponseEntity<?> resetPassword(@PathVariable("id") String id) throws MessagingException, UnsupportedEncodingException {
 
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
@@ -66,6 +73,8 @@ public class UserController {
         user.setResetPasswordToken(token);
         user.setResetPasswordTokenExpiration(LocalDateTime.now().plusMinutes(10));
 
+        mailService.sendMail("filipvuksan.iphone@gmail.com", token);
+        userService.add(user);
         //TODO TU POSLATI MAIL(Ne radi nesto MailServiceImpl-po komentarom je)
 
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
@@ -125,10 +134,19 @@ public class UserController {
     }
 
     //TODO OVDE SE TOKENI RADE
-    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody RequestLoginDTO requestLoginDTO){
-        return null;
-    }
+//    @PostMapping(value = "/login", consumes = "application/json")
+//    public ResponseEntity<?> login(@RequestBody RequestLoginDTO authenticationRequest, HttpServletResponse response) {
+//
+//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//        User user = (User) authentication.getPrincipal();
+//        String jwt = tokenUtils.generateToken(user.getUsername());
+//
+//        return ResponseEntity.ok(new TokenDTO(jwt, jwt));
+//    }
 
     @PutMapping(value = "/{id}/block")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
