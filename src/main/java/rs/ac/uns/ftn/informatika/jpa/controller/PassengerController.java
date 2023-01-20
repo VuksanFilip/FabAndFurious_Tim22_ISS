@@ -42,13 +42,16 @@ public class PassengerController{
         if(this.passengerService.findByEmail(requestPassengerDTO.getEmail()) != null){
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
+
         Passenger passenger =  requestPassengerDTO.parseToPassenger();
+        UserActivation activation = new UserActivation(passenger);
         passengerService.add(passenger);
+        userActivationService.add(activation);
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<ResponsePageDTO> getStudentsPage(Pageable page) {
+    public ResponseEntity<ResponsePageDTO> getPassengersPage(Pageable page) {
 
         int results = passengerService.getAll().size();
         List<ResponsePassengerDTO> responsePassengerDTOS = passengerService.getAsPageableResponse(page);
@@ -68,12 +71,14 @@ public class PassengerController{
     @GetMapping(value = "/activate/{activationId}")
     public ResponseEntity<?> activatePassenger(@PathVariable("activationId") String id) {
 
+        if(!userActivationService.getUserActivation(id).isPresent()){
+            return new ResponseEntity<>(new MessageDTO("Activation with entered id does not exis!"), HttpStatus.NOT_FOUND);
+        }
         UserActivation activation = userActivationService.getUserActivation(id).get();
         if (activation.checkIfExpired()) {
             userActivationService.renewActivation(activation);
             return new ResponseEntity<>(new MessageDTO("Activation expired!"), HttpStatus.BAD_REQUEST);
         }
-
         Passenger toActivate = (Passenger) activation.getUser();
         if (toActivate.isActive()) {
             return new ResponseEntity<>(new MessageDTO("Activation already activated!"), HttpStatus.BAD_REQUEST);

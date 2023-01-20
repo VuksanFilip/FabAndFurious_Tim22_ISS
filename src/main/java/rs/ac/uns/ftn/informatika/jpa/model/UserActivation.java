@@ -2,9 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -17,7 +15,8 @@ import java.time.temporal.ChronoUnit;
 public class UserActivation {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne
     private User user;
@@ -30,11 +29,18 @@ public class UserActivation {
         this.user = user;
     }
 
-    public int getId() {
+    public UserActivation( Long id, User user) {
+        this.id = id;
+        this.date = LocalDateTime.now();
+        this.lifespan = 3;
+        this.user = user;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

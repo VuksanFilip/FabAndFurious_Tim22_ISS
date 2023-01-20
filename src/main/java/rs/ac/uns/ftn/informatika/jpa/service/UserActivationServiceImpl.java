@@ -6,6 +6,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserActivationRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +39,8 @@ public class UserActivationServiceImpl implements IUserActivationService {
     }
 
     public void renewActivation(UserActivation activation) {
-        this.delete(activation);
-        UserActivation renewed = new UserActivation(activation.getUser());
-        this.add(renewed);
+        activation.setDate(LocalDateTime.now());
+        activation.setLifespan(3);
+        this.add(activation);
     }
 }

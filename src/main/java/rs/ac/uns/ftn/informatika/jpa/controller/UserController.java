@@ -49,9 +49,9 @@ public class UserController {
         if(user.getPassword().equals(requestUserChangePasswordDTO.getOldPassword())){
             user.setPassword(requestUserChangePasswordDTO.getNewPassword());
             userService.add(user);
-            return new ResponseEntity<>("Password successfully changed!", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new MessageDTO("Password successfully changed!"), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>("Current password is not matching!", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MessageDTO("Current password is not matching!"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/{id}/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,14 +1,18 @@
 --admin
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (1, true, 'Bulevar oslobodjenja 12, Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', 'fica123', '0664587545', 'picture')
 insert into ADMIN(id) values (1)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (1, '2023-01-20 13:51:00.900595', 3, 1)
 
 --passenger
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (2, true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', 'marko123', '06652685', 'picture')
 insert into PASSENGER(id) values (2)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (2, '2023-01-20 13:51:00.900595', 3, 2)
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (3, true, 'Bulevar oslobodjenja 2, Novi Sad', false, 'petar.petrovic@gmail.com', 'Petar', 'Petrovic', 'petar123', '066874521', 'picture')
 insert into PASSENGER(id) values (3)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (3, '2023-01-20 13:51:00.900595', 3, 3)
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (4, true, 'Bulevar oslobodjenja 44, Novi Sad', false, 'janko.jankovic@gmail.com', 'Janko', 'Jankovic', 'janko123', '0654784595', 'picture')
 insert into PASSENGER(id) values (4)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (4, '2023-01-20 13:51:00.900595', 3, 4)
 
 --vehicle type
 insert into VEHICLE_TYPE(id, price_per_km, vehicle_name) values (1, 500, 'STANDARD')
@@ -27,10 +31,13 @@ insert into VEHICLE(id, baby_friendly, license_number, pet_friendly, seats, vehi
 --driver
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (5, true, 'Bulevar oslobodjenja 78, Novi Sad', false, 'andrea.katzenberger@gmail.com', 'Andrea', 'Katzenberger', 'andrea123', '0641254658', 'picture')
 insert into DRIVER(id, vehicle_id) values (5, 1)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (5, '2023-01-20 13:51:00.900595', 3, 5)
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (6, true, 'Bulevar oslobodjenja 27, Novi Sad', false, 'bojana.popov@gmail.com', 'Bojana', 'Popov', 'bojana123', '0634857954', 'picture')
 insert into DRIVER(id, vehicle_id) values (6, 2)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (6, '2023-01-20 13:51:00.900595', 3, 6)
 insert into USER(id, active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (7, true, 'Bulevar oslobodjenja 7, Novi Sad', false, 'mirko.mirkovic@gmail.com', 'Mirko', 'Mirkovic', 'mirko123', '0645879458', 'picture')
 insert into DRIVER(id, vehicle_id) values (7, null)
+insert into USER_ACTIVATION(id, date, lifespan, user_id) values (7, '2023-01-20 13:51:00.900595', 3, 7)
 
 --document
 insert into DOCUMENT(id, image, name, driver_id) values (1, 'image', 'vozacka dozvola', 5)
