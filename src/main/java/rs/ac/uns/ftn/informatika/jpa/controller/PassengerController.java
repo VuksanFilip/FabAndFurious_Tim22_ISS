@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.informatika.jpa.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,16 +13,13 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
-import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/passenger")
@@ -42,6 +38,7 @@ public class PassengerController{
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createPassenger(@RequestBody RequestPassengerDTO requestPassengerDTO) throws Exception {
+
         if(this.passengerService.findByEmail(requestPassengerDTO.getEmail()) != null){
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
@@ -53,23 +50,19 @@ public class PassengerController{
     @GetMapping
     public ResponseEntity<ResponsePageDTO> getStudentsPage(Pageable page) {
 
-        Page<Passenger> passengers = passengerService.findAll(page);
         int results = passengerService.getAll().size();
-
-        List<ResponsePassengerDTO> responsePassengerDTOS = new ArrayList<>();
-        for (Passenger p : passengers) {
-            responsePassengerDTOS.add(new ResponsePassengerDTO(p));
-        }
+        List<ResponsePassengerDTO> responsePassengerDTOS = passengerService.getAsPageableResponse(page);
         return new ResponseEntity<>(new ResponsePageDTO(results, Arrays.asList(responsePassengerDTOS.toArray())), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
+
         if(!this.passengerService.getPassenger(id).isPresent()){
             return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
-        Optional<Passenger> passenger = this.passengerService.getPassenger(id);
-        return new ResponseEntity<>(passenger.get().parseToResponse(), HttpStatus.OK);
+        Passenger passenger = this.passengerService.getPassenger(id).get();
+        return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/activate/{activationId}")
@@ -77,9 +70,7 @@ public class PassengerController{
 
         UserActivation activation = userActivationService.getUserActivation(id).get();
         if (activation.checkIfExpired()) {
-            userActivationService.delete(activation);
-            UserActivation renewed = new UserActivation(activation.getUser());
-            userActivationService.add(renewed);
+            userActivationService.renewActivation(activation);
             return new ResponseEntity<>(new MessageDTO("Activation expired!"), HttpStatus.BAD_REQUEST);
         }
 
@@ -94,6 +85,7 @@ public class PassengerController{
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
+
         if(!this.passengerService.getPassenger(id).isPresent()){
             return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
@@ -107,39 +99,9 @@ public class PassengerController{
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponsePageDTO> getPassengerRides(@PathVariable("id") String id, Pageable page) {
 
-        //LOSIJA VERZIJA
-        Page<Ride> rides = rideService.findAll(page);
-        List<ResponseRideDTO> responseRideDTOS = new ArrayList<>();
-        for(Ride r: rides){
-            for(Passenger p: r.getPassengers()){
-                if(p.getId() == Long.parseLong(id)){
-                    responseRideDTOS.add(r.parseToResponse());
-                }
-            }
-        }
-
-        List<Ride> ridesForSize = rideService.getAll();
-        int result = 0;
-        for(Ride r: ridesForSize){
-            for(Passenger p: r.getPassengers()){
-                if(p.getId() == Long.parseLong(id)){
-                    result = result + 1;
-                }
-            }
-        }
-
-        //BOLJA VERZIJA(SKONTATI RESENJE)
-//      Passenger passenger = passengerService.getPassenger(id).get();
-//      List<Ride> rides = passenger.getRides();
-//      System.out.println(rides.size());
-//      List<ResponseRideDTO> responseRideDTOS = new ArrayList<>();
-//      for(Ride r : rides){
-//          responseRideDTOS.add(r.parseToResponse());
-//      }
-
-        return new ResponseEntity<>(new ResponsePageDTO(result, Arrays.asList(responseRideDTOS.toArray())), HttpStatus.OK);
-
+        List<ResponseRideDTO> responseRideDTOS = rideService.getPageableResponseRide(page, id);
+        int passengerRidesNumber = rideService.getNumberOfRidesForPessanger(id);
+        return new ResponseEntity<>(new ResponsePageDTO(passengerRidesNumber, Arrays.asList(responseRideDTOS.toArray())), HttpStatus.OK);
     }
-
 
 }

@@ -8,15 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.ValidateData;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteWithScheduledTimeDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -173,14 +173,10 @@ public class RideController{
 
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postFavoriteRoute(@RequestBody RequestFavoriteRouteDTO requestFavoriteRoute){
-        List<Passenger> passengers = new ArrayList<>();
-        for(ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()){
-            passengers.add(this.passengerService.findByEmail(p.getEmail()));
-        }
-        for(Passenger p : passengers){
-            if (this.passengerService.hasTenFavoriteRoutes(p)){
-                return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
-            }
+
+        List<Passenger> passengers = passengerService.getPassengersFromFavoriteRouteRequest(requestFavoriteRoute);
+        if(passengerService.hasTenFavoriteRoutesForPassengers(passengers)){
+            return new ResponseEntity<>(new MessageDTO("Number of favorite rides cannot exceed 10!"), HttpStatus.BAD_REQUEST);
         }
         FavoriteRoutes favoriteRoutes = this.favoriteRouteService.postFavoriteRoute(passengers, requestFavoriteRoute);
         return new ResponseEntity<>(favoriteRoutes.parseToResponseWithScheduledTime(), HttpStatus.OK);
@@ -188,26 +184,19 @@ public class RideController{
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getFavoriteRoutes() {
-        List<FavoriteRoutes> favoriteRoutes = this.favoriteRouteService.getAll();
-        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = new ArrayList<>();
-        for(FavoriteRoutes r : favoriteRoutes){
-            responseFavoriteRoutes.add(r.parseToResponse());
-        }
+
+        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = favoriteRouteService.getResponseFavoriteRoutes();
         return new ResponseEntity<>(responseFavoriteRoutes, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getFavoriteRoute(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteFavoriteRoute(@PathVariable("id") String id) {
+
         if(!this.favoriteRouteService.existsById(id)){
-            return new ResponseEntity<>("Favorite location does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
         }
-        FavoriteRoutes favoriteRoutes = this.favoriteRouteService.getFavoriteLocations(id).get();
-        for(Passenger p : favoriteRoutes.getPassengers()){
-            Passenger passenger = this.passengerService.getPassenger(p.getId().toString()).get();
-            passenger.getFavoriteRoutes().remove(favoriteRoutes);
-            this.passengerService.add(passenger);
-        }
-        this.favoriteRouteService.deleteById(id);
-        return new ResponseEntity<>("Successful deletion of favorite location!", HttpStatus.NO_CONTENT);
+        favoriteRouteService.deleteFavouriteRoutesFromPassengers(id);
+        favoriteRouteService.deleteById(id);
+        return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
     }
 }

@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 
@@ -21,4 +22,8 @@ public interface IFavoriteRouteService {
 
     boolean existsById(String id);
     FavoriteRoutes postFavoriteRoute(List<Passenger> passengers, RequestFavoriteRouteDTO requestFavoriteRoute);
+
+    List<ResponseFavoriteRouteDTO> getResponseFavoriteRoutes();
+
+    void deleteFavouriteRoutesFromPassengers(String id);
 }

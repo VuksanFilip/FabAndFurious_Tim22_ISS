@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
@@ -84,5 +85,23 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
             this.passengerService.add(passenger);
         }
         return favoriteRoutes;
+    }
+
+    public List<ResponseFavoriteRouteDTO> getResponseFavoriteRoutes() {
+        List<FavoriteRoutes> favoriteRoutes = getAll();
+        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = new ArrayList<>();
+        for (FavoriteRoutes r : favoriteRoutes) {
+            responseFavoriteRoutes.add(r.parseToResponse());
+        }
+        return responseFavoriteRoutes;
+    }
+
+    public void deleteFavouriteRoutesFromPassengers(String id){
+    FavoriteRoutes favoriteRoutes = getFavoriteLocations(id).get();
+        for(Passenger p : favoriteRoutes.getPassengers()) {
+            Passenger passenger = this.passengerService.getPassenger(p.getId().toString()).get();
+            passenger.getFavoriteRoutes().remove(favoriteRoutes);
+            this.passengerService.add(passenger);
+        }
     }
 }

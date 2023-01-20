@@ -14,4 +14,6 @@ public interface IUserActivationService {
     void add(UserActivation userActivation);
 
     void delete(UserActivation activation);
+
+    void renewActivation(UserActivation activation);
 }

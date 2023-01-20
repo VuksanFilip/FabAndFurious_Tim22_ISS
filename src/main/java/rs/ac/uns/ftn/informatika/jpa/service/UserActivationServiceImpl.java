@@ -36,4 +36,10 @@ public class UserActivationServiceImpl implements IUserActivationService {
     public void delete(UserActivation activation) {
         userActivationRepository.delete(activation);
     }
+
+    public void renewActivation(UserActivation activation) {
+        this.delete(activation);
+        UserActivation renewed = new UserActivation(activation.getUser());
+        this.add(renewed);
+    }
 }
