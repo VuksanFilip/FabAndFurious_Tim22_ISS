@@ -20,31 +20,31 @@ public class WorkingHour {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private Date start;
-    private Date end;
+    private Date endTime;
 
     @OneToOne
     private Driver driver;
 
-    public WorkingHour(Date start, Date end, Driver driver) {
+    public WorkingHour(Date start, Date endTime, Driver driver) {
         this.start = start;
-        this.end = end;
+        this.endTime = endTime;
         this.driver = driver;
     }
 
-    public WorkingHour(Long id, Date start, Date end) {
+    public WorkingHour(Long id, Date start, Date endTime) {
         this.id = id;
         this.start = start;
-        this.end = end;
+        this.endTime = endTime;
         this.driver = new Driver();
     }
 
     public WorkingHour(Driver driver, RequestDriverWorkingHourStartDTO dto){
         this.start = dto.getStart();
-        this.end = new Date(Calendar.getInstance().getTime().getTime());
+        this.endTime = new Date(Calendar.getInstance().getTime().getTime());
         this.driver = driver;
     }
 
     public ResponseDriverWorkingHourDTO parseToResponse() {
-        return new ResponseDriverWorkingHourDTO(this.id, this.start, this.end);
+        return new ResponseDriverWorkingHourDTO(this.id, this.start, this.endTime);
     }
 }

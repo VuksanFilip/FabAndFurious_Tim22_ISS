@@ -3,6 +3,8 @@ package rs.ac.uns.ftn.informatika.jpa.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseMessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Message;
@@ -48,6 +50,8 @@ public class UserServiceImpl implements IUserService {
         return  this.userRepository.existsById(Long.parseLong(id));
     }
 
+
+
     @Override
     public Set<ResponseMessageDTO> findMessagesOfUser(String id) {
         Optional<User> userO = userRepository.findById(id);
@@ -61,5 +65,11 @@ public class UserServiceImpl implements IUserService {
             messageDTOS.add(m.parseToDTO());
         }
         return messageDTOS;
+    }
+
+    //TODO
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 }

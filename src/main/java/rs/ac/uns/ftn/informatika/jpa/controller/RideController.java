@@ -150,7 +150,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
         if(rideService.checkIfNotStartedById(id)){
-            return new ResponseEntity<>(new MessageDTO("Cannot end a ride that is not in status STARTED!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Cannot endTime a ride that is not in status STARTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.FINISHED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);

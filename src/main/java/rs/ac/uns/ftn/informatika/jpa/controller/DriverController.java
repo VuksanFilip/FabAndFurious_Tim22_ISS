@@ -203,7 +203,7 @@ public class DriverController {
         }
         WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
         if(this.driverService.getDriver(workingHour.getDriver().getId().toString()).get().getVehicle() == null){
-            return new ResponseEntity<>(new MessageDTO("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Cannot endTime shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         WorkingHour updatedWorkingHour = new WorkingHour(workingHour.getId(), workingHour.getStart(), requestWorkingHour.getEnd(), workingHour.getDriver());
         this.workHourService.add(updatedWorkingHour);

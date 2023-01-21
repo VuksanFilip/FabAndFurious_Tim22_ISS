@@ -9,5 +9,6 @@ import javax.persistence.*;
 @Getter
 @ToString
 @Entity
+@Table(name = "admins")
 public class Admin extends User{
 }
