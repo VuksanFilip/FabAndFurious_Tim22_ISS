@@ -15,11 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// Filter koji ce presretati SVAKI zahtev klijenta ka serveru
-// (sem nad putanjama navedenim u WebSecurityConfig.configure(WebSecurity web))
-// Filter proverava da li JWT token postoji u Authorization header-u u zahtevu koji stize od klijenta
-// Ukoliko token postoji, proverava se da li je validan. Ukoliko je sve u redu, postavlja se autentifikacija
-// u SecurityContext holder kako bi podaci o korisniku bili dostupni u ostalim delovima aplikacije gde su neophodni
+
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	private TokenUtils tokenUtils;

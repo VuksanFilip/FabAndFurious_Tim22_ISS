@@ -1,5 +1,11 @@
+-- insert into ROLES (name) values ('ROLE_PASSENGER1');
+-- insert into ROLES (name) values ('ROLE_DRIVER1');
+-- insert into ROLES (name) values ('ROLE_ADMIN1');
+
+
 --admin
 insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 12, Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', 'fica123', '0664587545', 'picture')
+-- insert into USER_ROLE(user_id, role_id) values (1,3)
 insert into ADMINS(id) values (1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 1)
 

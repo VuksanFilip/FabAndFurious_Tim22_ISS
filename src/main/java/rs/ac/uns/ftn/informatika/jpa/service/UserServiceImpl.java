@@ -67,9 +67,13 @@ public class UserServiceImpl implements IUserService {
         return messageDTOS;
     }
 
-    //TODO
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        User user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
+        } else {
+            return user;
+        }
     }
 }

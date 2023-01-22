@@ -6,8 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestNoteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserChangePasswordDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserResetPasswordDTO;
@@ -16,8 +20,10 @@ import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
+import rs.ac.uns.ftn.informatika.jpa.util.TokenUtils;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,13 +38,15 @@ public class UserController {
     private IDriverService driverService;
     private INoteService noteService;
     private IMailService mailService;
+    private TokenUtils tokenUtils;
 
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService){
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
         this.noteService = noteService;
         this.mailService = mailService;
+        this.tokenUtils = tokenUtils;
     }
 
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -129,19 +137,19 @@ public class UserController {
     }
 
     //TODO OVDE SE TOKENI RADE
-//    @PostMapping(value = "/login", consumes = "application/json")
-//    public ResponseEntity<?> login(@RequestBody RequestLoginDTO authenticationRequest, HttpServletResponse response) {
-//
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        User user = (User) authentication.getPrincipal();
-//        String jwt = tokenUtils.generateToken(user.getUsername());
-//
-//        return ResponseEntity.ok(new TokenDTO(jwt, jwt));
-//    }
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResponseEntity<?> login(@RequestBody RequestLoginDTO authenticationRequest, HttpServletResponse response) {
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = (User) authentication.getPrincipal();
+        String jwt = tokenUtils.generateToken(user.getUsername());
+
+        return ResponseEntity.ok(new ResponseTokenDTO(jwt, jwt));
+    }
 
     @PutMapping(value = "/{id}/block")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
