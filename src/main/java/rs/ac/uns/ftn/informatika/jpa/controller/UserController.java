@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
@@ -32,6 +32,7 @@ import java.util.*;
 @RequestMapping("/api/user")
 public class UserController {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
     private IUserService userService;
     private IPassengerService passengerService;
@@ -40,7 +41,7 @@ public class UserController {
     private IMailService mailService;
     private TokenUtils tokenUtils;
 
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils){
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
@@ -140,15 +141,21 @@ public class UserController {
     @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> login(@RequestBody RequestLoginDTO authenticationRequest, HttpServletResponse response) {
 
+        System.out.println("a");
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getEmail(), authenticationRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println(authentication.getCredentials());
 
-        User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//        User user = (User) authentication.getPrincipal();
+//        String jwt = tokenUtils.generateToken(user.getUsername());
+//
+        return null;
 
-        return ResponseEntity.ok(new ResponseTokenDTO(jwt, jwt));
+//        return ResponseEntity.ok(new ResponseTokenDTO(jwt, jwt));
     }
 
     @PutMapping(value = "/{id}/block")

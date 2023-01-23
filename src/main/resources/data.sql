@@ -1,15 +1,17 @@
--- insert into ROLES (name) values ('ROLE_PASSENGER1');
--- insert into ROLES (name) values ('ROLE_DRIVER1');
--- insert into ROLES (name) values ('ROLE_ADMIN1');
+-- insert into ROLE (name) values ('PASSENGER');
+-- insert into ROLE (name) values ('DRIVER');
+-- insert into ROLE (name) values ('ADMIN');
 
+-- //TODO SA OVIM RADI ROLE, A OSTALO NE RADI
+-- INSERT INTO USERS (password, first_name, last_name, phone_number, email, address, blocked, active, reset_password_token, reset_password_token_expiration, picture) VALUES ('$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Marko', 'Markovic', '0664587545', 'asd@as', 'adresa', false, false, 'token', '2017-10-01 21:58:58.508-07', 'picture');
 
 --admin
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 12, Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', 'fica123', '0664587545', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, reset_password_token, reset_password_token_expiration) values (true, 'Bulevar oslobodjenja 12 Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', 'fica123', '0664587545', 'picture', 'token', '2017-10-01 21:58:58.508-07')
 -- insert into USER_ROLE(user_id, role_id) values (1,3)
 insert into ADMINS(id) values (1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 1)
 
---passenger
+-- --passenger
 insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', 'marko123', '06652685', 'picture')
 insert into PASSENGER(id) values (2)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 2)
