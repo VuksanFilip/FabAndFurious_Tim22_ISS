@@ -7,11 +7,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,18 +52,13 @@ public class User implements UserDetails {
 
     private LocalDateTime resetPasswordTokenExpiration;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
 
     @Override
     public String getUsername() {

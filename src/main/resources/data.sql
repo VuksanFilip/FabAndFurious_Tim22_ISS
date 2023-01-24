@@ -1,24 +1,16 @@
--- insert into ROLE (name) values ('PASSENGER');
--- insert into ROLE (name) values ('DRIVER');
--- insert into ROLE (name) values ('ADMIN');
-
--- //TODO SA OVIM RADI ROLE, A OSTALO NE RADI
--- INSERT INTO USERS (password, first_name, last_name, phone_number, email, address, blocked, active, reset_password_token, reset_password_token_expiration, picture) VALUES ('$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Marko', 'Markovic', '0664587545', 'asd@as', 'adresa', false, false, 'token', '2017-10-01 21:58:58.508-07', 'picture');
-
 --admin
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, reset_password_token, reset_password_token_expiration) values (true, 'Bulevar oslobodjenja 12 Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', 'fica123', '0664587545', 'picture', 'token', '2017-10-01 21:58:58.508-07')
--- insert into USER_ROLE(user_id, role_id) values (1,3)
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, reset_password_token, reset_password_token_expiration, role) values (true, 'Bulevar oslobodjenja 12 Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', 'fica123', '0664587545', 'picture', 'token', '2017-10-01 21:58:58.508-07', 'ADMIN')
 insert into ADMINS(id) values (1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 1)
 
 -- --passenger
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', 'marko123', '06652685', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', 'marko123', '06652685', 'picture', 'PASSENGER')
 insert into PASSENGER(id) values (2)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 2)
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 2, Novi Sad', false, 'petar.petrovic@gmail.com', 'Petar', 'Petrovic', 'petar123', '066874521', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 2, Novi Sad', false, 'petar.petrovic@gmail.com', 'Petar', 'Petrovic', 'petar123', '066874521', 'picture', 'PASSENGER')
 insert into PASSENGER(id) values (3)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 3)
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 44, Novi Sad', false, 'janko.jankovic@gmail.com', 'Janko', 'Jankovic', 'janko123', '0654784595', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 44, Novi Sad', false, 'janko.jankovic@gmail.com', 'Janko', 'Jankovic', 'janko123', '0654784595', 'picture', 'PASSENGER')
 insert into PASSENGER(id) values (4)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 4)
 
@@ -37,21 +29,25 @@ insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_
 insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (true, 'NS 444 VT', true, 4, 'Opel astra', 2, 2)
 
 --driver
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 78, Novi Sad', false, 'andrea.katzenberger@gmail.com', 'Andrea', 'Katzenberger', 'andrea123', '0641254658', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 78, Novi Sad', false, 'andrea.katzenberger@gmail.com', 'Andrea', 'Katzenberger', 'andrea123', '0641254658', 'picture', 'DRIVER')
 insert into DRIVER(id, vehicle_id) values (5, 1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 5)
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 27, Novi Sad', false, 'bojana.popov@gmail.com', 'Bojana', 'Popov', 'bojana123', '0634857954', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 27, Novi Sad', false, 'bojana.popov@gmail.com', 'Bojana', 'Popov', 'bojana123', '0634857954', 'picture', 'DRIVER')
 insert into DRIVER(id, vehicle_id) values (6, 2)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 6)
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture) values (true, 'Bulevar oslobodjenja 7, Novi Sad', false, 'mirko.mirkovic@gmail.com', 'Mirko', 'Mirkovic', 'mirko123', '0645879458', 'picture')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 7, Novi Sad', false, 'mirko.mirkovic@gmail.com', 'Mirko', 'Mirkovic', 'mirko123', '0645879458', 'picture', 'DRIVER')
 insert into DRIVER(id, vehicle_id) values (7, null)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 7)
 
 --document
 insert into DOCUMENT(image, name, driver_id) values ('image', 'vozacka dozvola', 5)
+insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (5, 1)
 insert into DOCUMENT(image, name, driver_id) values ('image', 'licna karta', 5)
+insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (5, 2)
 insert into DOCUMENT(image, name, driver_id) values ('image', 'vozacka dozvola', 6)
+insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (6, 3)
 insert into DOCUMENT(image, name, driver_id) values ('image', 'licna karta', 6)
+insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (6, 4)
 
 --TIMESTAMP '1999-01-31 10:00:00'
 
