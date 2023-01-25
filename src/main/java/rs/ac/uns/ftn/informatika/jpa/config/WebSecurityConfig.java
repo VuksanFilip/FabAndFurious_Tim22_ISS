@@ -23,7 +23,7 @@ import rs.ac.uns.ftn.informatika.jpa.util.TokenUtils;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private final IUserService userService;
@@ -74,7 +74,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/user/login").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
-                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils,  userDetailsService()), BasicAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthenticationFilter(), BasicAuthenticationFilter.class);
 
         http.csrf().disable();
         http.headers().frameOptions().disable();
