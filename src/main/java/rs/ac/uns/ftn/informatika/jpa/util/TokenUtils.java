@@ -71,7 +71,7 @@ public class TokenUtils implements Serializable {
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000))
-				.signWith(SignatureAlgorithm.ES512, secret).compact();
+				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
 	public String generateRefreshToken(User userDetails) {
