@@ -21,6 +21,7 @@ insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:0
 --vehicle type
 insert into VEHICLE_TYPE(price_per_km, vehicle_name) values (500, 'STANDARD')
 insert into VEHICLE_TYPE(price_per_km, vehicle_name) values (570, 'VAN')
+insert into VEHICLE_TYPE(price_per_km, vehicle_name) values (650, 'LUXURY')
 
 --location
 insert into LOCATION(address, latitude, longitude) values ('Radnicka 19, Novi Sad', 45.249101856630546, 19.848034)
@@ -31,6 +32,7 @@ insert into LOCATION(address, latitude, longitude) values ('Vladike Platona 2, N
 --vehicle
 insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (true, 'NS 234 NR', false, 4, 'Audi A4', 1, 1)
 insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (true, 'NS 444 VT', true, 4, 'Opel astra', 2, 2)
+insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (false, 'NS 444 VT', false, 4, 'BMW', 3, 3)
 
 --driver
 --pass: andrea123
