@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestCurrentLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
@@ -23,6 +24,7 @@ public class VehicleController {
 
 
     @PutMapping(value = "/{id}/location", consumes = "application/json")
+    @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
         if(!this.vehicleService.getVehicle(id).isPresent()){
             return new ResponseEntity<>("Vehicle does not exist!", HttpStatus.NOT_FOUND);

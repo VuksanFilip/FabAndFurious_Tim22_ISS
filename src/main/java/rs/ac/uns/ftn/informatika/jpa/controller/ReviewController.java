@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestReviewDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
@@ -44,6 +45,7 @@ public class ReviewController {
     }
 
     @PostMapping(value = "{rideId}/vehicle",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO) {
         if(!this.rideService.existsById(rideId)){
             return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
@@ -63,6 +65,7 @@ public class ReviewController {
     }
 
     @GetMapping(value = "/vehicle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getVehicleReviews(@PathVariable("id") String id) {
         if(!this.vehicleService.getVehicle(id).isPresent()){
             return new ResponseEntity<>("Vehicle does not exist", HttpStatus.NOT_FOUND);
@@ -76,6 +79,7 @@ public class ReviewController {
     }
 
     @PostMapping(value = "{rideId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createDriverReview(@PathVariable("rideId") Long rideId, @RequestBody RequestReviewDTO requestReviewDTO){
         if(!this.rideService.existsById(rideId.toString())){
             return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
@@ -89,6 +93,7 @@ public class ReviewController {
     }
 
     @GetMapping(value = "/driver/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getDriverReviews(@PathVariable("id") String id) {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist!", HttpStatus.NOT_FOUND);
@@ -108,6 +113,7 @@ public class ReviewController {
     }
 
     @GetMapping(value = "/{rideId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getRideReviews(@PathVariable("rideId") String rideId) {
         if(!this.rideService.getRide(rideId).isPresent()){
             return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);

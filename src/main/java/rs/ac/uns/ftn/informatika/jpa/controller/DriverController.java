@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
@@ -38,6 +39,7 @@ public class DriverController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> createDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
         if(this.driverService.findByEmail(requestDriverDTO.getEmail()) != null){
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
@@ -48,6 +50,7 @@ public class DriverController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getDriversPage(Pageable page) {
 
         Page<Driver> drivers = driverService.findAll(page);
@@ -61,6 +64,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriver(@PathVariable("id") String id) {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -70,6 +74,7 @@ public class DriverController {
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestDriverDTO requestDriverDTO) {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -82,6 +87,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}/documents", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverDocuments(@PathVariable("id") String id) {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -96,6 +102,7 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> addDriverDocument(@PathVariable("id") String id, @RequestBody RequestDriverDocumentDTO requestDriverDocumentDTO) throws Exception {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -109,6 +116,7 @@ public class DriverController {
     }
 
     @DeleteMapping(value = "/document/{document-id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> deleteDriverDocument(@PathVariable("document-id") String documentId) {
         if(!this.documentService.getDocument(documentId).isPresent()){
             return new ResponseEntity<>("Document does not exist", HttpStatus.NOT_FOUND);
@@ -118,6 +126,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}/vehicle", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getDriverVehicle(@PathVariable("id") String id) {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -130,6 +139,7 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> addDriverVehicle(@PathVariable("id") String id, @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) throws Exception {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -143,6 +153,7 @@ public class DriverController {
     }
 
     @PutMapping (value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> changeDriverVehicle(@PathVariable("id") String driverId, @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) {
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -158,6 +169,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}/working-hour", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverWorkingHours(@PathVariable("id") String driverId) {
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -166,6 +178,7 @@ public class DriverController {
     }
 
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -180,6 +193,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverRides(@PathVariable("id") String driverId) {
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
@@ -188,6 +202,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getWorkingHour(@PathVariable("working-hour-id") Long workingHourId) {
         if(!this.workHourService.getWorkHour(workingHourId.toString()).isPresent()) {
             return new ResponseEntity<>("Working hour does not exist!", HttpStatus.NOT_FOUND);
@@ -197,6 +212,7 @@ public class DriverController {
     }
 
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") Long workingHourId, @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
         if(!this.workHourService.getWorkHour(workingHourId.toString()).isPresent()) {
             return new ResponseEntity<>("Working hour does not exist!", HttpStatus.NOT_FOUND);
