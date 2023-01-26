@@ -50,6 +50,10 @@ public class UserServiceImpl implements IUserService {
         return  this.userRepository.existsById(Long.parseLong(id));
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
 
 
     @Override

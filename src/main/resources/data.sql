@@ -4,7 +4,7 @@ insert into ADMINS(id) values (1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 1)
 
 -- --passenger
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', 'marko123', '06652685', 'picture', 'PASSENGER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '06652685', 'picture', 'PASSENGER')
 insert into PASSENGER(id) values (2)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 2)
 insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 2, Novi Sad', false, 'petar.petrovic@gmail.com', 'Petar', 'Petrovic', 'petar123', '066874521', 'picture', 'PASSENGER')

@@ -23,4 +23,6 @@ public interface IUserService extends UserDetailsService {
     Set<ResponseMessageDTO> findMessagesOfUser(String id);
 
     boolean existsById(String id);
+
+    User findByEmail(String email);
 }

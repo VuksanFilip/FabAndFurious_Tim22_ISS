@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
@@ -12,6 +13,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.ArrayList;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -55,9 +57,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(this.getRole().toString()));
+        return authorities;
     }
 
     @Override

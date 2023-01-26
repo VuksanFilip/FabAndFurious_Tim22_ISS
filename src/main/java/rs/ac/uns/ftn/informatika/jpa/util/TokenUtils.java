@@ -10,158 +10,87 @@ import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Component
-public class TokenUtils {
+public class TokenUtils implements Serializable {
 
-	@Value("spring-security-example")
-	private String APP_NAME;
+	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-	@Value("somesecret")
-	public String SECRET;
+	public static final long JWT_REFRESH_TOKEN_VALIDITY = 24*60*60;
 
-	@Value("1800000")
-	private int EXPIRES_IN;
-	
-	@Value("Authorization")
-	private String AUTH_HEADER;
-	
-	private static final String AUDIENCE_WEB = "web";
+	@Value("${jwt.secret}")
+	private String secret;
 
-	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-
-	public String generateToken(String username) {
-		return Jwts.builder()
-				.setIssuer(APP_NAME)
-				.setSubject(username)
-				.setAudience(generateAudience())
-				.setIssuedAt(new Date())
-				.setExpiration(generateExpirationDate())
-				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+	private Claims getAllClaimsFromToken(String token) {
+		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
 
-	private String generateAudience() {
-		
-		//	Moze se iskoristiti org.springframework.mobile.device.Device objekat za odredjivanje tipa uredjaja sa kojeg je zahtev stigao.
-		//	https://spring.io/projects/spring-mobile
-				
-		//	String audience = AUDIENCE_UNKNOWN;
-		//		if (device.isNormal()) {
-		//			audience = AUDIENCE_WEB;
-		//		} else if (device.isTablet()) {
-		//			audience = AUDIENCE_TABLET;
-		//		} else if (device.isMobile()) {
-		//			audience = AUDIENCE_MOBILE;
-		//		}
-		
-		return AUDIENCE_WEB;
-	}
-
-	private Date generateExpirationDate() {
-		return new Date(new Date().getTime() + EXPIRES_IN);
-	}
-
-	public String getToken(HttpServletRequest request) {
-		String authHeader = getAuthHeaderFromHeader(request);
-
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			return authHeader.substring(7);
-		}
-
-		return null;
+	public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
+		final Claims claims = getAllClaimsFromToken(token);
+		return claimsResolver.apply(claims);
 	}
 
 	public String getUsernameFromToken(String token) {
-		String username;
-		
-		try {
-			final Claims claims = this.getAllClaimsFromToken(token);
-			username = claims.getSubject();
-		} catch (ExpiredJwtException ex) {
-			throw ex;
-		} catch (Exception e) {
-			username = null;
-		}
-		
-		return username;
+		return getClaimFromToken(token, Claims::getSubject);
 	}
 
-	public Date getIssuedAtDateFromToken(String token) {
-		Date issueAt;
-		try {
-			final Claims claims = this.getAllClaimsFromToken(token);
-			issueAt = claims.getIssuedAt();
-		} catch (ExpiredJwtException ex) {
-			throw ex;
-		} catch (Exception e) {
-			issueAt = null;
-		}
-		return issueAt;
-	}
-
-	public String getAudienceFromToken(String token) {
-		String audience;
-		try {
-			final Claims claims = this.getAllClaimsFromToken(token);
-			audience = claims.getAudience();
-		} catch (ExpiredJwtException ex) {
-			throw ex;
-		} catch (Exception e) {
-			audience = null;
-		}
-		return audience;
-	}
 
 	public Date getExpirationDateFromToken(String token) {
-		Date expiration;
-		try {
-			final Claims claims = this.getAllClaimsFromToken(token);
-			expiration = claims.getExpiration();
-		} catch (ExpiredJwtException ex) {
-			throw ex;
-		} catch (Exception e) {
-			expiration = null;
-		}
-		
-		return expiration;
+		return getClaimFromToken(token, Claims::getExpiration);
 	}
 
-	private Claims getAllClaimsFromToken(String token) {
-		Claims claims;
-		try {
-			claims = Jwts.parser()
-					.setSigningKey(SECRET)
-					.parseClaimsJws(token)
-					.getBody();
-		} catch (ExpiredJwtException ex) {
-			throw ex;
-		} catch (Exception e) {
-			claims = null;
-		}
-		return claims;
+//	public String getRoleFromToken(String token) {
+//		Map<String, Object> claims;
+//		claims = getAllClaimsFromToken(token);
+//		return (String) claims.get("role");
+//	}
+//
+//	public int getUserIdFromToken(String token) {
+//		Map<String, Object> claims;
+//		claims = getAllClaimsFromToken(token);
+//		return (int) claims.get("id");
+//	}
+
+	private Boolean isTokenExpired(String token){
+		final Date expiration = getExpirationDateFromToken(token);
+		return expiration.before(new Date());
 	}
 
-	public Boolean validateToken(String token, UserDetails userDetails) {
-		User user = (User) userDetails;
+	public String generateToken(User userDetails) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", userDetails.getRole());
+		claims.put("id", userDetails.getId());
+		return doGenerateToken(claims, userDetails.getEmail());
+	}
+
+	private String doGenerateToken(Map<String, Object> claims, String subject) {
+		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000))
+				.signWith(SignatureAlgorithm.HS512, secret).compact();
+	}
+
+	public String generateRefreshToken(User userDetails) {
+		Map<String,Object> claims = new HashMap<>();
+		claims.put("role", userDetails.getRole());
+		claims.put("id", userDetails.getId());
+		return doGenerateRefreshToken(claims, userDetails.getEmail());
+	}
+
+	private String doGenerateRefreshToken(Map<String, Object> claims, String email) {
+		return Jwts.builder().setClaims(claims).setSubject(email).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis()+JWT_REFRESH_TOKEN_VALIDITY*1000))
+				.signWith(SignatureAlgorithm.HS512,secret).compact();
+	}
+
+
+	public Boolean validateToken(String token, User userDetails) {
 		final String username = getUsernameFromToken(token);
-		final Date created = getIssuedAtDateFromToken(token);
-		
-		return (username != null // korisnicko ime nije null
-			&& username.equals(userDetails.getUsername())); // korisnicko ime iz tokena se podudara sa korisnickom imenom koje pise u bazi
-//			&& !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate())); // nakon kreiranja tokena korisnik nije menjao svoju lozinku
-	}
-
-	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-		return (lastPasswordReset != null && created.before(lastPasswordReset));
-	}
-
-	public int getExpiredIn() {
-		return EXPIRES_IN;
-	}
-
-	public String getAuthHeaderFromHeader(HttpServletRequest request) {
-		return request.getHeader(AUTH_HEADER);
+		return (username.equals(userDetails.getEmail()) && !isTokenExpired(token) && !userDetails.isBlocked());
 	}
 	
 }
