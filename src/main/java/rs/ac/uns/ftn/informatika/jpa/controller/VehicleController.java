@@ -16,7 +16,7 @@ public class VehicleController {
     private IVehicleService vehicleService;
     private ILocationService locationService;
 
-    private VehicleController(IVehicleService vehicleService, ILocationService locationService){
+    public VehicleController(IVehicleService vehicleService, ILocationService locationService){
         this.vehicleService = vehicleService;
         this.locationService = locationService;
     }
