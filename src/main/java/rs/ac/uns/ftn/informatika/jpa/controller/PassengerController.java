@@ -61,7 +61,6 @@ public class PassengerController{
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
 
         if(!this.passengerService.getPassenger(id).isPresent()){

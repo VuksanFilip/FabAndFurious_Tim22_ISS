@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class JpaExampleApplication {
 
-	
 	public static void main(String[] args) {
 
 		SpringApplication.run(JpaExampleApplication.class, args);
