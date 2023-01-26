@@ -7,13 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestNoteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserChangePasswordDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserResetPasswordDTO;
@@ -25,7 +20,6 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 import rs.ac.uns.ftn.informatika.jpa.util.TokenUtils;
 
 import javax.mail.MessagingException;
-import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,7 +29,7 @@ import java.util.*;
 public class UserController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+//    private AuthenticationManager authenticationManager;
     private IUserService userService;
     private IPassengerService passengerService;
     private IDriverService driverService;
@@ -43,7 +37,7 @@ public class UserController {
     private IMailService mailService;
     private TokenUtils tokenUtils;
 
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
@@ -142,22 +136,22 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO login) {
-        try{
-            User user = this.userService.findByEmail(login.getEmail());
-            ResponseLoginDTO responseLogin = new ResponseLoginDTO();
-            responseLogin.setAccessToken(this.tokenUtils.generateToken(user));
-            responseLogin.setRefreshToken(this.tokenUtils.generateRefreshToken(user));
-
-            Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new ResponseEntity<>(responseLogin, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(new MessageDTO("Wrong username or password!"), HttpStatus.BAD_REQUEST);
-        }
-
-    }
+//    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+//    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO login) {
+//        try{
+//            User user = this.userService.findByEmail(login.getEmail());
+//            ResponseLoginDTO responseLogin = new ResponseLoginDTO();
+//            responseLogin.setAccessToken(this.tokenUtils.generateToken(user));
+//            responseLogin.setRefreshToken(this.tokenUtils.generateRefreshToken(user));
+//
+//            Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            return new ResponseEntity<>(responseLogin, HttpStatus.OK);
+//        } catch (Exception e){
+//            return new ResponseEntity<>(new MessageDTO("Wrong username or password!"), HttpStatus.BAD_REQUEST);
+//        }
+//
+//    }
 
 
     @PutMapping(value = "/{id}/block")
