@@ -62,7 +62,7 @@ public class PassengerServiceImpl implements IPassengerService {
     }
 
     public void add(Passenger passenger) {
-        System.out.println(passenger.getEmail());
+
         this.passengerRepository.save(passenger);
     }
 

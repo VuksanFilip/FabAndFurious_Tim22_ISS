@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerDTO;
@@ -15,6 +16,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
@@ -29,12 +31,14 @@ public class PassengerController{
     private IPassengerService passengerService;
     private IRideService rideService;
     private IUserActivationService userActivationService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PassengerController(IPassengerService passengerService, IRideService rideService, IUserActivationService userActivationService) {
+    public PassengerController(IPassengerService passengerService, IRideService rideService, IUserActivationService userActivationService, PasswordEncoder passwordEncoder) {
         this.passengerService = passengerService;
         this.rideService = rideService;
         this.userActivationService = userActivationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,6 +49,9 @@ public class PassengerController{
         }
 
         Passenger passenger =  requestPassengerDTO.parseToPassenger();
+        passenger.setPassword(passwordEncoder.encode(requestPassengerDTO.getPassword()));
+        passenger.setRole(Role.PASSENGER);
+        passenger.setActive(true);
         UserActivation activation = new UserActivation(passenger);
         passengerService.add(passenger);
         userActivationService.add(activation);
