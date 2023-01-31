@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
 
 import java.util.List;
@@ -12,4 +13,8 @@ public interface IVehicleTypeService {
     Optional<VehicleType> getVehicleType(String id);
 
     void add(VehicleType vehicleType);
+
+    int getEstimatedCost(RequestAssumptionDTO requestAssumptionDTO);
+
+    int getEstimatedTimeInMinutes(RequestAssumptionDTO requestAssumptionDTO);
 }

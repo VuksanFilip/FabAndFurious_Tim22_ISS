@@ -8,14 +8,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestAssumptionDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAssumptionDTO;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleTypeService;
 
 @RestController
 @RequestMapping("/api/unregisteredUser/")
 public class UnregisteredUserController {
 
+    private IVehicleTypeService vehicleTypeService;
+
+    public UnregisteredUserController(IVehicleTypeService vehicleTypeService){
+        this.vehicleTypeService = vehicleTypeService;
+    }
+
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAssumption(@RequestBody RequestAssumptionDTO requestAssumptionDTO) {
-        return new ResponseEntity<>(requestAssumptionDTO.getAssumption(), HttpStatus.OK);
+
+        int estimatedCost = vehicleTypeService.getEstimatedCost(requestAssumptionDTO);
+        int estimatedTimeInMinutes = vehicleTypeService.getEstimatedTimeInMinutes(requestAssumptionDTO);
+
+        return new ResponseEntity<>(new ResponseAssumptionDTO(estimatedTimeInMinutes, estimatedCost), HttpStatus.OK);
     }
 }

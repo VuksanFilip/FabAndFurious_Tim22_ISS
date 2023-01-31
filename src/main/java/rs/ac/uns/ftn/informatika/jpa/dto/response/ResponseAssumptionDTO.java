@@ -1,33 +1,31 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestAssumptionDTO;
-
 public class ResponseAssumptionDTO {
 
-    private double estimatedTimeInMinutes;
-    private double estimatedCost;
+    private int estimatedTimeInMinutes;
+    private int estimatedCost;
 
     public ResponseAssumptionDTO() {
     }
 
-    public ResponseAssumptionDTO(double estimatedTimeInMinutes, double estimatedCost) {
+    public ResponseAssumptionDTO(int estimatedTimeInMinutes, int estimatedCost) {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
         this.estimatedCost = estimatedCost;
     }
 
-    public double getEstimatedTimeInMinutes() {
+    public int getEstimatedTimeInMinutes() {
         return estimatedTimeInMinutes;
     }
 
-    public void setEstimatedTimeInMinutes(double estimatedTimeInMinutes) {
+    public void setEstimatedTimeInMinutes(int estimatedTimeInMinutes) {
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
     }
 
-    public double getEstimatedCost() {
+    public int getEstimatedCost() {
         return estimatedCost;
     }
 
-    public void setEstimatedCost(double estimatedCost) {
+    public void setEstimatedCost(int estimatedCost) {
         this.estimatedCost = estimatedCost;
     }
 

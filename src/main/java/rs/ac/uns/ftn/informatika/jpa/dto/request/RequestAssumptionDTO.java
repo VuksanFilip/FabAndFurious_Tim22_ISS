@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAssumptionDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.List;
@@ -54,9 +52,12 @@ public class RequestAssumptionDTO {
         this.petTransport = petTransport;
     }
 
-    public ResponseAssumptionDTO getAssumption(){
-        float estimatedTimeInMinutes = 0;
-        float estimatedCost = 0;
-        return new ResponseAssumptionDTO(estimatedTimeInMinutes, estimatedCost);
+    public List<RequestLocationAssumptionDTO> getLocations() {
+        return locations;
     }
+
+    public void setLocations(List<RequestLocationAssumptionDTO> locations) {
+        this.locations = locations;
+    }
+
 }
