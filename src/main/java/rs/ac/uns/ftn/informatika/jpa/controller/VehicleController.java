@@ -24,7 +24,7 @@ public class VehicleController {
 
 
     @PutMapping(value = "/{id}/location", consumes = "application/json")
-    @PreAuthorize("hasAnyRole('DRIVER')")
+//    @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
         if(!this.vehicleService.getVehicle(id).isPresent()){
             return new ResponseEntity<>("Vehicle does not exist!", HttpStatus.NOT_FOUND);

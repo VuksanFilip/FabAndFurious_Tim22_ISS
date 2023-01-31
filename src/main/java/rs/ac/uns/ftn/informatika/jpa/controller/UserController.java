@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody RequestUserChangePasswordDTO requestUserChangePasswordDTO) {
 
         if(!userService.existsById(id)){
@@ -108,7 +108,7 @@ public class UserController {
 
     //TODO NAPRAVITI DA BUDE PAGEBLE (ZAJEBANO)
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
         List<ResponseRideNoStatusDTO> responseRides = new ArrayList<>();
@@ -130,7 +130,7 @@ public class UserController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUser(Pageable page) {
 
         Page<User> users = userService.findAll(page);
@@ -161,7 +161,7 @@ public class UserController {
 
 
     @PutMapping(value = "/{id}/block")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
 
         if(userService.existsById(id) == false){
@@ -178,7 +178,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}/unblock")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> ublockUser(@PathVariable("id") String id){
 
         if(userService.existsById(id) == false){
@@ -195,7 +195,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserMessages(@PathVariable("id") String id){
         Set<ResponseMessageDTO> messageDTOS = userService.findMessagesOfUser(id);
         return new ResponseEntity<>(new ResponseMessagePageDTO(messageDTOS.size(), messageDTOS), HttpStatus.OK);
@@ -203,13 +203,13 @@ public class UserController {
 
     //TODO IMA VEZE SA TOKENIMA(ZAJEBANO)
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
         return null;
     }
 
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> createNote(@PathVariable("id") String id, @RequestBody RequestNoteDTO requestNoteDTO){
         if(userService.existsById(id) == false){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
@@ -221,7 +221,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}/note", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUserNotes(@PathVariable("id") String id, Pageable page){
         if(userService.existsById(id) == false){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);

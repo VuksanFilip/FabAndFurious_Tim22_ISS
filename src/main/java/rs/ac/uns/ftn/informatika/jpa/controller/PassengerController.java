@@ -59,7 +59,7 @@ public class PassengerController{
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getPassengersPage(Pageable page) {
 
         int results = passengerService.getAll().size();
@@ -68,7 +68,7 @@ public class PassengerController{
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
 
         if(!this.passengerService.getPassenger(id).isPresent()){
@@ -99,7 +99,7 @@ public class PassengerController{
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
 
         if(!this.passengerService.getPassenger(id).isPresent()){
@@ -113,7 +113,7 @@ public class PassengerController{
     }
 
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<ResponsePageDTO> getPassengerRides(@PathVariable("id") String id, Pageable page) {
 
         List<ResponseRideDTO> responseRideDTOS = rideService.getPageableResponseRide(page, id);
