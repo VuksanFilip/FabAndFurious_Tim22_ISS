@@ -25,26 +25,20 @@ import java.util.List;
 @RequestMapping("/api/ride")
 public class RideController{
 
-    private ValidateData validateData= new ValidateData();
-    private IRideService rideService;
-    private IPanicService panicService;
-    private IFavoriteRouteService favoriteRouteService;
-    private IPassengerService passengerService;
-    private IDriverService driverService;
-    private ILocationService locationService;
-    private IRouteService routeService;
-    private IUserService userService;
+    private final ValidateData validateData = new ValidateData();
+    private final IRideService rideService;
+    private final IPanicService panicService;
+    private final IFavoriteRouteService favoriteRouteService;
+    private final IPassengerService passengerService;
+    private final IDriverService driverService;
 
     @Autowired
-    public RideController(IRideService rideService, IPanicService panicService, IFavoriteRouteService favoriteRouteService, IPassengerService passengerService, IDriverService driverService, ILocationService locationService, IRouteService routeService, IUserService userService) {
+    public RideController(IRideService rideService, IPanicService panicService, IFavoriteRouteService favoriteRouteService, IPassengerService passengerService, IDriverService driverService) {
         this.rideService = rideService;
         this.panicService = panicService;
         this.favoriteRouteService = favoriteRouteService;
         this.passengerService = passengerService;
         this.driverService = driverService;
-        this.locationService = locationService;
-        this.routeService = routeService;
-        this.userService = userService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

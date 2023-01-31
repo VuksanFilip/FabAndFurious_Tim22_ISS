@@ -36,11 +36,13 @@ public class UserController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    private IUserService userService;
-    private IPassengerService passengerService;
-    private IDriverService driverService;
-    private INoteService noteService;
-    private IMailService mailService;
+    private final IUserService userService;
+    private final IPassengerService passengerService;
+    private final IDriverService driverService;
+    private final INoteService noteService;
+    private final IMailService mailService;
+
+    @Autowired
     private TokenUtils tokenUtils;
 
     public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
@@ -106,7 +108,7 @@ public class UserController {
         return new ResponseEntity<>("Password successfully changed!", HttpStatus.NO_CONTENT);
     }
 
-    //TODO NAPRAVITI DA BUDE PAGEBLE (ZAJEBANO)
+    //TODO NAPRAVITI DA BUDE PAGEBLE
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
@@ -164,7 +166,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
 
-        if(userService.existsById(id) == false){
+        if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
         User user = userService.getUser(id).get();
@@ -181,7 +183,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> ublockUser(@PathVariable("id") String id){
 
-        if(userService.existsById(id) == false){
+        if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
         User user = userService.getUser(id).get();
@@ -201,7 +203,6 @@ public class UserController {
         return new ResponseEntity<>(new ResponseMessagePageDTO(messageDTOS.size(), messageDTOS), HttpStatus.OK);
     }
 
-    //TODO IMA VEZE SA TOKENIMA(ZAJEBANO)
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
@@ -211,7 +212,7 @@ public class UserController {
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> createNote(@PathVariable("id") String id, @RequestBody RequestNoteDTO requestNoteDTO){
-        if(userService.existsById(id) == false){
+        if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
         User user = userService.getUser(id).get();
@@ -223,7 +224,7 @@ public class UserController {
     @GetMapping(value = "/{id}/note", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUserNotes(@PathVariable("id") String id, Pageable page){
-        if(userService.existsById(id) == false){
+        if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
         User user = userService.getUser(id).get();
