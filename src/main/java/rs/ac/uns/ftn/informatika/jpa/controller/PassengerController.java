@@ -28,10 +28,10 @@ import java.util.List;
 @RequestMapping("/api/passenger")
 public class PassengerController{
 
-    private IPassengerService passengerService;
-    private IRideService rideService;
-    private IUserActivationService userActivationService;
-    private PasswordEncoder passwordEncoder;
+    private final IPassengerService passengerService;
+    private final IRideService rideService;
+    private final IUserActivationService userActivationService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public PassengerController(IPassengerService passengerService, IRideService rideService, IUserActivationService userActivationService, PasswordEncoder passwordEncoder) {

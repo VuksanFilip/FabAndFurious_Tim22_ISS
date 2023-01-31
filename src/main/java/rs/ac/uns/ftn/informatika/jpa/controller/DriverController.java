@@ -25,10 +25,10 @@ import java.util.Optional;
 @RequestMapping("/api/driver")
 public class DriverController {
 
-    private IDriverService driverService;
-    private IDocumentService documentService;
-    private IVehicleService vehicleService;
-    private IWorkingHourService workHourService;
+    private final IDriverService driverService;
+    private final IDocumentService documentService;
+    private final IVehicleService vehicleService;
+    private final IWorkingHourService workHourService;
 
 
     public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService){
@@ -40,7 +40,7 @@ public class DriverController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> createDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
+    public ResponseEntity<?> createNewDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
         if(this.driverService.findByEmail(requestDriverDTO.getEmail()) != null){
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
