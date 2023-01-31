@@ -60,7 +60,7 @@ public class PassengerController{
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponsePageDTO> getPassengersPage(Pageable page) {
+    public ResponseEntity<ResponsePageDTO> getAllPassengers(Pageable page) {
 
         int results = passengerService.getAll().size();
         List<ResponsePassengerDTO> responsePassengerDTOS = passengerService.getAsPageableResponse(page);

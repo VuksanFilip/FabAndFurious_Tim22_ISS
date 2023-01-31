@@ -49,7 +49,7 @@ public class RideController{
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> postRide(@RequestBody RequestRideDTO requestRideDTO){
+    public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
         Driver driver = this.driverService.getDriver("6").get();
 
         if(rideService.checkIfDriverHasPandingRides(driver)){
@@ -61,7 +61,7 @@ public class RideController{
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
-    public ResponseEntity<?> getActiveDriver(@PathVariable("driverId") String id) {
+    public ResponseEntity<?> getActiveRideForDriver(@PathVariable("driverId") String id) {
 
         Ride ride = rideService.getaActiveRideByDriverId(id);
         if(ride != null){
@@ -72,7 +72,7 @@ public class RideController{
 
     @GetMapping(value = "/passenger/{passengerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
-    public ResponseEntity<?> getActivePassenger(@PathVariable("passengerId") String id) {
+    public ResponseEntity<?> getActiveRideForPassenger(@PathVariable("passengerId") String id) {
 
         Ride ride = rideService.getActiveRideByPassengerId(id);
         if(ride != null){
@@ -184,7 +184,7 @@ public class RideController{
 
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> postFavoriteRoute(@RequestBody RequestFavoriteRouteDTO requestFavoriteRoute){
+    public ResponseEntity<?> createFavoriteRoute(@RequestBody RequestFavoriteRouteDTO requestFavoriteRoute){
 
         List<Passenger> passengers = passengerService.getPassengersFromFavoriteRouteRequest(requestFavoriteRoute);
         if(passengerService.hasTenFavoriteRoutesForPassengers(passengers)){

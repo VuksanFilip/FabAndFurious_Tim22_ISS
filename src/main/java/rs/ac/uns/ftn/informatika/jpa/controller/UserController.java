@@ -130,8 +130,8 @@ public class UserController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> getUser(Pageable page) {
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> getUsers(Pageable page) {
 
         Page<User> users = userService.findAll(page);
         int size = userService.getAll().size();

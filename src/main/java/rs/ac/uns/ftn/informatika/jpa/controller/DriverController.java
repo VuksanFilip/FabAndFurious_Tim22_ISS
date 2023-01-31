@@ -51,7 +51,7 @@ public class DriverController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponsePageDTO> getDriversPage(Pageable page) {
+    public ResponseEntity<ResponsePageDTO> getAllDrivers(Pageable page) {
 
         Page<Driver> drivers = driverService.findAll(page);
         int results = driverService.getAll().size();
