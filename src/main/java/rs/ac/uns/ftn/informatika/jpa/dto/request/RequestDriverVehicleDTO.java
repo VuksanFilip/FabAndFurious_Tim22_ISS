@@ -5,20 +5,34 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 public class RequestDriverVehicleDTO {
 
-    private VehicleName vehicleVehicleName;
+//    {
+//        "vehicleType": "STANDARD",
+//            "model": "VW Golf 2",
+//            "licenseNumber": "NS 123-AB",
+//            "currentLocation": {
+//        "address": "Bulevar oslobodjenja 46",
+//                "latitude": 45.267136,
+//                "longitude": 19.833549
+//    },
+//        "passengerSeats": 4,
+//            "babyTransport": true,
+//            "petTransport": true
+//    }
+
+    private VehicleName vehicleType;
     private String model;
     private String licenseNumber;
-    private Location currentLocation;
+    private RequestLocationWithAddressDTO currentLocation;
     private int passengerSeats;
     private boolean babyTransport;
     private boolean petTransport;
 
     public VehicleName getVehicleType() {
-        return vehicleVehicleName;
+        return vehicleType;
     }
 
     public void setVehicleType(VehicleName vehicleVehicleName) {
-        this.vehicleVehicleName = vehicleVehicleName;
+        this.vehicleType = vehicleVehicleName;
     }
 
     public String getModel() {
@@ -37,7 +51,15 @@ public class RequestDriverVehicleDTO {
         this.licenseNumber = licenseNumber;
     }
 
-//    public CurrentLocation getCurrentLocation() {
+    public RequestLocationWithAddressDTO getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(RequestLocationWithAddressDTO currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    //    public CurrentLocation getCurrentLocation() {
 //        return currentLocation;
 //    }
 //
@@ -70,7 +92,7 @@ public class RequestDriverVehicleDTO {
     }
 
 
-    public Vehicle parseToVehicle(Driver driver){
-        return new Vehicle(driver, new VehicleType(this.vehicleVehicleName), this.model, this.licenseNumber, this.currentLocation, this.passengerSeats, this.babyTransport, this.petTransport);
+    public Vehicle parseToVehicle(Driver driver, Location currentLocation){
+        return new Vehicle(driver, new VehicleType(this.vehicleType), this.model, this.licenseNumber, currentLocation, this.passengerSeats, this.babyTransport, this.petTransport);
     }
 }

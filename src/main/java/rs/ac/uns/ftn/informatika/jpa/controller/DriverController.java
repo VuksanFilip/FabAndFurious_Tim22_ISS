@@ -5,16 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDocumentService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDriverService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkingHourService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,13 +26,17 @@ public class DriverController {
     private IDocumentService documentService;
     private IVehicleService vehicleService;
     private IWorkingHourService workHourService;
+    private ILocationService locationService;
+    private PasswordEncoder passwordEncoder;
 
 
-    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService){
+    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService, ILocationService locationService, PasswordEncoder passwordEncoder){
         this.driverService = driverService;
         this.documentService = documentService;
         this.vehicleService = vehicleService;
         this.workHourService = workHourService;
+        this.locationService = locationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,6 +46,7 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
         Driver driver = requestDriverDTO.parseToDriver();
+        driver.setPassword(passwordEncoder.encode(requestDriverDTO.getPassword()));
         driverService.add(driver);
         return new ResponseEntity<>(driver.parseToResponse(), HttpStatus.OK);
     }
@@ -75,7 +77,7 @@ public class DriverController {
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestDriverDTO requestDriverDTO) {
+    public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestDriverWithoutPassDTO requestDriverDTO) {
         if(!this.driverService.getDriver(id).isPresent()){
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
@@ -145,7 +147,9 @@ public class DriverController {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Driver driver = this.driverService.getDriver(id).get();
-        Vehicle vehicle = requestDriverVehicleDTO.parseToVehicle(driver);
+        Location currentLocation = new Location(requestDriverVehicleDTO.getCurrentLocation().getAddress(), requestDriverVehicleDTO.getCurrentLocation().getLatitude(), requestDriverVehicleDTO.getCurrentLocation().getLongitude());
+        this.locationService.add(currentLocation);
+        Vehicle vehicle = requestDriverVehicleDTO.parseToVehicle(driver, currentLocation);
         this.vehicleService.add(vehicle);
         driver.addVehicle(vehicle);
         this.driverService.add(driver);
@@ -160,11 +164,13 @@ public class DriverController {
         }
         Driver driver = this.driverService.getDriver(driverId).get();
         Vehicle currentVehicle = driver.getVehicle();
-        Vehicle newVehicle = requestDriverVehicleDTO.parseToVehicle(driver);
+        Location currentLocation = new Location(requestDriverVehicleDTO.getCurrentLocation().getAddress(), requestDriverVehicleDTO.getCurrentLocation().getLatitude(), requestDriverVehicleDTO.getCurrentLocation().getLongitude());
+        Vehicle newVehicle = requestDriverVehicleDTO.parseToVehicle(driver, currentLocation);
         driver.addVehicle(newVehicle);
         this.vehicleService.add(newVehicle);
         this.driverService.add(driver);
-        this.vehicleService.deleteById(currentVehicle.getId());
+        currentVehicle.setDriver(null);
+        this.vehicleService.add(currentVehicle);
         return new ResponseEntity<>(newVehicle.parseToResponse(), HttpStatus.OK);
     }
 

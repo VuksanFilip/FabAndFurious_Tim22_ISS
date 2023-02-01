@@ -2,9 +2,8 @@ package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
-import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 
-public class RequestDriverDTO {
+public class RequestDriverWithoutPassDTO {
 
 //    {
 //        "name": "Pera",
@@ -13,7 +12,6 @@ public class RequestDriverDTO {
 //            "telephoneNumber": "+381123123",
 //            "email": "pera.peric@email.com",
 //            "address": "Bulevar Oslobodjenja 74",
-//            "password": "Pasword123"
 //    }
 
     private String name;
@@ -22,19 +20,17 @@ public class RequestDriverDTO {
     private String telephoneNumber;
     private String email;
     private String address;
-    private String password;
 
-    public RequestDriverDTO() {
+    public RequestDriverWithoutPassDTO() {
     }
 
-    public RequestDriverDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
+    public RequestDriverWithoutPassDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
         this.name = name;
         this.surname = surname;
         this.profilePicture = profilePicture;
         this.telephoneNumber = telephoneNumber;
         this.email = email;
         this.address = address;
-        this.password = password;
     }
 
     public String getName() {
@@ -85,13 +81,6 @@ public class RequestDriverDTO {
         this.address = address;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public ResponseDriverDTO parseToResponse(Long id){
         ResponseDriverDTO driverResponse = new ResponseDriverDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
@@ -100,6 +89,6 @@ public class RequestDriverDTO {
     }
 
     public Driver parseToDriver(){
-        return new Driver(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address, this.password, false, true, Role.DRIVER);
+        return new Driver(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
     }
 }

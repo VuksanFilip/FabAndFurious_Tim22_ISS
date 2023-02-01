@@ -115,6 +115,18 @@ public class User implements UserDetails {
         this.active = active;
     }
 
+    public User(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.blocked = blocked;
+        this.active = active;
+    }
+
     public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         this.id = id;
         this.firstName = firstName;
@@ -149,6 +161,15 @@ public class User implements UserDetails {
         this.email = email;
         this.address = address;
         this.password = password;
+    }
+
+    public User(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
+        this.firstName = name;
+        this.lastName = surname;
+        this.picture = profilePicture;
+        this.phoneNumber = telephoneNumber;
+        this.email = email;
+        this.address = address;
     }
 
     public void setResetPasswordTokenExpiration(LocalDateTime resetPasswordTokenExpiration) {

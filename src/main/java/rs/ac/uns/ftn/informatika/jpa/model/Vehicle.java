@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationWithAddressDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseCurrentLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverVehicleDTO;
 
 import javax.persistence.*;
@@ -78,7 +80,7 @@ public class Vehicle {
     }
 
     public ResponseDriverVehicleDTO parseToResponse(){
-        return new ResponseDriverVehicleDTO(this.id, this.driver.getId(), this.vehicleType.getVehicleName(), this.vehicleModel, this.licenseNumber, this.currentLocation, this.seats, this.babyFriendly, this.petFriendly);
+        return new ResponseDriverVehicleDTO(this.id, this.driver.getId(), this.vehicleType.getVehicleName(), this.vehicleModel, this.licenseNumber, new ResponseCurrentLocationDTO(this.currentLocation.getAddress(), this.currentLocation.getLatitude(), this.currentLocation.getLongitude()), this.seats, this.babyFriendly, this.petFriendly);
     }
 
     public void updateCurrentLocation(Location location) {

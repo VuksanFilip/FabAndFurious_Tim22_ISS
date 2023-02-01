@@ -4,6 +4,7 @@ import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRideDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class Driver extends User{
         super(id, email);
     }
 
-    public Driver(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active){
+    public Driver(String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active, Role role){
         super(firstName, lastName, picture, phoneNumber, email, address, password, blocked, active);
     }
 
@@ -47,6 +48,10 @@ public class Driver extends User{
         this.documents = documents;
         this.rides = rides;
         this.vehicle = vehicle;
+    }
+
+    public Driver(String name, String surname, String profilePicture, String telephoneNumber, String email, String address) {
+        super(name, surname, profilePicture, telephoneNumber, email, address);
     }
 
     public void update(Driver driver){
