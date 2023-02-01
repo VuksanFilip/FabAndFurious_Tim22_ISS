@@ -45,6 +45,8 @@ public class RideController{
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
         Driver driver = this.driverService.getDriver("6").get();
+
+        //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
 //        Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
 
         if(rideService.checkIfDriverHasPandingRides(driver)){
