@@ -4,10 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 import rs.ac.uns.ftn.informatika.jpa.repository.DriverRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDriverService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleTypeService;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkingHourService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +23,14 @@ import java.util.Optional;
 public class DriverServiceImpl implements IDriverService {
 
     private DriverRepository driverRepository;
+    private IWorkingHourService workingHourService;
+    private IVehicleTypeService vehicleTypeService;
 
     @Autowired
-    public DriverServiceImpl(DriverRepository driverRepository) {
+    public DriverServiceImpl(DriverRepository driverRepository, IWorkingHourService workingHourService, IVehicleTypeService vehicleTypeService) {
         this.driverRepository = driverRepository;
+        this.workingHourService = workingHourService;
+        this.vehicleTypeService = vehicleTypeService;
     }
 
     public List<Driver> getAll() {
@@ -45,5 +57,40 @@ public class DriverServiceImpl implements IDriverService {
 
     public void add(Driver driver) {
         this.driverRepository.save(driver);
+    }
+
+    public Driver getPerfectDriver(VehicleName name, Date date, RequestLocationDTO requestLocationDTO){
+
+        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        List<Driver> drivers = getDriverByVehicleName(name);
+        Driver perfectDriver = new Driver();
+        double perfectDistance = Double.POSITIVE_INFINITY;
+
+        for(Driver driver : drivers){
+            if(!workingHourService.checkIfShiftBetween(driver.getId().toString(), localDateTime)){
+                drivers.remove(driver);
+            }
+        }
+        for(Driver driver: drivers){
+            double distance = vehicleTypeService.distance(requestLocationDTO.getDeparture().getLatitude(),
+                    driver.getVehicle().getCurrentLocation().getLatitude(),
+                    requestLocationDTO.getDeparture().getLongitude(),
+                    driver.getVehicle().getCurrentLocation().getLongitude());
+            if(distance < perfectDistance){
+                perfectDistance = distance;
+                perfectDriver = driver;
+            }
+        }
+        return perfectDriver;
+    }
+
+    public List<Driver> getDriverByVehicleName(VehicleName name){
+        List<Driver> drivers = new ArrayList<>();
+        for(Driver driver : getAll()){
+            if(driver.getVehicle().getVehicleType().getVehicleName() == name){
+                drivers.add(driver);
+            }
+        }
+        return drivers;
     }
 }

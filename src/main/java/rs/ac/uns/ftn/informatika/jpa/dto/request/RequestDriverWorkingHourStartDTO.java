@@ -1,26 +1,23 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class RequestDriverWorkingHourStartDTO {
 
-//    {
-//            "start": "2022-12-11T14:58:53.730Z"
-//    }
-    private Date start;
+    private LocalDateTime start;
 
     public RequestDriverWorkingHourStartDTO() {
     }
 
-    public RequestDriverWorkingHourStartDTO(Date start) {
+    public RequestDriverWorkingHourStartDTO(LocalDateTime start) {
         this.start = start;
     }
 
-    public Date getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 

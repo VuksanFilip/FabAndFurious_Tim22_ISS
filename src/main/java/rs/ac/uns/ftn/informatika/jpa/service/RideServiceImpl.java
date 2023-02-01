@@ -216,4 +216,9 @@ public class RideServiceImpl implements IRideService {
     }
 
 
+    public void getClosestDriver(RequestRideDTO requestRideDTO){
+
+    }
+
+
 }

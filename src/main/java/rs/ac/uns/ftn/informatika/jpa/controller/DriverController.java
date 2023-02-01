@@ -9,8 +9,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
-import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.Document;
+import rs.ac.uns.ftn.informatika.jpa.model.Driver;
+import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
+import rs.ac.uns.ftn.informatika.jpa.model.WorkingHour;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDocumentService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDriverService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
@@ -31,7 +36,7 @@ public class DriverController {
     private final IWorkingHourService workHourService;
 
 
-    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService){
+    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService) {
         this.driverService = driverService;
         this.documentService = documentService;
         this.vehicleService = vehicleService;
@@ -41,7 +46,7 @@ public class DriverController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> createNewDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
-        if(this.driverService.findByEmail(requestDriverDTO.getEmail()) != null){
+        if (this.driverService.findByEmail(requestDriverDTO.getEmail()) != null) {
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
         Driver driver = requestDriverDTO.parseToDriver();
@@ -66,17 +71,17 @@ public class DriverController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriver(@PathVariable("id") String id) {
-        if(!this.driverService.getDriver(id).isPresent()){
+        if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Optional<Driver> driver = this.driverService.getDriver(id);
         return new ResponseEntity<>(driver.get().parseToResponse(), HttpStatus.OK);
     }
 
-    @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestDriverDTO requestDriverDTO) {
-        if(!this.driverService.getDriver(id).isPresent()){
+        if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Driver driverForUpdate = driverService.getDriver(id).get();
@@ -89,13 +94,13 @@ public class DriverController {
     @GetMapping(value = "/{id}/documents", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverDocuments(@PathVariable("id") String id) {
-        if(!this.driverService.getDriver(id).isPresent()){
+        if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Driver driver = driverService.getDriver(id).get();
         List<Document> driverDocuments = driver.getDocuments();
         List<ResponseDriverDocumentDTO> driverDocumentDTOS = new ArrayList<>();
-        for(Document d: driverDocuments){
+        for (Document d : driverDocuments) {
             driverDocumentDTOS.add(new ResponseDriverDocumentDTO(d));
         }
         return new ResponseEntity<>(driverDocumentDTOS, HttpStatus.OK);
@@ -104,7 +109,7 @@ public class DriverController {
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> addDriverDocument(@PathVariable("id") String id, @RequestBody RequestDriverDocumentDTO requestDriverDocumentDTO) throws Exception {
-        if(!this.driverService.getDriver(id).isPresent()){
+        if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Driver driver = driverService.getDriver(id).get();
@@ -118,7 +123,7 @@ public class DriverController {
     @DeleteMapping(value = "/document/{document-id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> deleteDriverDocument(@PathVariable("document-id") String documentId) {
-        if(!this.documentService.getDocument(documentId).isPresent()){
+        if (!this.documentService.getDocument(documentId).isPresent()) {
             return new ResponseEntity<>("Document does not exist", HttpStatus.NOT_FOUND);
         }
         documentService.deleteById(documentId);
@@ -128,10 +133,10 @@ public class DriverController {
     @GetMapping(value = "/{id}/vehicle", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getDriverVehicle(@PathVariable("id") String id) {
-        if(!this.driverService.getDriver(id).isPresent()){
+        if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
-        if(this.driverService.getDriver(id).get().getVehicle() == null){
+        if (this.driverService.getDriver(id).get().getVehicle() == null) {
             return new ResponseEntity<>(new MessageDTO("Vehicle is not assigned!"), HttpStatus.BAD_REQUEST);
         }
         Vehicle vehicle = driverService.getDriver(id).get().getVehicle();
@@ -141,7 +146,7 @@ public class DriverController {
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> addDriverVehicle(@PathVariable("id") String id, @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) throws Exception {
-        if(!this.driverService.getDriver(id).isPresent()){
+        if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Driver driver = this.driverService.getDriver(id).get();
@@ -152,10 +157,10 @@ public class DriverController {
         return new ResponseEntity<>(vehicle.parseToResponse(), HttpStatus.OK);
     }
 
-    @PutMapping (value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> changeDriverVehicle(@PathVariable("id") String driverId, @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) {
-        if(!this.driverService.getDriver(driverId).isPresent()){
+        if (!this.driverService.getDriver(driverId).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         Driver driver = this.driverService.getDriver(driverId).get();
@@ -168,10 +173,11 @@ public class DriverController {
         return new ResponseEntity<>(newVehicle.parseToResponse(), HttpStatus.OK);
     }
 
+    //TODO NIJE ZAVRSENO
     @GetMapping(value = "/{id}/working-hour", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverWorkingHours(@PathVariable("id") String driverId) {
-        if(!this.driverService.getDriver(driverId).isPresent()){
+        if (!this.driverService.getDriver(driverId).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("", HttpStatus.OK);
@@ -180,11 +186,25 @@ public class DriverController {
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
-        if(!this.driverService.getDriver(driverId).isPresent()){
-            return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
+        if (!this.driverService.getDriver(driverId).isPresent()) {
+            return new ResponseEntity<>(new MessageDTO("Driver does not exist"), HttpStatus.NOT_FOUND);
         }
-        if(this.driverService.getDriver(driverId).get().getVehicle() == null){
+        if (this.driverService.getDriver(driverId).get().getVehicle() == null) {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
+        }
+
+        // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je pre lokalnog vremena)
+//        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
+//            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
+//        }
+        if (this.workHourService.checkIfShiftBetween(driverId, requestWorkingHour.getStart())) {
+            return new ResponseEntity<>(new MessageDTO("Cannot start shift because it was already ongoing in that time!"), HttpStatus.BAD_REQUEST);
+        }
+        if (this.workHourService.checkIfShiftOngoing(driverId)) {
+            return new ResponseEntity<>(new MessageDTO("Cannot start shift because it is already ongoing!"), HttpStatus.BAD_REQUEST);
+        }
+        if (this.workHourService.checkIfPassed8hLimit(driverId, requestWorkingHour.getStart())) {
+            return new ResponseEntity<>(new MessageDTO("Cannot start shift because it passsed 8 hours limit!"), HttpStatus.BAD_REQUEST);
         }
         Driver driver = this.driverService.getDriver(driverId).get();
         WorkingHour workingHour = new WorkingHour(driver, requestWorkingHour);
@@ -192,10 +212,11 @@ public class DriverController {
         return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
+    //TODO NIJE ZAVRSENO
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverRides(@PathVariable("id") String driverId) {
-        if(!this.driverService.getDriver(driverId).isPresent()){
+        if (!this.driverService.getDriver(driverId).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("", HttpStatus.OK);
@@ -203,26 +224,49 @@ public class DriverController {
 
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
-    public ResponseEntity<?> getWorkingHour(@PathVariable("working-hour-id") Long workingHourId) {
-        if(!this.workHourService.getWorkHour(workingHourId.toString()).isPresent()) {
+    public ResponseEntity<?> getWorkingHour(@PathVariable("working-hour-id") String workingHourId) {
+        if (!this.workHourService.getWorkHour(workingHourId).isPresent()) {
             return new ResponseEntity<>("Working hour does not exist!", HttpStatus.NOT_FOUND);
         }
-        WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
+        WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId).get();
         return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
-    public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") Long workingHourId, @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
-        if(!this.workHourService.getWorkHour(workingHourId.toString()).isPresent()) {
-            return new ResponseEntity<>("Working hour does not exist!", HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") String workingHourId, @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
+        if (!this.workHourService.getWorkHour(workingHourId).isPresent()) {
+            return new ResponseEntity<>(new MessageDTO("Working hour does not exist!"), HttpStatus.NOT_FOUND);
         }
-        WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId.toString()).get();
-        if(this.driverService.getDriver(workingHour.getDriver().getId().toString()).get().getVehicle() == null){
-            return new ResponseEntity<>(new MessageDTO("Cannot endTime shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
+        if (this.driverService.getDriver(this.workHourService.getWorkHour(workingHourId).get().getDriver().getId().toString()).get().getVehicle() == null) {
+            return new ResponseEntity<>(new MessageDTO("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
-        WorkingHour updatedWorkingHour = new WorkingHour(workingHour.getId(), workingHour.getStart(), requestWorkingHour.getEnd(), workingHour.getDriver());
-        this.workHourService.add(updatedWorkingHour);
-        return new ResponseEntity<>(updatedWorkingHour.parseToResponse(), HttpStatus.OK);
+
+        // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je posle lokalnog vremena)
+//        if(requestWorkingHour.getEnd().isAfter(LocalDateTime.now())){
+//            return new ResponseEntity<>(new MessageDTO("Cannot end shift in the future"), HttpStatus.BAD_REQUEST);
+//        }
+        WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId).get();
+        if (!this.workHourService.checkIfEndIsNull(workingHour.getEndTime())) {
+            return new ResponseEntity<>(new MessageDTO("Cannot end shift because it is already finished!"), HttpStatus.BAD_REQUEST);
+        }
+        workingHour.setEndTime(requestWorkingHour.getEnd());
+        this.workHourService.add(workingHour);
+        return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
+    }
+
+    //TODO PROVERITI DA LI RADI
+    /*
+    Ova komanda se preporucuje da se svaki minut refreshuje,
+    sluzi da proveri one "end-ove" koji su na null duze
+    nego sto su radili (npr. u slucaju da je driver zaboravio
+    da zavrsi sa radnim vremenom, u poslednja 24 sata mu se
+    trazi ukupno radno vreme i nakon prekoracenog vremena
+    automatcki enduje u tih 24 sata
+     */
+    @PutMapping(value = "/working-hour/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateWorkingHour() {
+        this.workHourService.refreshUnfinishedShifts();
+        return new ResponseEntity<>(null);
     }
 }

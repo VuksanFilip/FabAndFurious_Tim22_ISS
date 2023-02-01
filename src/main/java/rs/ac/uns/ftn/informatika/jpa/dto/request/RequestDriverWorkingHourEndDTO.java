@@ -1,22 +1,22 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class RequestDriverWorkingHourEndDTO {
-    private Date end;
+    private LocalDateTime end;
 
     public RequestDriverWorkingHourEndDTO() {
     }
 
-    public RequestDriverWorkingHourEndDTO(Date end) {
+    public RequestDriverWorkingHourEndDTO(LocalDateTime end) {
         this.end = end;
     }
 
-    public Date getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 }

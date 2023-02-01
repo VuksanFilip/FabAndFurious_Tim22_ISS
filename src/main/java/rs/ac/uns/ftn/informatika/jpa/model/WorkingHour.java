@@ -5,8 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverWorkingHourStartDT
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,19 +18,19 @@ public class WorkingHour {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    private Date start;
-    private Date endTime;
+    private LocalDateTime start;
+    private LocalDateTime endTime;
 
     @OneToOne
     private Driver driver;
 
-    public WorkingHour(Date start, Date endTime, Driver driver) {
+    public WorkingHour(LocalDateTime start, LocalDateTime endTime, Driver driver) {
         this.start = start;
         this.endTime = endTime;
         this.driver = driver;
     }
 
-    public WorkingHour(Long id, Date start, Date endTime) {
+    public WorkingHour(Long id, LocalDateTime start, LocalDateTime endTime) {
         this.id = id;
         this.start = start;
         this.endTime = endTime;
@@ -40,7 +39,7 @@ public class WorkingHour {
 
     public WorkingHour(Driver driver, RequestDriverWorkingHourStartDTO dto){
         this.start = dto.getStart();
-        this.endTime = new Date(Calendar.getInstance().getTime().getTime());
+        this.endTime = null;
         this.driver = driver;
     }
 
