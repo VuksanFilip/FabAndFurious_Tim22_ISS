@@ -1,31 +1,33 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationWithAddressDTO;
+
 public class ResponseLocationDTO {
 
-    private ResponseDepartureDTO departure;
-    private ResponseDestinationDTO destination;
+    private RequestLocationWithAddressDTO departure;
+    private RequestLocationWithAddressDTO destination;
 
     public ResponseLocationDTO() {
     }
 
-    public ResponseLocationDTO(ResponseDepartureDTO departure, ResponseDestinationDTO destination) {
+    public ResponseLocationDTO(RequestLocationWithAddressDTO departure, RequestLocationWithAddressDTO destination) {
         this.departure = departure;
         this.destination = destination;
     }
 
-    public ResponseDepartureDTO getDeparture() {
+    public RequestLocationWithAddressDTO getDeparture() {
         return departure;
     }
 
-    public void setDeparture(ResponseDepartureDTO departure) {
+    public void setDeparture(RequestLocationWithAddressDTO departure) {
         this.departure = departure;
     }
 
-    public ResponseDestinationDTO getDestination() {
+    public RequestLocationWithAddressDTO getDestination() {
         return destination;
     }
 
-    public void setDestination(ResponseDestinationDTO destination) {
+    public void setDestination(RequestLocationWithAddressDTO destination) {
         this.destination = destination;
     }
 }

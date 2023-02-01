@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,4 +58,6 @@ public interface IRideService {
     List<ResponseRideDTO> getPageableResponseRide(Pageable page, String id);
 
     int getNumberOfRidesForPessanger(String id);
+
+    Page<Ride> findAll(String id, Pageable page, Date from, Date to);
 }

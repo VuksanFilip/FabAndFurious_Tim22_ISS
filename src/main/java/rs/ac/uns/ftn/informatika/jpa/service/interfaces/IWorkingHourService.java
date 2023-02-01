@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.WorkingHour;
 
 import java.time.LocalDateTime;
@@ -23,4 +26,8 @@ public interface IWorkingHourService {
     boolean checkIfEndIsNull(LocalDateTime localDateTime);
 
     void refreshUnfinishedShifts();
+
+    Page<WorkingHour> findAll(Pageable page);
+
+    List<ResponseDriverWorkingHourDTO> getPageableDriverWorkingHours(String id, Pageable page);
 }

@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.jpa.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,22 +10,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.Document;
-import rs.ac.uns.ftn.informatika.jpa.model.Driver;
-import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
-import rs.ac.uns.ftn.informatika.jpa.model.WorkingHour;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDocumentService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IDriverService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
-import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkingHourService;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
+import rs.ac.uns.ftn.informatika.jpa.model.*;
+import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/driver")
@@ -34,13 +26,15 @@ public class DriverController {
     private final IDocumentService documentService;
     private final IVehicleService vehicleService;
     private final IWorkingHourService workHourService;
+    private final IRideService rideService;
 
 
-    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService) {
+    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService, IRideService rideService) {
         this.driverService = driverService;
         this.documentService = documentService;
         this.vehicleService = vehicleService;
         this.workHourService = workHourService;
+        this.rideService = rideService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -173,14 +167,15 @@ public class DriverController {
         return new ResponseEntity<>(newVehicle.parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO NIJE ZAVRSENO
     @GetMapping(value = "/{id}/working-hour", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
-    public ResponseEntity<?> getDriverWorkingHours(@PathVariable("id") String driverId) {
+    public ResponseEntity<?> getDriverWorkingHours(@PathVariable("id") String driverId, Pageable page) {
         if (!this.driverService.getDriver(driverId).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("", HttpStatus.OK);
+        List<ResponseDriverWorkingHourDTO> workingHours = workHourService.getPageableDriverWorkingHours(driverId, page);
+        int size = workingHours.size();
+        return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(workingHours.toArray())), HttpStatus.OK);
     }
 
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -192,7 +187,6 @@ public class DriverController {
         if (this.driverService.getDriver(driverId).get().getVehicle() == null) {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
-
         // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je pre lokalnog vremena)
 //        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
 //            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
@@ -212,14 +206,37 @@ public class DriverController {
         return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO NIJE ZAVRSENO
-    @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/ride")
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
-    public ResponseEntity<?> getDriverRides(@PathVariable("id") String driverId) {
+    public ResponseEntity<?> getDriverRides(
+            @PathVariable("id") String driverId,
+            Pageable page,
+            @RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate from,
+            @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate to) {
+
         if (!this.driverService.getDriver(driverId).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("", HttpStatus.OK);
+
+        Date dateFrom = null;
+        Date dateTo = null;
+
+        if (from != null || to != null) {
+            if  (from != null) {
+                dateFrom = Date.from(from.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            }
+            if (to != null) {
+                dateTo = Date.from(to.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            }
+        }
+
+        Page<Ride> driversRides = this.rideService.findAll(driverId, page, dateFrom, dateTo);
+        List<ResponseRideNoStatusDTO> driverRidesList = new ArrayList<>();
+
+        for(Ride driverRide : driversRides){
+            driverRidesList.add(driverRide.parseToResponseNoStatus());
+        }
+        return new ResponseEntity<>(new ResponsePageDTO(driverRidesList.size(), Arrays.asList(driverRidesList.toArray())), HttpStatus.OK);
     }
 
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)

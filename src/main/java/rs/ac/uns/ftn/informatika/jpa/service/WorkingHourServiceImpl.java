@@ -1,7 +1,10 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.WorkingHour;
 import rs.ac.uns.ftn.informatika.jpa.repository.WorkingHourRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkingHourService;
@@ -25,6 +28,21 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
 
     public List<WorkingHour> getAll() {
         return (List<WorkingHour>) this.workingHourRepository.findAll();
+    }
+
+    public Page<WorkingHour> findAll(Pageable page) {
+        return workingHourRepository.findAll(page);
+    }
+
+    public List<ResponseDriverWorkingHourDTO> getPageableDriverWorkingHours(String id, Pageable page){
+        Page<WorkingHour> workingHours = findAll(page);
+        List<ResponseDriverWorkingHourDTO> workingHoursResponse = new ArrayList<>();
+        for(WorkingHour w: workingHours) {
+            if (w.getDriver().getId() == Long.parseLong(id)) {
+                workingHoursResponse.add(w.parseToResponse());
+            }
+        }
+        return workingHoursResponse;
     }
 
     @Override

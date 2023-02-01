@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 import java.util.ArrayList;
@@ -36,6 +37,21 @@ public class ResponseRideNoStatusDTO {
         this.driver = new ResponseDriverIdEmailDTO(123L, null);
         this.rejection = new ResponseRejectionReasonTimeOfDetectionDTO();
         this.estimatedTimeInMinutes = 0;
+    }
+
+    public ResponseRideNoStatusDTO(Ride ride, ArrayList<ResponsePassengerIdEmailDTO> passengers, ArrayList<ResponseLocationDTO> locations, ResponseDriverIdEmailDTO driver, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
+        this.id = ride.getId();
+        this.passengers = passengers;
+        this.vehicleVehicleName = ride.getVehicle().getVehicleType().getVehicleName();
+        this.babyTransport = ride.isBabyTransport();
+        this.petTransport = ride.isPetTransport();
+        this.locations = locations;
+        this.startTime = ride.getStartTime();
+        this.endTime = ride.getEndTime();
+        this.totalCost = ride.getTotalCost();
+        this.driver = driver;
+        this.rejection = rejection;
+        this.estimatedTimeInMinutes = ride.getEstimatedTimeInMinutes();
     }
 
     public ResponseRideNoStatusDTO(Long id, Date startTime, Date endTime, int totalCost, ResponseDriverIdEmailDTO driver, ArrayList<ResponsePassengerIdEmailDTO> passengers, int estimatedTimeInMinutes, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ResponseRejectionReasonTimeOfDetectionDTO rejection, ArrayList<ResponseLocationDTO> locations) {

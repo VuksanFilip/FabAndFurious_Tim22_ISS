@@ -10,7 +10,7 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IAdminService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/")
 public class AdminController {
 
     private final IAdminService adminService;

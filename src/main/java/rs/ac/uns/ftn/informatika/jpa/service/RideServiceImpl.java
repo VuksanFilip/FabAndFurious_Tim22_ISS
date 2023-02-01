@@ -14,6 +14,7 @@ import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -217,8 +218,18 @@ public class RideServiceImpl implements IRideService {
 
 
     public void getClosestDriver(RequestRideDTO requestRideDTO){
-
     }
 
 
+    public Page<Ride> findAll(String id, Pageable page, Date from, Date to) {
+
+        if(from == null && to == null)
+            return this.rideRepository.findAllByDriverId(Long.parseLong(id), page);
+        if(to != null && from == null)
+            return this.rideRepository.findAllByDriverIdAndTimeOfEndBefore(Long.parseLong(id), to, page);
+        if(to == null)
+            return this.rideRepository.findAllByDriverIdAndTimeOfStartAfter(Long.parseLong(id), from, page);
+
+        return this.rideRepository.findAllByDriverIdAndTimeOfStartAfterAndTimeOfEndBefore(Long.parseLong(id), from, to, page);
+    }
 }

@@ -54,9 +54,9 @@ public class RideController{
         }
         driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size();
 
-//        if(driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size() == 0){
-//            return new ResponseEntity<>(new MessageDTO("Currently there are not that type of vehicles!"), HttpStatus.BAD_REQUEST);
-//        }
+        if(driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size() == 0){
+            return new ResponseEntity<>(new MessageDTO("Currently there are not that type of vehicles!"), HttpStatus.BAD_REQUEST);
+        }
         Ride newRide = this.rideService.parseToRide(requestRideDTO, driver);
         return new ResponseEntity<>(newRide.parseToResponseNew(requestRideDTO.getScheduledTime()), HttpStatus.OK);
     }
