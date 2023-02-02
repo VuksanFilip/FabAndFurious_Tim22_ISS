@@ -163,6 +163,7 @@ public class UserController {
         return new ResponseEntity<>(new MessageDTO("Cant get rides for ADMIN"), HttpStatus.NOT_FOUND);
     }
 
+    //RADI
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUsers(Pageable page) {
@@ -173,7 +174,7 @@ public class UserController {
         for(User u: users){
             responseUserDTOS.add(u.parseToResponseUserWithId());
         }
-        return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.OK);
     }
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")

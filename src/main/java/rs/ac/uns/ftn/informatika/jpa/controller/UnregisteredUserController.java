@@ -12,7 +12,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleTypeService;
 
 @RestController
-@RequestMapping("/api/unregisteredUser/")
+@RequestMapping("/api/unregisteredUser")
 public class UnregisteredUserController {
 
     private IVehicleTypeService vehicleTypeService;
