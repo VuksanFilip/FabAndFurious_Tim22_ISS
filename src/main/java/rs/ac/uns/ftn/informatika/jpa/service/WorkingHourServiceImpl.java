@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IWorkingHourService;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,6 +132,18 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
             minutes += number;
         }
         return (int) minutes;
+    }
+
+    public Page<WorkingHour> findAll(String id, Pageable page, Date from, Date to) {
+
+        if(from == null && to == null)
+            return this.workingHourRepository.findAllByDriverId(Long.parseLong(id), page);
+        if(to != null && from == null)
+            return this.workingHourRepository.findAllByDriverIdAndTimeOfEndBefore(Long.parseLong(id), to, page);
+        if(to == null)
+            return this.workingHourRepository.findAllByDriverIdAndTimeOfStartAfter(Long.parseLong(id), from, page);
+
+        return this.workingHourRepository.findAllByDriverIdAndTimeOfStartAfterAndTimeOfEndBefore(Long.parseLong(id), from, to, page);
     }
 }
 

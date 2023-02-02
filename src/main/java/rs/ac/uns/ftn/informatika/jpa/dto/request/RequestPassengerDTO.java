@@ -3,15 +3,6 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 public class RequestPassengerDTO {
 
-    //    {
-//        "name": "Pera",
-//            "surname": "Perić",
-//            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
-//            "telephoneNumber": "+381123123",
-//            "email": "pera.peric@email.com",
-//            "address": "Bulevar Oslobodjenja 74",
-//            "password": "Pasword123"
-//    }
     private String name;
     private String surname;
     private String profilePicture;

@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
-import rs.ac.uns.ftn.informatika.jpa.model.Location;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
 public class ResponseDriverVehicleDTO {
@@ -15,13 +14,13 @@ public class ResponseDriverVehicleDTO {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public ResponseDriverVehicleDTO(Long id, Long driverId, VehicleName vehicleVehicleName, String model, String licenseNumber, Location currentLocation, int passengerSeats, boolean babyTransport, boolean petTransport) {
+    public ResponseDriverVehicleDTO(Long id, Long driverId, VehicleName vehicleVehicleName, String model, String licenseNumber, ResponseCurrentLocationDTO currentLocation, int passengerSeats, boolean babyTransport, boolean petTransport) {
         this.id = id;
         this.driverId = driverId;
         this.vehicleVehicleName = vehicleVehicleName;
         this.model = model;
         this.licenseNumber = licenseNumber;
-//        this.currentLocation = currentLocation;
+        this.currentLocation = currentLocation;
         this.passengerSeats = passengerSeats;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;

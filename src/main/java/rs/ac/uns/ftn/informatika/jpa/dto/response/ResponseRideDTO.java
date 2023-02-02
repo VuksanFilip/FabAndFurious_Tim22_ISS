@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
@@ -54,6 +55,22 @@ public class ResponseRideDTO {
         this.rejection = rejection;
         this.locations = locations;
         this.status = status;
+    }
+
+    public ResponseRideDTO(Ride ride, ArrayList<ResponsePassengerIdEmailDTO> passengers, ArrayList<ResponseLocationDTO> locations, ResponseDriverIdEmailDTO driver, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
+        this.id = ride.getId();
+        this.passengers = passengers;
+        this.vehicleVehicleName = ride.getVehicle().getVehicleType().getVehicleName();
+        this.babyTransport = ride.isBabyTransport();
+        this.petTransport = ride.isPetTransport();
+        this.locations = locations;
+        this.startTime = ride.getStartTime();
+        this.endTime = ride.getEndTime();
+        this.totalCost = ride.getTotalCost();
+        this.driver = driver;
+        this.rejection = rejection;
+        this.estimatedTimeInMinutes = ride.getEstimatedTimeInMinutes();
+        this.status = ride.getStatus();
     }
 
     public ResponseRideDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {

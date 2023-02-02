@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
@@ -190,13 +190,13 @@ public class RideServiceImpl implements IRideService {
         updateRideByStatus(id, rideStatus);
     }
 
-    public List<ResponseRideDTO> getPageableResponseRide(Pageable page, String id){
+    public List<ResponseRideNoStatusDTO> getPageableResponseRide(Pageable page, String id){
         Page<Ride> rides = findAll(page);
-        List<ResponseRideDTO> responseRideDTOS = new ArrayList<>();
+        List<ResponseRideNoStatusDTO> responseRideDTOS = new ArrayList<>();
         for(Ride r: rides) {
             for (Passenger p : r.getPassengers()) {
                 if (p.getId() == Long.parseLong(id)) {
-                    responseRideDTOS.add(r.parseToResponse());
+                    responseRideDTOS.add(r.parseToResponseNoStatus());
                 }
             }
         }

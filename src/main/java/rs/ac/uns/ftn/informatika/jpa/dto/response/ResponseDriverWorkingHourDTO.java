@@ -4,12 +4,6 @@ import java.time.LocalDateTime;
 
 public class ResponseDriverWorkingHourDTO {
 
-//    {
-//        "id": 10,
-//            "start": "2022-12-11T15:24:10.627Z",
-//            "endTime": "2022-12-11T15:24:10.627Z"
-//    }
-
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;

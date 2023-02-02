@@ -167,8 +167,14 @@ public class Ride {
             responseLocationDTOS.add(new ResponseLocationDTO(r.getDeparture().parseToResponse(), r.getDestination().parseToResponse()));
         }
 
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, responseLocationDTOS);
+        //TODO NA OVOME PORADITI
+        this.setLetter(new RejectionLetter(this, "a",this.driver, new Date()));
 
+        ResponseDriverIdEmailDTO responseDriverIdEmailDTO = new ResponseDriverIdEmailDTO(driver.getId(), driver.getEmail());
+
+        ResponseRejectionReasonTimeOfDetectionDTO rejectionReasonTimeOfDetectionDTO = new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime());
+
+        ResponseRideDTO rideResponse = new ResponseRideDTO(this, responsPassengerIdEmailDTOS, responseLocationDTOS, responseDriverIdEmailDTO, rejectionReasonTimeOfDetectionDTO);
         return rideResponse;
     }
 
@@ -233,7 +239,7 @@ public class Ride {
         //TODO NA OVOME PORADITI
         this.setLetter(new RejectionLetter(this, "a",this.driver, new Date()));
 
-        ResponseRejectionReasonTimeOfDetectionDTO rejectionReasonTimeOfDetectionDTO = new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason().toString(), this.letter.getTime());
+        ResponseRejectionReasonTimeOfDetectionDTO rejectionReasonTimeOfDetectionDTO = new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime());
 
         ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this, responsPassengerIdEmailDTOS, responseLocationDTOS, responseDriverIdEmailDTO, rejectionReasonTimeOfDetectionDTO);
         return rideResponse;

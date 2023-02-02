@@ -6,11 +6,11 @@ public class ResponsePanicDTO {
 
     private Long id;
     private ResponsePanicUserDTO user;
-    private ResponsePanicRideDTO ride;
+    private ResponseRideNoStatusDTO ride;
     private Date time;
     private String reason;
 
-    public ResponsePanicDTO(Long id, ResponsePanicUserDTO user, ResponsePanicRideDTO ride, Date time, String reason) {
+    public ResponsePanicDTO(Long id, ResponsePanicUserDTO user, ResponseRideNoStatusDTO ride, Date time, String reason) {
         this.id = id;
         this.user = user;
         this.ride = ride;
@@ -34,11 +34,11 @@ public class ResponsePanicDTO {
         this.user = user;
     }
 
-    public ResponsePanicRideDTO getRide() {
+    public ResponseRideNoStatusDTO getRide() {
         return ride;
     }
 
-    public void setRide(ResponsePanicRideDTO ride) {
+    public void setRide(ResponseRideNoStatusDTO ride) {
         this.ride = ride;
     }
 

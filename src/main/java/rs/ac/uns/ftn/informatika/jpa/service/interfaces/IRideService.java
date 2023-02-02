@@ -3,7 +3,7 @@ package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
@@ -55,7 +55,7 @@ public interface IRideService {
 
     void updateRideByRejectionLetterAndStatus(String id, RejectionLetter rejectionLetter, RideStatus rideStatus);
 
-    List<ResponseRideDTO> getPageableResponseRide(Pageable page, String id);
+    List<ResponseRideNoStatusDTO> getPageableResponseRide(Pageable page, String id);
 
     int getNumberOfRidesForPessanger(String id);
 

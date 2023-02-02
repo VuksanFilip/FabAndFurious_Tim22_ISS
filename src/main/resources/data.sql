@@ -78,4 +78,4 @@ insert into REVIEW(comment, rating, review_type, passenger_id, ride_id) values (
 insert into RIDE_REVIEWS(ride_id, reviews_id) values (1, 2)
 
 --panic
-insert into PANIC(reason, time, ride_id, user_id) values ('Putnici se nisu pojavili', TIMESTAMP '1999-01-31 10:00:00', 1, 5)
+insert into PANIC(reason, time, ride_id, user_id) values ('Strasan je', TIMESTAMP '1999-01-31 10:00:00', 1, 5)

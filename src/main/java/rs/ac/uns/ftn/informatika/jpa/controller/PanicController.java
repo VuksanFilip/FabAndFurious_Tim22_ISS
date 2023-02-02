@@ -27,6 +27,7 @@ public class PanicController {
         this.panicService = panicService;
     }
 
+    //RADI
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getAllPanics(Pageable page) {

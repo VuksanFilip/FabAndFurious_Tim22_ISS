@@ -6,6 +6,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverWorkingHourDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.WorkingHour;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +31,6 @@ public interface IWorkingHourService {
     Page<WorkingHour> findAll(Pageable page);
 
     List<ResponseDriverWorkingHourDTO> getPageableDriverWorkingHours(String id, Pageable page);
+
+    Page<WorkingHour> findAll(String id, Pageable page, Date from, Date to);
 }

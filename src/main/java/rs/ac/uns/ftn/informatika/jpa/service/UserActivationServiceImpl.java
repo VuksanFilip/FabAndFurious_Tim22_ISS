@@ -29,6 +29,10 @@ public class UserActivationServiceImpl implements IUserActivationService {
         return  this.userActivationRepository.findById(Long.parseLong(id));
     }
 
+    public UserActivation findUserActivationByUserId(String id){
+        return this.userActivationRepository.findUserActivationByUserId(Long.parseLong(id));
+    }
+
     public void add(UserActivation userActivation) {
         this.userActivationRepository.save(userActivation);
     }

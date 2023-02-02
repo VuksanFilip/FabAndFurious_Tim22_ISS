@@ -37,13 +37,13 @@ public class RequestDriverVehicleDTO {
         this.licenseNumber = licenseNumber;
     }
 
-//    public CurrentLocation getCurrentLocation() {
-//        return currentLocation;
-//    }
-//
-//    public void setCurrentLocation(CurrentLocation currentLocation) {
-//        this.currentLocation = currentLocation;
-//    }
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 
     public int getPassengerSeats() {
         return passengerSeats;

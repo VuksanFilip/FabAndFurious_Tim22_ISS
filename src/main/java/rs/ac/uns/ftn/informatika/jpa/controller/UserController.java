@@ -158,9 +158,7 @@ public class UserController {
         } catch (Exception e){
             return new ResponseEntity<>(new MessageDTO("Wrong username or password!"), HttpStatus.BAD_REQUEST);
         }
-
     }
-
 
     @PutMapping(value = "/{id}/block")
     @PreAuthorize("hasAnyRole('ADMIN')")

@@ -39,6 +39,6 @@ public class Panic {
     }
 
     public ResponsePanicDTO parseToResponse(){
-        return new ResponsePanicDTO(this.id, this.user.parseToPanicResponse(), this.ride.parseToPanicResponse(), this.time, this.reason);
+        return new ResponsePanicDTO(this.id, this.user.parseToPanicResponse(), this.ride.parseToResponseNoStatus(), this.time, this.reason);
     }
 }

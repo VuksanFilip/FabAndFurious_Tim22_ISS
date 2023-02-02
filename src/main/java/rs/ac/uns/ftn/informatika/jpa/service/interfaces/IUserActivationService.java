@@ -16,4 +16,6 @@ public interface IUserActivationService {
     void delete(UserActivation activation);
 
     void renewActivation(UserActivation activation);
+
+    UserActivation findUserActivationByUserId(String id);
 }
