@@ -9,11 +9,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.ValidateData;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
@@ -31,14 +29,16 @@ public class RideController{
     private final IFavoriteRouteService favoriteRouteService;
     private final IPassengerService passengerService;
     private final IDriverService driverService;
+    private final IUserService userService;
 
     @Autowired
-    public RideController(IRideService rideService, IPanicService panicService, IFavoriteRouteService favoriteRouteService, IPassengerService passengerService, IDriverService driverService) {
+    public RideController(IRideService rideService, IPanicService panicService, IFavoriteRouteService favoriteRouteService, IPassengerService passengerService, IDriverService driverService, IUserService userService) {
         this.rideService = rideService;
         this.panicService = panicService;
         this.favoriteRouteService = favoriteRouteService;
         this.passengerService = passengerService;
         this.driverService = driverService;
+        this.userService = userService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -214,5 +214,31 @@ public class RideController{
         favoriteRouteService.deleteFavouriteRoutesFromPassengers(id);
         favoriteRouteService.deleteById(id);
         return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(value = "/{userId}/report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getReportDays(@PathVariable("userId") String userId, RequestReportDTO requestReport){
+        if(!this.userService.existsById(userId)){
+            return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        User user = this.userService.getUser(userId).get();
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(user, requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countRidesForDay(rides, requestReport.getFrom(), requestReport.getTo());
+    }
+
+    @GetMapping(value = "/{userId}/report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getReportKms(@PathVariable("userId") String userId, RequestReportDTO requestReport){
+        if(!this.userService.existsById(userId)){
+            return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        User user = this.userService.getUser(userId).get();
+    }
+
+    @GetMapping(value = "/{userId}/report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getReportMoneys(@PathVariable("userId") String userId, RequestReportDTO requestReport){
+        if(!this.userService.existsById(userId)){
+            return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        User user = this.userService.getUser(userId).get();
     }
 }

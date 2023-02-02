@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
@@ -231,5 +232,42 @@ public class RideServiceImpl implements IRideService {
             return this.rideRepository.findAllByDriverIdAndTimeOfStartAfter(Long.parseLong(id), from, page);
 
         return this.rideRepository.findAllByDriverIdAndTimeOfStartAfterAndTimeOfEndBefore(Long.parseLong(id), from, to, page);
+    }
+
+    @Override
+    public List<Ride> getUserRidesBetweenDates(User user, Date from, Date to) {
+        List<Ride> allRides = this.rideRepository.findAll();
+        List<Ride> allUserRides = new ArrayList<>();
+        List<Ride> allUserRidesBetweenDates = new ArrayList<>();
+        for(Ride r : allRides){
+            if(r.getDriver().getId() == user.getId()){
+                allUserRides.add(r);
+            }
+            for(Passenger p : r.getPassengers()){
+                if(p.getId() == user.getId()){
+                    allUserRides.add(r);
+                }
+            }
+        }
+        for(Ride r : allUserRides){
+            if(r.getEndTime().after(from) && r.getEndTime().before(to)){
+                allUserRidesBetweenDates.add(r);
+            }
+        }
+        return allUserRidesBetweenDates;
+    }
+
+    @Override
+    public List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, Date from, Date to) {
+        int count = 0;
+        List<Date> allDates = new ArrayList<>();
+        while(!from.after(to)){
+            allDates.add(from);
+//            from = from.
+        }
+//        while (!start.isAfter(end)) {
+//            totalDates.add(start);
+//            start = start.plusDays(1);
+//        }
     }
 }

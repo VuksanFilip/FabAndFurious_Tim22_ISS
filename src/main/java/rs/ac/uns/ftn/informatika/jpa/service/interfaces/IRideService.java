@@ -3,10 +3,12 @@ package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import java.util.Date;
@@ -60,4 +62,8 @@ public interface IRideService {
     int getNumberOfRidesForPessanger(String id);
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);
+
+    List<Ride> getUserRidesBetweenDates(User user, Date from, Date to);
+
+    List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, Date from, Date to);
 }

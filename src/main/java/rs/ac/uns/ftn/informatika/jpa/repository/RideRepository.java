@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 
 import java.util.Date;
 import java.util.List;
@@ -41,4 +42,7 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
             Long driverId,
             Date timeOfEnd,
             Pageable page);
+
+//    @Query("select r from Ride rides where r.")
+//    List<Ride> findUserRidesBetweenDates(User user, Date from, Date to);
 }
