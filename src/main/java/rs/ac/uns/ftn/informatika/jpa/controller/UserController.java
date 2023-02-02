@@ -59,6 +59,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //RADI
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody RequestUserChangePasswordDTO requestUserChangePasswordDTO) {
@@ -79,9 +80,13 @@ public class UserController {
         return new ResponseEntity<>(new MessageDTO("Current password is not matching!"), HttpStatus.BAD_REQUEST);
     }
 
+    //RADI
     @GetMapping(value = "/{id}/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPassword(@PathVariable("id") String id) throws MessagingException, UnsupportedEncodingException {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -98,6 +103,7 @@ public class UserController {
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
 
+    //RADI
     @PutMapping (value = "/{id}/resetPassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePasswordWithResetCode(@PathVariable("id") String id, @RequestBody RequestUserResetPasswordDTO requestUserResetPasswordDTO) {
 
@@ -109,7 +115,7 @@ public class UserController {
             return new ResponseEntity<>("Code is expired or not correct!", HttpStatus.BAD_REQUEST);
         }
 
-        user.setPassword(requestUserResetPasswordDTO.getNewPassword());
+        user.setPassword(passwordEncoder.encode(requestUserResetPasswordDTO.getNewPassword()));
         user.setResetPasswordToken(null);
         user.setResetPasswordTokenExpiration(null);
         userService.add(user);
@@ -119,7 +125,7 @@ public class UserController {
 
     //TODO NAPRAVITI DA BUDE PAGEBLE
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
         List<ResponseRideNoStatusDTO> responseRides = new ArrayList<>();

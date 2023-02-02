@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.controller;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -214,5 +215,19 @@ public class RideController{
         favoriteRouteService.deleteFavouriteRoutesFromPassengers(id);
         favoriteRouteService.deleteById(id);
         return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(value = "/favorites/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('PASSENGER')")
+    public ResponseEntity<?> getFavoriteOfPassenger(@PathVariable("passengerId") String passengerId) {
+
+        if(!StringUtils.isNumeric(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.passengerService.existsById(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = favoriteRouteService.getResponseFavoriteRoutes();
+        return new ResponseEntity<>(responseFavoriteRoutes, HttpStatus.OK);
     }
 }
