@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
@@ -34,36 +36,43 @@ import java.util.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
+//    @Autowired
     private AuthenticationManager authenticationManager;
     private final IUserService userService;
     private final IPassengerService passengerService;
     private final IDriverService driverService;
     private final INoteService noteService;
     private final IMailService mailService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+//    @Autowired
     private TokenUtils tokenUtils;
 
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
+    @Autowired
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
         this.noteService = noteService;
         this.mailService = mailService;
         this.tokenUtils = tokenUtils;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody RequestUserChangePasswordDTO requestUserChangePasswordDTO) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
         User user = userService.getUser(id).get();
-        if(user.getPassword().equals(requestUserChangePasswordDTO.getOldPassword())){
-            user.setPassword(requestUserChangePasswordDTO.getNewPassword());
+
+        if(passwordEncoder.matches(requestUserChangePasswordDTO.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(requestUserChangePasswordDTO.getNewPassword()));
             userService.add(user);
             return new ResponseEntity<>(new MessageDTO("Password successfully changed!"), HttpStatus.NO_CONTENT);
         }
