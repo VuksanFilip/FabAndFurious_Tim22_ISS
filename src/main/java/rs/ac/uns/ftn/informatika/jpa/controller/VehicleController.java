@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestCurrentLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
+import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.ILocationService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
 
@@ -24,6 +25,7 @@ public class VehicleController {
         this.locationService = locationService;
     }
 
+    //RADI
     @PutMapping(value = "/{id}/location", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
@@ -32,15 +34,16 @@ public class VehicleController {
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
         if(!this.vehicleService.getVehicle(id).isPresent()){
-            return new ResponseEntity<>("Vehicle does not exist!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Vehicle does not exist!"), HttpStatus.NOT_FOUND);
         }
 
-        Location newLocation = new Location(requestCurrentLocationDTO.getAddress(), requestCurrentLocationDTO.getLatitude(), requestCurrentLocationDTO.getLongitude());
-        this.locationService.add(newLocation);
+        Vehicle vehicle = vehicleService.getVehicle(id).get();
+        Long locationId = vehicle.getCurrentLocation().getId();
 
-        this.vehicleService.getVehicle(id).get().updateCurrentLocation(this.locationService.getLocationByAddress(newLocation.getAddress()));
-        return new ResponseEntity<>("Coordinates successfully updated", HttpStatus.NO_CONTENT);
+        Location locationToUpdate = locationService.getLocation(locationId.toString()).get();
+        locationToUpdate.update(requestCurrentLocationDTO);
+
+        this.locationService.add(locationToUpdate);
+        return new ResponseEntity<>(new MessageDTO("Coordinates successfully updated"), HttpStatus.NO_CONTENT);
     }
-
-
 }

@@ -43,7 +43,7 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
     }
 
     public int getEstimatedTimeInMinutes(RequestAssumptionDTO requestAssumptionDTO){
-        return (int) (calculateDistance(requestAssumptionDTO.getLocationDTOS()) / kmPerHour);
+        return (int) ((calculateDistance(requestAssumptionDTO.getLocationDTOS()) / kmPerHour) * 60);
     }
 
     public double getPriceByVehicleType(VehicleName name){
@@ -66,6 +66,7 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
 
             totalKm = totalKm + distance;
         }
+        System.out.println(totalKm);
         return totalKm;
     }
 
