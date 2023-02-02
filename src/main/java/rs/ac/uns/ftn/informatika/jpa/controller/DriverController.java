@@ -159,7 +159,7 @@ public class DriverController {
         return new ResponseEntity<>(document.parseToResponse(), HttpStatus.OK);
     }
 
-    //IZBACUJE GRESKU PRILIKOM BRISANJA
+    //TODO IZBACUJE GRESKU PRILIKOM BRISANJA
     @DeleteMapping(value = "/document/{document-id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> deleteDriverDocument(@PathVariable("document-id") String documentId) {
@@ -310,7 +310,7 @@ public class DriverController {
         return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
+    //TODO PORADITI NA SETLETTERU UKOLIKO JE NULL KOD RESPONSA
     //TESTIRATI FROM I TO UPIT
     @GetMapping(value = "/{id}/ride")
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
@@ -345,6 +345,7 @@ public class DriverController {
         return new ResponseEntity<>(new ResponsePageDTO(driverRidesList.size(), Arrays.asList(driverRidesList.toArray())), HttpStatus.OK);
     }
 
+    //RADI
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getWorkingHour(@PathVariable("working-hour-id") String workingHourId) {
