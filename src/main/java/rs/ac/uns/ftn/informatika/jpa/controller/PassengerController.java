@@ -121,6 +121,9 @@ public class PassengerController{
     @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!this.passengerService.getPassenger(id).isPresent()){
             return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
@@ -134,8 +137,11 @@ public class PassengerController{
     //TODO PORADITI NA SETLETTERU UKOLIKO JE NULL KOD RESPONSA
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
-    public ResponseEntity<ResponsePageDTO> getPassengerRides(@PathVariable("id") String id, Pageable page) {
+    public ResponseEntity<?> getPassengerRides(@PathVariable("id") String id, Pageable page) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         List<ResponseRideNoStatusDTO> responseRideDTOS = rideService.getPageableResponseRide(page, id);
         int passengerRidesNumber = rideService.getNumberOfRidesForPessanger(id);
         return new ResponseEntity<>(new ResponsePageDTO(passengerRidesNumber, Arrays.asList(responseRideDTOS.toArray())), HttpStatus.OK);
