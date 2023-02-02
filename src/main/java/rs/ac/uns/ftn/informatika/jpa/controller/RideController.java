@@ -49,22 +49,22 @@ public class RideController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('PASSENGER')")
+//    @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
-        Driver driver = this.driverService.getDriver("6").get();
+//        Driver driver = this.driverService.getDriver("6").get();
 
         //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
-//        Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
+        Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
 
-        if(rideService.checkIfDriverHasPandingRides(driver)){
-            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
-        }
+//        if(rideService.checkIfDriverHasPandingRides(perfectDriver)){
+//            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
+//        }
         driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size();
 
         if(driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size() == 0){
             return new ResponseEntity<>(new MessageDTO("Currently there are not that type of vehicles!"), HttpStatus.BAD_REQUEST);
         }
-        Ride newRide = this.rideService.parseToRide(requestRideDTO, driver);
+        Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
         return new ResponseEntity<>(newRide.parseToResponseNew(requestRideDTO.getScheduledTime()), HttpStatus.OK);
     }
 

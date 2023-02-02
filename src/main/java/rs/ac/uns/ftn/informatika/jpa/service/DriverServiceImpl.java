@@ -87,7 +87,7 @@ public class DriverServiceImpl implements IDriverService {
     public List<Driver> getDriverByVehicleName(VehicleName name){
         List<Driver> drivers = new ArrayList<>();
         for(Driver driver : getAll()){
-            if(driver.getVehicle().getVehicleType().getVehicleName() == name){
+            if(driver.getVehicle() != null && driver.getVehicle().getVehicleType().getVehicleName() == name){
                 drivers.add(driver);
             }
         }
