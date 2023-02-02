@@ -68,6 +68,27 @@ insert into RIDE_PASSENGER(ride_id, passenger_id) values (1, 2)
 insert into RIDE_PASSENGER(ride_id, passenger_id) values (1, 3)
 insert into DRIVER_RIDES(driver_id, rides_id) values (5, 1)
 
+--ride 2
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (true, TIMESTAMP '2023-01-30 14:30:00', 30, false, true, TIMESTAMP '2023-01-30 14:00:00', 'FINISHED', 2500, 5, null, 1)
+insert into ROUTE(km, departure_id, destination_id) values (12, 1, 2)
+insert into RIDE_ROUTES(ride_id, routes_id) values (2, 2)
+insert into RIDE_PASSENGER(ride_id, passenger_id) values (2, 2)
+insert into DRIVER_RIDES(driver_id, rides_id) values (5, 2)
+
+--ride 3
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (false, TIMESTAMP '2023-01-28 16:00:00', 60, false, true, TIMESTAMP '2023-01-28 15:00:00', 'FINISHED', 2500, 5, null, 1)
+insert into ROUTE(km, departure_id, destination_id) values (20, 1, 3)
+insert into RIDE_ROUTES(ride_id, routes_id) values (3, 3)
+insert into RIDE_PASSENGER(ride_id, passenger_id) values (3, 2)
+insert into DRIVER_RIDES(driver_id, rides_id) values (5, 3)
+
+--ride 4
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (true, TIMESTAMP '2023-01-31 17:00:00', 30, true, true, TIMESTAMP '2023-01-31 16:30:00', 'CANCELED', 2500, 5, 'asd...', 1)
+insert into ROUTE(km, departure_id, destination_id) values (20, 2, 4)
+insert into RIDE_ROUTES(ride_id, routes_id) values (4, 4)
+insert into RIDE_PASSENGER(ride_id, passenger_id) values (4, 2)
+insert into DRIVER_RIDES(driver_id, rides_id) values (5, 4)
+
 --review for vehicle
 insert into REVIEW(comment, rating, review_type, passenger_id, ride_id) values ('Vozilo je prljavo', 3.5, 'VEHICLE', 2, 1)
 insert into RIDE_REVIEWS(ride_id, reviews_id) values (1, 1)
