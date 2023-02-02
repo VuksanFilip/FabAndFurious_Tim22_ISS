@@ -44,7 +44,7 @@ public class ReviewController {
     }
 
     //TODO IMA VEZE SA SEKJURITIJEM
-    @PostMapping(value = "{rideId}/vehicle",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{rideId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO) {
 
@@ -142,7 +142,7 @@ public class ReviewController {
 
     //RADI
     @GetMapping(value = "/{rideId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getRideReviews(@PathVariable("rideId") String rideId) {
 
         if(!StringUtils.isNumeric(rideId)){

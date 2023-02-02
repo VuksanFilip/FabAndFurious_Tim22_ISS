@@ -159,7 +159,7 @@ public class DriverController {
         return new ResponseEntity<>(document.parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO IZBACUJE GRESKU PRILIKOM BRISANJA
+    //RADI
     @DeleteMapping(value = "/document/{document-id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> deleteDriverDocument(@PathVariable("document-id") String documentId) {
@@ -170,8 +170,16 @@ public class DriverController {
         if (!this.documentService.getDocument(documentId).isPresent()) {
             return new ResponseEntity<>("Document does not exist", HttpStatus.NOT_FOUND);
         }
+
+        Document document = documentService.getDocument(documentId).get();
+        Driver driver = document.getDriver();
+        driver.getDocuments().remove(document);
+
+        driverService.add(driver);
+        document.setDriver(null);
+        documentService.add(document);
         documentService.deleteById(documentId);
-        return new ResponseEntity<>("Driver document deleted successfully", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new MessageDTO("Driver document deleted successfully"), HttpStatus.OK);
     }
 
     //RADI
