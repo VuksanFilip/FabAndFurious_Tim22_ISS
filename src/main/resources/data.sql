@@ -83,7 +83,7 @@ insert into RIDE_PASSENGER(ride_id, passenger_id) values (3, 2)
 insert into DRIVER_RIDES(driver_id, rides_id) values (5, 3)
 
 --ride 4
-insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (true, TIMESTAMP '2023-01-31 17:00:00', 30, true, true, TIMESTAMP '2023-01-31 16:30:00', 'CANCELED', 2500, 5, 'asd...', 1)
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (true, TIMESTAMP '2023-01-31 17:00:00', 30, true, true, TIMESTAMP '2023-01-31 16:30:00', 'CANCELED', 2500, 5, null, 1)
 insert into ROUTE(km, departure_id, destination_id) values (20, 2, 4)
 insert into RIDE_ROUTES(ride_id, routes_id) values (4, 4)
 insert into RIDE_PASSENGER(ride_id, passenger_id) values (4, 2)
