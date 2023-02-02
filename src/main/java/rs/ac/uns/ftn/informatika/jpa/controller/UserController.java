@@ -101,7 +101,6 @@ public class UserController {
 
         mailService.sendMail("filipvuksan.iphone@gmail.com", token);
         userService.add(user);
-        //TODO TU POSLATI MAIL(Ne radi nesto MailServiceImpl-po komentarom je)
 
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
@@ -177,6 +176,7 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.OK);
     }
 
+    //TODO PONOVO NE RADI (U PICKU MATERINU)
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO login) {
         try{
@@ -193,10 +193,14 @@ public class UserController {
         }
     }
 
+    //RADI
     @PutMapping(value = "/{id}/block")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
@@ -210,10 +214,14 @@ public class UserController {
         return new ResponseEntity<>("User is successfully blocked", HttpStatus.NO_CONTENT);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/unblock")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> ublockUser(@PathVariable("id") String id){
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
@@ -227,6 +235,7 @@ public class UserController {
         return new ResponseEntity<>("User is successfully ublocked", HttpStatus.NO_CONTENT);
     }
 
+    //TODO POZABAVITI SE SA OVIM
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserMessages(@PathVariable("id") String id){
@@ -234,38 +243,51 @@ public class UserController {
         return new ResponseEntity<>(new ResponseMessagePageDTO(messageDTOS.size(), messageDTOS), HttpStatus.OK);
     }
 
+    //TODO POZABAVITI SE SA OVIM
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
         return null;
     }
 
+    //RADI
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> createNote(@PathVariable("id") String id, @RequestBody RequestNoteDTO requestNoteDTO){
-        if(!userService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
+        if(!userService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
         User user = userService.getUser(id).get();
         Note note = requestNoteDTO.parseToNote(user);
+
         noteService.add(note);
+
         return new ResponseEntity<>(note.parseToResponse(), HttpStatus.OK);
     }
 
+    //RADI
     @GetMapping(value = "/{id}/note", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUserNotes(@PathVariable("id") String id, Pageable page){
-        if(!userService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
-        User user = userService.getUser(id).get();
-        Page<Note> notes = noteService.findAll(page);
+        if(!userService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        Page<Note> notes = noteService.getNotesByUserId(id, page);
+
         int size = noteService.getAll().size();
         List<ResponseNoteDTO> responseNoteDTOS = new ArrayList<>();
         for(Note n: notes){
-            if(n.getUser().getId().equals(user.getId())){
-                responseNoteDTOS.add(n.parseToResponse());
-            }
+            responseNoteDTOS.add(n.parseToResponse());
         }
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseNoteDTOS.toArray())), HttpStatus.OK);
     }

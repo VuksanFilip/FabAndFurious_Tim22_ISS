@@ -21,7 +21,6 @@ public class UnregisteredUserController {
         this.vehicleTypeService = vehicleTypeService;
     }
 
-
     //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAssumption(@RequestBody RequestAssumptionDTO requestAssumptionDTO) {

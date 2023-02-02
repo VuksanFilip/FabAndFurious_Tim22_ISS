@@ -25,6 +25,11 @@ public class NoteServiceImpl implements INoteService {
         return (List<Note>) this.noteRepository.findAll();
     }
 
+    public Page<Note> getNotesByUserId(String userId, Pageable page){
+        return noteRepository.getNotesByUserId(Long.parseLong(userId), page);
+    }
+
+
     public Page<Note> findAll(Pageable page) {
         return noteRepository.findAll(page);
     }
