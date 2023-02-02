@@ -3,12 +3,15 @@ package rs.ac.uns.ftn.informatika.jpa.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 import rs.ac.uns.ftn.informatika.jpa.model.RejectionLetter;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +64,21 @@ public interface IRideService {
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);
 
+
+    List<Ride> getUserRidesBetweenDates(List<Ride> allRides, String from, String to);
+
+    List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, String from, String to);
+
+    int getSumReport(List<ResponseReportDayDTO> dates);
+
+    float getAverageReport(List<ResponseReportDayDTO> dates);
+
+    List<ResponseReportDayDTO> countMoneyForDay(List<Ride> rides, String from, String to);
+
+    List<ResponseReportDayDTO> countKmsForDay(List<Ride> rides, String from, String to);
+
     Page<Ride> getRidesForPassenger(String passengerId, Pageable page);
 
     Page<Ride> getRidesForDriver(String driverId, Pageable page);
+
 }

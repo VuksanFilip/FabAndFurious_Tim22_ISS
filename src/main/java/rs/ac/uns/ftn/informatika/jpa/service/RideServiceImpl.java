@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,20 +25,21 @@ import java.util.Optional;
 @Service
 public class RideServiceImpl implements IRideService {
 
-    private RideRepository rideRepository;
-
-    private IPassengerService passengerService;
-    private ILocationService locationService;
-    private IRouteService routeService;
-    private IDriverService driverService;
+    private final RideRepository rideRepository;
+    private final IPassengerService passengerService;
+    private final ILocationService locationService;
+    private final IRouteService routeService;
+    private final IDriverService driverService;
+    private final IVehicleTypeService vehicleTypeService;
 
     @Autowired
-    public RideServiceImpl(RideRepository rideRepository, IPassengerService passengerService, ILocationService locationService, IRouteService routeService, IDriverService driverService) {
+    public RideServiceImpl(RideRepository rideRepository, IPassengerService passengerService, ILocationService locationService, IRouteService routeService, IDriverService driverService, IVehicleTypeService vehicleTypeService) {
         this.rideRepository = rideRepository;
         this.passengerService = passengerService;
         this.locationService = locationService;
         this.routeService = routeService;
         this.driverService = driverService;
+        this.vehicleTypeService = vehicleTypeService;
     }
 
     public List<Ride> getAll() {
@@ -235,4 +240,114 @@ public class RideServiceImpl implements IRideService {
 
         return this.rideRepository.findAllByDriverIdAndTimeOfStartAfterAndTimeOfEndBefore(Long.parseLong(id), from, to, page);
     }
+
+    @Override
+    public List<Ride> getUserRidesBetweenDates(List<Ride> allRides, String from, String to) {
+        List<Ride> allUserRidesBetweenDates = new ArrayList<>();
+
+        for(Ride r : allRides){
+            LocalDate endTime = r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fromDate = LocalDate.parse(from, formatter);
+            LocalDate toDate = LocalDate.parse(to, formatter);
+            if(endTime.isAfter(fromDate) && endTime.isBefore(toDate)){
+                allUserRidesBetweenDates.add(r);
+            }
+        }
+        return allUserRidesBetweenDates;
+    }
+
+    @Override
+    public List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, String from, String to) {
+        List<LocalDate> allDates = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fromDate = LocalDate.parse(from, formatter);
+        LocalDate toDate = LocalDate.parse(to, formatter);
+        while(!fromDate.isAfter(toDate)){
+            allDates.add(fromDate);
+            fromDate = fromDate.plusDays(1);
+        }
+        List<ResponseReportDayDTO> results = new ArrayList<>();
+        for(LocalDate lc : allDates){
+            int count = 0;
+            for(Ride r : rides){
+                if(r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(lc)){
+                    count++;
+                }
+            }
+            ResponseReportDayDTO day = new ResponseReportDayDTO(lc, count);
+            if(count != 0){
+                results.add(day);
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public List<ResponseReportDayDTO> countMoneyForDay(List<Ride> rides, String from, String to) {
+        List<LocalDate> allDates = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fromDate = LocalDate.parse(from, formatter);
+        LocalDate toDate = LocalDate.parse(to, formatter);
+        while(!fromDate.isAfter(toDate)){
+            allDates.add(fromDate);
+            fromDate = fromDate.plusDays(1);
+        }
+        List<ResponseReportDayDTO> results = new ArrayList<>();
+        for(LocalDate lc : allDates){
+            int count = 0;
+            for(Ride r : rides){
+                if(r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(lc)){
+                    count += r.getTotalCost();
+                }
+            }
+            ResponseReportDayDTO day = new ResponseReportDayDTO(lc, count);
+            if(count != 0){
+                results.add(day);
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public List<ResponseReportDayDTO> countKmsForDay(List<Ride> rides, String from, String to) {
+        List<LocalDate> allDates = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fromDate = LocalDate.parse(from, formatter);
+        LocalDate toDate = LocalDate.parse(to, formatter);
+        while(!fromDate.isAfter(toDate)){
+            allDates.add(fromDate);
+            fromDate = fromDate.plusDays(1);
+        }
+        List<ResponseReportDayDTO> results = new ArrayList<>();
+        for(LocalDate lc : allDates){
+            int count = 0;
+            for(Ride r : rides){
+                if(r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(lc)){
+                    Route route = r.getRoutes().get(0);
+                    count += this.vehicleTypeService.distance(route.getDeparture().getLatitude(), route.getDestination().getLatitude(), route.getDeparture().getLongitude(), route.getDestination().getLongitude());
+                }
+            }
+            ResponseReportDayDTO day = new ResponseReportDayDTO(lc, count);
+            if(count != 0){
+                results.add(day);
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public int getSumReport(List<ResponseReportDayDTO> dates) {
+        int sum = 0;
+        for(ResponseReportDayDTO d : dates){
+            sum += d.getCount();
+        }
+        return sum;
+    }
+
+    @Override
+    public float getAverageReport(List<ResponseReportDayDTO> dates) {
+        return getSumReport(dates)/dates.size();
+    }
+
 }

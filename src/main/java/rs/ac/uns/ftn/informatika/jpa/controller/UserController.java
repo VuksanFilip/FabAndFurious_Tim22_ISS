@@ -131,7 +131,7 @@ public class UserController {
 
     //RADI
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
         if(!StringUtils.isNumeric(id)){
