@@ -3,6 +3,8 @@ package rs.ac.uns.ftn.informatika.jpa.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,14 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteWithoutPassengersDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -219,7 +225,7 @@ public class RideController{
 
     @GetMapping(value = "/favorites/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> getFavoriteOfPassenger(@PathVariable("passengerId") String passengerId) {
+    public ResponseEntity<?> getFavoriteOfPassenger(@PathVariable("passengerId") String passengerId, Pageable page) {
 
         if(!StringUtils.isNumeric(passengerId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -227,7 +233,14 @@ public class RideController{
         if(!this.passengerService.existsById(passengerId)){
             return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
         }
-        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = favoriteRouteService.getResponseFavoriteRoutes();
-        return new ResponseEntity<>(responseFavoriteRoutes, HttpStatus.OK);
+
+        Page<FavoriteRoutes> favoriteRoutesPage = this.passengerService.findFavouriteRoutesByPassengerId(passengerId, page);
+
+        List<ResponseFavoriteRouteWithoutPassengersDTO> responseFavoriteRouteWithoutPassengersDTOS = new ArrayList<>();
+        for(FavoriteRoutes favorites : favoriteRoutesPage){
+            responseFavoriteRouteWithoutPassengersDTOS.add(favorites.parseToResponseWithoutPassengers());
+        }
+
+        return new ResponseEntity<>(new ResponsePageDTO(favoriteRoutesPage.getNumberOfElements(), Arrays.asList(responseFavoriteRouteWithoutPassengersDTOS.toArray())), HttpStatus.OK);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
@@ -46,6 +47,11 @@ public class PassengerServiceImpl implements IPassengerService {
     public Page<Passenger> findAll(Pageable page) {
         return passengerRepository.findAll(page);
     }
+
+    public Page<FavoriteRoutes> findFavouriteRoutesByPassengerId(String passengerId, Pageable page){
+        return passengerRepository.findFavouriteRoutesByPassengerId(Long.parseLong(passengerId), page);
+    }
+
 
     public boolean existsById(String id) {
         return  this.passengerRepository.existsById(Long.parseLong(id));
