@@ -1,24 +1,25 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ResponseReportDayDTO {
-    private Date date;
+    private LocalDate date;
     private int count;
 
     public ResponseReportDayDTO() {
     }
 
-    public ResponseReportDayDTO(Date date, int count) {
+    public ResponseReportDayDTO(LocalDate date, int count) {
         this.date = date;
         this.count = count;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

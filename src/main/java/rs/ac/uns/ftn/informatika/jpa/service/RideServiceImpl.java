@@ -14,6 +14,9 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +26,6 @@ import java.util.Optional;
 public class RideServiceImpl implements IRideService {
 
     private RideRepository rideRepository;
-
     private IPassengerService passengerService;
     private ILocationService locationService;
     private IRouteService routeService;
@@ -235,7 +237,7 @@ public class RideServiceImpl implements IRideService {
     }
 
     @Override
-    public List<Ride> getUserRidesBetweenDates(User user, Date from, Date to) {
+    public List<Ride> getUserRidesBetweenDates(User user, LocalDate from, LocalDate to) {
         List<Ride> allRides = this.rideRepository.findAll();
         List<Ride> allUserRides = new ArrayList<>();
         List<Ride> allUserRidesBetweenDates = new ArrayList<>();
@@ -250,7 +252,7 @@ public class RideServiceImpl implements IRideService {
             }
         }
         for(Ride r : allUserRides){
-            if(r.getEndTime().after(from) && r.getEndTime().before(to)){
+            if(r.getEndTime().toInstant().isAfter(Instant.from(from)) && r.getEndTime().toInstant().isBefore(Instant.from(to))){
                 allUserRidesBetweenDates.add(r);
             }
         }
@@ -258,16 +260,38 @@ public class RideServiceImpl implements IRideService {
     }
 
     @Override
-    public List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, Date from, Date to) {
-        int count = 0;
-        List<Date> allDates = new ArrayList<>();
-        while(!from.after(to)){
+    public List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, LocalDate from, LocalDate to) {
+        List<LocalDate> allDates = new ArrayList<>();
+        while(!from.isAfter(to)){
             allDates.add(from);
-//            from = from.
+            from = from.plusDays(1);
         }
-//        while (!start.isAfter(end)) {
-//            totalDates.add(start);
-//            start = start.plusDays(1);
-//        }
+        List<ResponseReportDayDTO> results = new ArrayList<>();
+        for(LocalDate lc : allDates){
+            int count = 0;
+            for(Ride r : rides){
+                if(r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(lc)){
+                    count++;
+                }
+            }
+            ResponseReportDayDTO day = new ResponseReportDayDTO(lc, count);
+            results.add(day);
+        }
+        return results;
     }
+
+    @Override
+    public float getSumReport(List<ResponseReportDayDTO> dates) {
+        float sum = 0;
+        for(ResponseReportDayDTO d : dates){
+            sum += d.getCount();
+        }
+        return sum;
+    }
+
+    @Override
+    public float getAverageReport(List<ResponseReportDayDTO> dates) {
+        return getSumReport(dates)/dates.size();
+    }
+
 }

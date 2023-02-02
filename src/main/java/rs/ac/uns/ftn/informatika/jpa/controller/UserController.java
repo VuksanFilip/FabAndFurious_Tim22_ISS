@@ -110,7 +110,7 @@ public class UserController {
 
     //TODO NAPRAVITI DA BUDE PAGEBLE
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
         List<ResponseRideNoStatusDTO> responseRides = new ArrayList<>();

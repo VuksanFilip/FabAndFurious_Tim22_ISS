@@ -1,32 +1,33 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class RequestReportDTO {
-    private Date from;
-    private Date to;
+    private LocalDate from;
+    private LocalDate to;
 
     public RequestReportDTO() {
     }
 
-    public RequestReportDTO(Date from, Date to) {
+    public RequestReportDTO(LocalDate from, LocalDate to) {
         this.from = from;
         this.to = to;
     }
 
-    public Date getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public void setFrom(Date from) {
+    public void setFrom(LocalDate from) {
         this.from = from;
     }
 
-    public Date getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
-    public void setTo(Date to) {
+    public void setTo(LocalDate to) {
         this.to = to;
     }
 }

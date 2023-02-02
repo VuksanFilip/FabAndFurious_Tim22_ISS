@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,11 @@ public interface IRideService {
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);
 
-    List<Ride> getUserRidesBetweenDates(User user, Date from, Date to);
+    List<Ride> getUserRidesBetweenDates(User user, LocalDate from, LocalDate to);
 
-    List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, Date from, Date to);
+    List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, LocalDate from, LocalDate to);
+
+    float getSumReport(List<ResponseReportDayDTO> dates);
+
+    float getAverageReport(List<ResponseReportDayDTO> dates);
 }
