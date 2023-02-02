@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Review;
+
 public class ResponseReviewDTO {
 
     private Long id;
@@ -28,6 +30,13 @@ public class ResponseReviewDTO {
         this.rating = rating;
         this.comment = comment;
         this.passenger = passenger;
+    }
+
+    public ResponseReviewDTO(Review review){
+        this.id = review.getId();
+        this.rating = review.getRating();
+        this.comment = review.getComment();
+        this.passenger = review.getPassenger().parseToResponseIdEmail();
     }
 
 

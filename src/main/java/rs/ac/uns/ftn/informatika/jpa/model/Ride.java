@@ -3,13 +3,12 @@ package rs.ac.uns.ftn.informatika.jpa.model;
 import lombok.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
-import rs.ac.uns.ftn.informatika.jpa.model.enums.ReviewType;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -270,22 +269,6 @@ public class Ride {
             passengers.add(p.parseToPanicPassengersDTO());
         }
         return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicle.getVehicleType(), this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date(Calendar.getInstance().getTime().getTime())), locations);
-    }
-
-    public ResponseRideReviewsDTO parseToResponseAllReviews() {
-        List<Review> vehicleReviews = new ArrayList<>();
-        for (Review r : this.getReviews()){
-            if(r.getReviewType() == ReviewType.VEHICLE){
-                vehicleReviews.add(r);
-            }
-        }
-        List<Review> driverReviews = new ArrayList<>();
-        for (Review r : this.getReviews()){
-            if(r.getReviewType() == ReviewType.DRIVER){
-                driverReviews.add(r);
-            }
-        }
-        return new ResponseRideReviewsDTO(vehicleReviews.get(0).parseToResponse(), driverReviews.get(0).parseToResponse());
     }
 
     public ResponseRideNewDTO parseToResponseNew(Date scheduledTime) {

@@ -44,7 +44,7 @@ public class DriverController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    //Radi
+    //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> createNewDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
