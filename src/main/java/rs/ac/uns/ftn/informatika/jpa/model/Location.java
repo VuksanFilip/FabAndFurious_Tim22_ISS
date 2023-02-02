@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestCurrentLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationWithAddressDTO;
 
 import javax.persistence.*;
@@ -25,6 +26,12 @@ public class Location {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public void update(RequestCurrentLocationDTO location){
+        this.address = location.getAddress();
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
     }
 
     public RequestLocationWithAddressDTO parseToResponse() {

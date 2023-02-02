@@ -1,7 +1,10 @@
 package rs.ac.uns.ftn.informatika.jpa.controller;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +16,14 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteWithoutPassengersDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -44,22 +50,22 @@ public class RideController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('PASSENGER')")
+//    @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
-        Driver driver = this.driverService.getDriver("6").get();
+//        Driver driver = this.driverService.getDriver("6").get();
 
         //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
-//        Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
+        Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
 
-        if(rideService.checkIfDriverHasPandingRides(driver)){
-            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
-        }
+//        if(rideService.checkIfDriverHasPandingRides(perfectDriver)){
+//            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
+//        }
         driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size();
 
         if(driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size() == 0){
             return new ResponseEntity<>(new MessageDTO("Currently there are not that type of vehicles!"), HttpStatus.BAD_REQUEST);
         }
-        Ride newRide = this.rideService.parseToRide(requestRideDTO, driver);
+        Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
         return new ResponseEntity<>(newRide.parseToResponseNew(requestRideDTO.getScheduledTime()), HttpStatus.OK);
     }
 
@@ -276,5 +282,27 @@ public class RideController{
         int sum = this.rideService.getSumReport(dates);
         float average = this.rideService.getAverageReport(dates);
         return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+
+    //RADI
+    @GetMapping(value = "/favorites/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('PASSENGER')")
+    public ResponseEntity<?> getFavoriteOfPassenger(@PathVariable("passengerId") String passengerId, Pageable page) {
+
+        if(!StringUtils.isNumeric(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.passengerService.existsById(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        Page<FavoriteRoutes> favoriteRoutesPage = this.passengerService.findFavouriteRoutesByPassengerId(passengerId, page);
+
+        List<ResponseFavoriteRouteWithoutPassengersDTO> responseFavoriteRouteWithoutPassengersDTOS = new ArrayList<>();
+        for(FavoriteRoutes favorites : favoriteRoutesPage){
+            responseFavoriteRouteWithoutPassengersDTOS.add(favorites.parseToResponseWithoutPassengers());
+        }
+
+        return new ResponseEntity<>(new ResponsePageDTO(favoriteRoutesPage.getNumberOfElements(), Arrays.asList(responseFavoriteRouteWithoutPassengersDTOS.toArray())), HttpStatus.OK);
+
     }
 }

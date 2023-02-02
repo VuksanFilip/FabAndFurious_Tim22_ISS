@@ -70,4 +70,13 @@ public class FavoriteRoutes {
         }
         return new ResponseFavoriteRouteDTO(this.id, this.favoriteName, routes, allPassengers, this.vehicleType, this.babyTransport, this.petTransport);
     }
+
+    public ResponseFavoriteRouteWithoutPassengersDTO parseToResponseWithoutPassengers() {
+        List<RequestLocationDTO> routes = new ArrayList<>();
+        for(Route r : this.routes){
+            routes.add(r.parseToResponse());
+        }
+        return new ResponseFavoriteRouteWithoutPassengersDTO(this.id, this.favoriteName, routes, this.vehicleType, this.babyTransport, this.petTransport);
+
+    }
 }

@@ -221,10 +221,13 @@ public class RideServiceImpl implements IRideService {
         return result;
     }
 
-
-    public void getClosestDriver(RequestRideDTO requestRideDTO){
+    public Page<Ride> getRidesForPassenger(String passengerId, Pageable page){
+        return this.rideRepository.getRidesForPassenger(Long.parseLong(passengerId), page);
     }
 
+    public Page<Ride> getRidesForDriver(String driverId, Pageable page){
+        return this.rideRepository.getRidesForDriver(Long.parseLong(driverId), page);
+    }
 
     public Page<Ride> findAll(String id, Pageable page, Date from, Date to) {
 

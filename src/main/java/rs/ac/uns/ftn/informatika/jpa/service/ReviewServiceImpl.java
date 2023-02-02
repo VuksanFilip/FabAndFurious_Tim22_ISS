@@ -102,9 +102,6 @@ public class ReviewServiceImpl implements IReviewService {
         Ride ride = this.rideService.getRide(id).get();
 
         List<ResponseRideReviewsDTO> responseRideReviewsDTOS = new ArrayList<>();
-
-//        boolean foundVehicleReview = false;
-//        boolean foundDriverReview = false;
         ResponseRideReviewsDTO responseRideReviewsDTO = new ResponseRideReviewsDTO();
 
         for(Passenger p : ride.getPassengers()){
@@ -114,19 +111,13 @@ public class ReviewServiceImpl implements IReviewService {
                         responseRideReviewsDTO.setVehicleReview(new ResponseReviewDTO(r));
                     }
                     if(r.getReviewType() == ReviewType.DRIVER){
-                        responseRideReviewsDTO.setVehicleReview(new ResponseReviewDTO(r));
+                        responseRideReviewsDTO.setDriverReview(new ResponseReviewDTO(r));
                     }
                 }
             }
             responseRideReviewsDTOS.add(responseRideReviewsDTO);
+            responseRideReviewsDTO = new ResponseRideReviewsDTO();
         }
-
-
-//        for (Review r : ride.getReviews()) {
-//            if (r.getReviewType() == ReviewType.VEHICLE) {
-//                responseRideReviewsDTOS.add(new ResponseRideReviewsDTO());
-//            }
-//        }
         return responseRideReviewsDTOS;
     }
 }

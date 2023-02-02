@@ -64,6 +64,7 @@ public interface IRideService {
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);
 
+
     List<Ride> getUserRidesBetweenDates(List<Ride> allRides, String from, String to);
 
     List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, String from, String to);
@@ -75,4 +76,9 @@ public interface IRideService {
     List<ResponseReportDayDTO> countMoneyForDay(List<Ride> rides, String from, String to);
 
     List<ResponseReportDayDTO> countKmsForDay(List<Ride> rides, String from, String to);
+
+    Page<Ride> getRidesForPassenger(String passengerId, Pageable page);
+
+    Page<Ride> getRidesForDriver(String driverId, Pageable page);
+
 }

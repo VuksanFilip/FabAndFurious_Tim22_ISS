@@ -12,7 +12,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleTypeService;
 
 @RestController
-@RequestMapping("/api/unregisteredUser/")
+@RequestMapping("/api/unregisteredUser")
 public class UnregisteredUserController {
 
     private IVehicleTypeService vehicleTypeService;
@@ -21,7 +21,7 @@ public class UnregisteredUserController {
         this.vehicleTypeService = vehicleTypeService;
     }
 
-
+    //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAssumption(@RequestBody RequestAssumptionDTO requestAssumptionDTO) {
 

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.jpa.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
@@ -21,6 +23,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 import rs.ac.uns.ftn.informatika.jpa.util.TokenUtils;
 
@@ -34,45 +37,59 @@ import java.util.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
+//    @Autowired
     private AuthenticationManager authenticationManager;
     private final IUserService userService;
     private final IPassengerService passengerService;
     private final IDriverService driverService;
     private final INoteService noteService;
     private final IMailService mailService;
+    private final IRideService rideService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+//    @Autowired
     private TokenUtils tokenUtils;
 
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
+    @Autowired
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, IRideService rideService, PasswordEncoder passwordEncoder){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
         this.noteService = noteService;
         this.mailService = mailService;
         this.tokenUtils = tokenUtils;
+        this.passwordEncoder = passwordEncoder;
+        this.rideService = rideService;
     }
 
+    //RADI
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody RequestUserChangePasswordDTO requestUserChangePasswordDTO) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
         User user = userService.getUser(id).get();
-        if(user.getPassword().equals(requestUserChangePasswordDTO.getOldPassword())){
-            user.setPassword(requestUserChangePasswordDTO.getNewPassword());
+
+        if(passwordEncoder.matches(requestUserChangePasswordDTO.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(requestUserChangePasswordDTO.getNewPassword()));
             userService.add(user);
             return new ResponseEntity<>(new MessageDTO("Password successfully changed!"), HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(new MessageDTO("Current password is not matching!"), HttpStatus.BAD_REQUEST);
     }
 
+    //RADI
     @GetMapping(value = "/{id}/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPassword(@PathVariable("id") String id) throws MessagingException, UnsupportedEncodingException {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -84,14 +101,18 @@ public class UserController {
 
         mailService.sendMail("filipvuksan.iphone@gmail.com", token);
         userService.add(user);
-        //TODO TU POSLATI MAIL(Ne radi nesto MailServiceImpl-po komentarom je)
 
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
 
+    //RADI
     @PutMapping (value = "/{id}/resetPassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePasswordWithResetCode(@PathVariable("id") String id, @RequestBody RequestUserResetPasswordDTO requestUserResetPasswordDTO) {
 
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -100,7 +121,7 @@ public class UserController {
             return new ResponseEntity<>("Code is expired or not correct!", HttpStatus.BAD_REQUEST);
         }
 
-        user.setPassword(requestUserResetPasswordDTO.getNewPassword());
+        user.setPassword(passwordEncoder.encode(requestUserResetPasswordDTO.getNewPassword()));
         user.setResetPasswordToken(null);
         user.setResetPasswordTokenExpiration(null);
         userService.add(user);
@@ -108,29 +129,40 @@ public class UserController {
         return new ResponseEntity<>("Password successfully changed!", HttpStatus.NO_CONTENT);
     }
 
-    //TODO NAPRAVITI DA BUDE PAGEBLE
+    //RADI
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!userService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        User user = this.userService.getUser(id).get();
+
         List<ResponseRideNoStatusDTO> responseRides = new ArrayList<>();
-        if(passengerService.existsById(id)){
-            List<Ride> rides = passengerService.getPassenger(id).get().getRides();
+
+        if(user.getRole() == Role.PASSENGER){
+            Page<Ride> rides = this.rideService.getRidesForPassenger(user.getId().toString(), page);
             for(Ride r: rides){
-                responseRides.add(r.parseToResponseNoStatusForUser());
+                responseRides.add(r.parseToResponseNoStatus());
             }
-            return new ResponseEntity<>(responseRides, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponsePageDTO(rides.getNumberOfElements(), Arrays.asList(responseRides.toArray())), HttpStatus.OK);
+
         }
-        else if(driverService.existsById(id)){
-            List<Ride> rides = driverService.getDriver(id).get().getRides();
+        else if(user.getRole() == Role.DRIVER){
+            Page<Ride> rides = this.rideService.getRidesForDriver(user.getId().toString(), page);
             for(Ride r: rides){
-                responseRides.add(r.parseToResponseNoStatusForUser());
+                responseRides.add(r.parseToResponseNoStatus());
             }
-            return new ResponseEntity<>(responseRides, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponsePageDTO(rides.getNumberOfElements(), Arrays.asList(responseRides.toArray())), HttpStatus.OK);
         }
-        return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MessageDTO("Cant get rides for ADMIN"), HttpStatus.NOT_FOUND);
     }
 
+    //RADI
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUsers(Pageable page) {
@@ -141,9 +173,10 @@ public class UserController {
         for(User u: users){
             responseUserDTOS.add(u.parseToResponseUserWithId());
         }
-        return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.OK);
     }
 
+    //TODO PONOVO NE RADI (U PICKU MATERINU)
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO login) {
         try{
@@ -160,10 +193,14 @@ public class UserController {
         }
     }
 
+    //RADI
     @PutMapping(value = "/{id}/block")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
@@ -177,10 +214,14 @@ public class UserController {
         return new ResponseEntity<>("User is successfully blocked", HttpStatus.NO_CONTENT);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/unblock")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> ublockUser(@PathVariable("id") String id){
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
         }
@@ -194,6 +235,7 @@ public class UserController {
         return new ResponseEntity<>("User is successfully ublocked", HttpStatus.NO_CONTENT);
     }
 
+    //TODO POZABAVITI SE SA OVIM
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserMessages(@PathVariable("id") String id){
@@ -201,38 +243,51 @@ public class UserController {
         return new ResponseEntity<>(new ResponseMessagePageDTO(messageDTOS.size(), messageDTOS), HttpStatus.OK);
     }
 
+    //TODO POZABAVITI SE SA OVIM
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
         return null;
     }
 
+    //RADI
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> createNote(@PathVariable("id") String id, @RequestBody RequestNoteDTO requestNoteDTO){
-        if(!userService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
+        if(!userService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
         User user = userService.getUser(id).get();
         Note note = requestNoteDTO.parseToNote(user);
+
         noteService.add(note);
+
         return new ResponseEntity<>(note.parseToResponse(), HttpStatus.OK);
     }
 
+    //RADI
     @GetMapping(value = "/{id}/note", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUserNotes(@PathVariable("id") String id, Pageable page){
-        if(!userService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Message placeholder (User does not exist!)"), HttpStatus.NOT_FOUND);
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
-        User user = userService.getUser(id).get();
-        Page<Note> notes = noteService.findAll(page);
+        if(!userService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        Page<Note> notes = noteService.getNotesByUserId(id, page);
+
         int size = noteService.getAll().size();
         List<ResponseNoteDTO> responseNoteDTOS = new ArrayList<>();
         for(Note n: notes){
-            if(n.getUser().getId().equals(user.getId())){
-                responseNoteDTOS.add(n.parseToResponse());
-            }
+            responseNoteDTOS.add(n.parseToResponse());
         }
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseNoteDTOS.toArray())), HttpStatus.OK);
     }

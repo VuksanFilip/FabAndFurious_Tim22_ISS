@@ -17,4 +17,5 @@ public interface INoteService {
 
     Page<Note> findAll(Pageable page);
 
+    Page<Note> getNotesByUserId(String userId, Pageable page);
 }
