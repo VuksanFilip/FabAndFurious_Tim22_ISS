@@ -140,9 +140,9 @@ public class ReviewController {
         return new ResponseEntity<>(new ResponsePageDTO(reviewsForDriver.size(), Arrays.asList(responseReviewDTOS.toArray())), HttpStatus.OK);
     }
 
-    //TODO ZAVRSITI
+    //RADI
     @GetMapping(value = "/{rideId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getRideReviews(@PathVariable("rideId") String rideId) {
 
         if(!StringUtils.isNumeric(rideId)){
