@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -237,22 +238,15 @@ public class RideServiceImpl implements IRideService {
     }
 
     @Override
-    public List<Ride> getUserRidesBetweenDates(User user, LocalDate from, LocalDate to) {
-        List<Ride> allRides = this.rideRepository.findAll();
-        List<Ride> allUserRides = new ArrayList<>();
+    public List<Ride> getUserRidesBetweenDates(List<Ride> allRides, String from, String to) {
         List<Ride> allUserRidesBetweenDates = new ArrayList<>();
+
         for(Ride r : allRides){
-            if(r.getDriver().getId() == user.getId()){
-                allUserRides.add(r);
-            }
-            for(Passenger p : r.getPassengers()){
-                if(p.getId() == user.getId()){
-                    allUserRides.add(r);
-                }
-            }
-        }
-        for(Ride r : allUserRides){
-            if(r.getEndTime().toInstant().isAfter(Instant.from(from)) && r.getEndTime().toInstant().isBefore(Instant.from(to))){
+            LocalDate endTime = r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fromDate = LocalDate.parse(from, formatter);
+            LocalDate toDate = LocalDate.parse(to, formatter);
+            if(endTime.isAfter(fromDate) && endTime.isBefore(toDate)){
                 allUserRidesBetweenDates.add(r);
             }
         }
@@ -260,11 +254,14 @@ public class RideServiceImpl implements IRideService {
     }
 
     @Override
-    public List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, LocalDate from, LocalDate to) {
+    public List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, String from, String to) {
         List<LocalDate> allDates = new ArrayList<>();
-        while(!from.isAfter(to)){
-            allDates.add(from);
-            from = from.plusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fromDate = LocalDate.parse(from, formatter);
+        LocalDate toDate = LocalDate.parse(to, formatter);
+        while(!fromDate.isAfter(toDate)){
+            allDates.add(fromDate);
+            fromDate = fromDate.plusDays(1);
         }
         List<ResponseReportDayDTO> results = new ArrayList<>();
         for(LocalDate lc : allDates){
@@ -275,14 +272,42 @@ public class RideServiceImpl implements IRideService {
                 }
             }
             ResponseReportDayDTO day = new ResponseReportDayDTO(lc, count);
-            results.add(day);
+            if(count != 0){
+                results.add(day);
+            }
         }
         return results;
     }
 
     @Override
-    public float getSumReport(List<ResponseReportDayDTO> dates) {
-        float sum = 0;
+    public List<ResponseReportDayDTO> countMoneyForDay(List<Ride> rides, String from, String to) {
+        List<LocalDate> allDates = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fromDate = LocalDate.parse(from, formatter);
+        LocalDate toDate = LocalDate.parse(to, formatter);
+        while(!fromDate.isAfter(toDate)){
+            allDates.add(fromDate);
+            fromDate = fromDate.plusDays(1);
+        }
+        List<ResponseReportDayDTO> results = new ArrayList<>();
+        for(LocalDate lc : allDates){
+            int count = 0;
+            for(Ride r : rides){
+                if(r.getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(lc)){
+                    count += r.getTotalCost();
+                }
+            }
+            ResponseReportDayDTO day = new ResponseReportDayDTO(lc, count);
+            if(count != 0){
+                results.add(day);
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public int getSumReport(List<ResponseReportDayDTO> dates) {
+        int sum = 0;
         for(ResponseReportDayDTO d : dates){
             sum += d.getCount();
         }

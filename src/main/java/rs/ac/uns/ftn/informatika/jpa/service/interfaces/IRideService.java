@@ -64,11 +64,15 @@ public interface IRideService {
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);
 
-    List<Ride> getUserRidesBetweenDates(User user, LocalDate from, LocalDate to);
+    List<Ride> getUserRidesBetweenDates(List<Ride> allRides, String from, String to);
 
-    List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, LocalDate from, LocalDate to);
+    List<ResponseReportDayDTO> countRidesForDay(List<Ride> rides, String from, String to);
 
-    float getSumReport(List<ResponseReportDayDTO> dates);
+    int getSumReport(List<ResponseReportDayDTO> dates);
 
     float getAverageReport(List<ResponseReportDayDTO> dates);
+
+    List<ResponseReportDayDTO> countMoneyForDay(List<Ride> rides, String from, String to);
+
+    List<ResponseReportDayDTO> countKmsForDay(List<Ride> rides, String from, String to);
 }

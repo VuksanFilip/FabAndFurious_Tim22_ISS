@@ -4,30 +4,30 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class RequestReportDTO {
-    private LocalDate from;
-    private LocalDate to;
+    private String from;
+    private String to;
 
     public RequestReportDTO() {
     }
 
-    public RequestReportDTO(LocalDate from, LocalDate to) {
+    public RequestReportDTO(String from, String to) {
         this.from = from;
         this.to = to;
     }
 
-    public LocalDate getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(LocalDate from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public LocalDate getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(LocalDate to) {
+    public void setTo(String to) {
         this.to = to;
     }
 }
