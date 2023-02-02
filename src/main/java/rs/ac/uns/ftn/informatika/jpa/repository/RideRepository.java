@@ -30,7 +30,7 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
             Date timeOfEnd,
             Pageable page);
 
-@Query("select r from Ride r, Driver d where d.id = :driverId and r.endTime >= :timeOfStart")
+    @Query("select r from Ride r, Driver d where d.id = :driverId and r.endTime >= :timeOfStart")
     Page<Ride> findAllByDriverIdAndTimeOfStartAfter(
             Long driverId,
             Date timeOfStart,
@@ -41,4 +41,10 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
             Long driverId,
             Date timeOfEnd,
             Pageable page);
+
+    @Query("select r from Ride r, Passenger p where p.id = :passengerId and p member of r.passengers")
+    Page<Ride> getRidesForPassenger(Long passengerId, Pageable page);
+
+    @Query("select r from Ride r where r.driver.id = :driverId")
+    Page<Ride> getRidesForDriver(Long driverId, Pageable page);
 }

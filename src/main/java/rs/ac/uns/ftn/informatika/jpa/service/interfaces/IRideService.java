@@ -60,4 +60,8 @@ public interface IRideService {
     int getNumberOfRidesForPessanger(String id);
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);
+
+    Page<Ride> getRidesForPassenger(String passengerId, Pageable page);
+
+    Page<Ride> getRidesForDriver(String driverId, Pageable page);
 }

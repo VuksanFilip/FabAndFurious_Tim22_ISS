@@ -23,6 +23,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 import rs.ac.uns.ftn.informatika.jpa.util.TokenUtils;
 
@@ -43,13 +44,14 @@ public class UserController {
     private final IDriverService driverService;
     private final INoteService noteService;
     private final IMailService mailService;
+    private final IRideService rideService;
     private final PasswordEncoder passwordEncoder;
 
 //    @Autowired
     private TokenUtils tokenUtils;
 
     @Autowired
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder){
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, IRideService rideService, PasswordEncoder passwordEncoder){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
@@ -57,6 +59,7 @@ public class UserController {
         this.mailService = mailService;
         this.tokenUtils = tokenUtils;
         this.passwordEncoder = passwordEncoder;
+        this.rideService = rideService;
     }
 
     //RADI
@@ -107,6 +110,10 @@ public class UserController {
     @PutMapping (value = "/{id}/resetPassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePasswordWithResetCode(@PathVariable("id") String id, @RequestBody RequestUserResetPasswordDTO requestUserResetPasswordDTO) {
 
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!userService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -123,27 +130,37 @@ public class UserController {
         return new ResponseEntity<>("Password successfully changed!", HttpStatus.NO_CONTENT);
     }
 
-    //TODO NAPRAVITI DA BUDE PAGEBLE
+    //RADI
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!userService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        User user = this.userService.getUser(id).get();
+
         List<ResponseRideNoStatusDTO> responseRides = new ArrayList<>();
-        if(passengerService.existsById(id)){
-            List<Ride> rides = passengerService.getPassenger(id).get().getRides();
+
+        if(user.getRole() == Role.PASSENGER){
+            Page<Ride> rides = this.rideService.getRidesForPassenger(user.getId().toString(), page);
             for(Ride r: rides){
-                responseRides.add(r.parseToResponseNoStatusForUser());
+                responseRides.add(r.parseToResponseNoStatus());
             }
-            return new ResponseEntity<>(responseRides, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponsePageDTO(rides.getNumberOfElements(), Arrays.asList(responseRides.toArray())), HttpStatus.OK);
+
         }
-        else if(driverService.existsById(id)){
-            List<Ride> rides = driverService.getDriver(id).get().getRides();
+        else if(user.getRole() == Role.DRIVER){
+            Page<Ride> rides = this.rideService.getRidesForDriver(user.getId().toString(), page);
             for(Ride r: rides){
-                responseRides.add(r.parseToResponseNoStatusForUser());
+                responseRides.add(r.parseToResponseNoStatus());
             }
-            return new ResponseEntity<>(responseRides, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponsePageDTO(rides.getNumberOfElements(), Arrays.asList(responseRides.toArray())), HttpStatus.OK);
         }
-        return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MessageDTO("Cant get rides for ADMIN"), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
