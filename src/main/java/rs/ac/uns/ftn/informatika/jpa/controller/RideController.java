@@ -306,4 +306,31 @@ public class RideController{
         return new ResponseEntity<>(new ResponsePageDTO(favoriteRoutesPage.getNumberOfElements(), Arrays.asList(responseFavoriteRouteWithoutPassengersDTOS.toArray())), HttpStatus.OK);
 
     }
+
+    @GetMapping(value = "/admin-report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAdminReportDays(@RequestBody RequestReportDTO requestReport){
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countRidesForDay(rides, requestReport.getFrom(), requestReport.getTo());
+        int sum = this.rideService.getSumReport(dates);
+        float average = this.rideService.getAverageReport(dates);
+        return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/admin-report/kms", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAdminReportKms(@RequestBody RequestReportDTO requestReport){
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countKmsForDay(rides, requestReport.getFrom(), requestReport.getTo());
+        int sum = this.rideService.getSumReport(dates);
+        float average = this.rideService.getAverageReport(dates);
+        return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/admin-report/money", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAdminReportMoney(@RequestBody RequestReportDTO requestReport) {
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countMoneyForDay(rides, requestReport.getFrom(), requestReport.getTo());
+        int sum = this.rideService.getSumReport(dates);
+        float average = this.rideService.getAverageReport(dates);
+        return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
 }
