@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +31,10 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/user")
@@ -329,5 +334,22 @@ public class UserController {
             responseNoteDTOS.add(n.parseToResponse());
         }
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseNoteDTOS.toArray())), HttpStatus.OK);
+    }
+
+    @MessageMapping("/message")
+    @SendTo("/topic/greetings")
+    public String transferMessages(RequestMessageWithIdDTO requestMessageWithIdDTO) {
+
+        Message message = new Message();
+        User sender = this.userService.getUser(requestMessageWithIdDTO.getSender().toString()).get();
+        message.setSender(sender);
+        User receiver = this.userService.getUser(requestMessageWithIdDTO.getSender().toString()).get();
+        message.setReciever(receiver);
+        message.setRideId(requestMessageWithIdDTO.getRideId());
+        message.setSendingTime(requestMessageWithIdDTO.getSentDateTime());
+        message.setType(requestMessageWithIdDTO.getType());
+        message.setMessage(requestMessageWithIdDTO.getMessage());
+        this.messageService.add(message);
+        return "LOL";
     }
 }

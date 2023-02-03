@@ -48,6 +48,7 @@ public class WebSecurityConfig {
 //                .antMatchers("/api/passenger/**").permitAll()
 //                .antMatchers("/api/driver/**").permitAll()
                 .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
+
 //                .antMatchers("/**").authenticated()
                 .and()
                 .headers().frameOptions().disable().and()
