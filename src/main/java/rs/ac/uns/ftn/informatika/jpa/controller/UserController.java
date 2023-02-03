@@ -37,7 +37,7 @@ import java.util.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-//    @Autowired
+    @Autowired
     private AuthenticationManager authenticationManager;
     private final IUserService userService;
     private final IPassengerService passengerService;
@@ -184,7 +184,6 @@ public class UserController {
             ResponseLoginDTO responseLogin = new ResponseLoginDTO();
             responseLogin.setAccessToken(this.tokenUtils.generateToken(user));
             responseLogin.setRefreshToken(this.tokenUtils.generateRefreshToken(user));
-
             Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return new ResponseEntity<>(responseLogin, HttpStatus.OK);
