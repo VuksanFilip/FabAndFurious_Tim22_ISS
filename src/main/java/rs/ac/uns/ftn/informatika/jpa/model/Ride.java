@@ -7,10 +7,8 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -260,18 +258,7 @@ public class Ride {
         return rideResponse;
     }
 
-    public ResponsePanicRideDTO parseToPanicResponse(){
-        ConcurrentHashMap<String, ResponsePanicRideLocationDTO> locations = new ConcurrentHashMap<>();
-        locations.put("departure", new ResponsePanicRideLocationDTO());
-        locations.put("destionation", new ResponsePanicRideLocationDTO());
-        ArrayList<ResponsePanicRidePassengerDTO> passengers = new ArrayList<>();
-        for (Passenger p:this.passengers) {
-            passengers.add(p.parseToPanicPassengersDTO());
-        }
-        return new ResponsePanicRideDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToPanicDriverResponse(), passengers, this.estimatedTimeInMinutes, this.vehicle.getVehicleType(), this.babyTransport, this.petTransport, new ResponsePanicRejectionDTO("reason1", new Date(Calendar.getInstance().getTime().getTime())), locations);
-    }
-
-    public ResponseRideNewDTO parseToResponseNew(Date scheduledTime) {
+    public ResponseRideNewDTO parseToResponseNew() {
         List<ResponsePassengerIdEmailDTO> passengers = new ArrayList<>();
         for(Passenger p : this.passengers){
             passengers.add(p.parseToResponseIdEmail());
@@ -281,8 +268,8 @@ public class Ride {
             locations.add(r.parseToResponse());
         }
         if(this.letter != null){
-            return new ResponseRideNewDTO(this.id, null, null, 0, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, this.letter.parseToResponse(), locations, this.status, scheduledTime);
+            return new ResponseRideNewDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, this.letter.parseToResponse(), locations, this.status, this.scheduledTime);
         }
-        return new ResponseRideNewDTO(this.id, null, null, 0, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, null, locations, this.status, scheduledTime);
+        return new ResponseRideNewDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, null, locations, this.status, scheduledTime);
     }
 }

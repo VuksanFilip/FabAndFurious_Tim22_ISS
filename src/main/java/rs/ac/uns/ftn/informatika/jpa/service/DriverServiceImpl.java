@@ -74,6 +74,7 @@ public class DriverServiceImpl implements IDriverService {
             }
         }
 
+        System.out.println("as");
         for(Driver driver: driverWithShift){
             double distance = vehicleTypeService.distance(requestLocationDTO.getDeparture().getLatitude(),
                     driver.getVehicle().getCurrentLocation().getLatitude(),

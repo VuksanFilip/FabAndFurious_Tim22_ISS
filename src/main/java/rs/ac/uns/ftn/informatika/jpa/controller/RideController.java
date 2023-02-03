@@ -10,28 +10,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.jpa.ValidateData;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReportDayDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteWithoutPassengersDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ride")
 public class RideController{
 
-    private final ValidateData validateData = new ValidateData();
     private final IRideService rideService;
     private final IPanicService panicService;
     private final IFavoriteRouteService favoriteRouteService;
@@ -49,98 +42,122 @@ public class RideController{
         this.userService = userService;
     }
 
-    //TODO JOS PROVERITI
+    //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('PASSENGER')")
+    @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
 
-        //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
         Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
         if(perfectDriver == null){
             return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.BAD_REQUEST);
         }
-
-//        if(rideService.checkIfDriverHasPandingRides(perfectDriver)){
-//            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
-//        }
-        driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size();
-
-        if(driverService.getDriverByVehicleName(requestRideDTO.getVehicleType()).size() == 0){
-            return new ResponseEntity<>(new MessageDTO("Currently there are not that type of vehicles!"), HttpStatus.BAD_REQUEST);
+        if(!rideService.findAllRidesByPassengerIdAndRideStatus(requestRideDTO.getPassengers().get(0).getId().toString(), RideStatus.PENDING).isEmpty()){
+            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
         }
+
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
-        return new ResponseEntity<>(newRide.parseToResponseNew(requestRideDTO.getScheduledTime()), HttpStatus.OK);
+
+        return new ResponseEntity<>(newRide.parseToResponseNew(), HttpStatus.OK);
     }
 
+    //RADI
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getActiveRideForDriver(@PathVariable("driverId") String id) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.driverService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("Driver does not exist!"), HttpStatus.NOT_FOUND);
+        }
         Ride ride = rideService.getaActiveRideByDriverId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseNew(new Date()), HttpStatus.OK);
+            return new ResponseEntity<>(ride.parseToResponseNew(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageDTO("Active ride does not exist!"), HttpStatus.NOT_FOUND);
     }
 
+    //RADI
     @GetMapping(value = "/passenger/{passengerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getActiveRideForPassenger(@PathVariable("passengerId") String id) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.driverService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("Driver does not exist!"), HttpStatus.NOT_FOUND);
+        }
         Ride ride = rideService.getActiveRideByPassengerId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseNew(new Date()), HttpStatus.OK);
+            return new ResponseEntity<>(ride.parseToResponseNew(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageDTO("Active ride does not exist!"), HttpStatus.NOT_FOUND);
     }
 
+    //RADI
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getRide(@PathVariable("id") String id) {
 
-        if(!validateData.isNumericOrNegativeLong(id)){
-            return new ResponseEntity<>(new MessageDTO("Invalid data. For example bad Id format."), HttpStatus.BAD_REQUEST);
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.driverService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("Driver does not exist!"), HttpStatus.NOT_FOUND);
         }
         else if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getRide(id).get();
-        return new ResponseEntity<>(ride.parseToResponseNew(new Date()), HttpStatus.OK);
+        return new ResponseEntity<>(ride.parseToResponseNew(), HttpStatus.OK);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> withdrawRide(@PathVariable String id){
 
-        if(!rideService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.driverService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("Driver does not exist!"), HttpStatus.NOT_FOUND);
         }
         if(rideService.checkIfNotPendingAndNotStartedById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.CANCELED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
     }
 
+    //TODO promeniti usera
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER', 'PASSENGER')")
     public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getRide(id).get();
-        //TODO promeniti usera
         Panic panic = panicService.createPanicByRide(this.driverService.getDriver("5").get(), ride, reason.getReason());
 
         panicService.add(panic);
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/start", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> startRide(@PathVariable String id){
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -148,13 +165,17 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status ACCEPTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.STARTED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> acceptRide(@PathVariable String id){
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -162,13 +183,17 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status PENDING!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/end", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> endRide(@PathVariable String id) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -176,13 +201,17 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot endTime a ride that is not in status STARTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.FINISHED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
     }
 
+    //RADI
     @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -192,7 +221,7 @@ public class RideController{
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
 
         rideService.updateRideByRejectionLetterAndStatus(id, rejectionLetter, RideStatus.CANCELED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(new Date()), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -219,6 +248,9 @@ public class RideController{
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> deleteFavoriteRoute(@PathVariable("id") String id) {
 
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
         if(!this.favoriteRouteService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -230,6 +262,7 @@ public class RideController{
     @GetMapping(value = "/{userId}/report/days", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getReportDays(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport){
+
         if(!this.userService.existsById(userId)){
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
         }

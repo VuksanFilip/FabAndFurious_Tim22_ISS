@@ -60,6 +60,10 @@ public class RideServiceImpl implements IRideService {
         return rideRepository.findAll(page);
     }
 
+    public List<Ride> findAllRidesByPassengerIdAndRideStatus(String passengerId, RideStatus rideStatus) {
+        return this.rideRepository.findAllRidesByPassengerIdAndRideStatus(Long.parseLong(passengerId), rideStatus);
+    }
+
     @Override
     public List<Ride> getRidesOfDriver(Driver driver) {
         List<Ride> allRides = new ArrayList<>();

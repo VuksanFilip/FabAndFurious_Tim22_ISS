@@ -176,7 +176,7 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.OK);
     }
 
-    //TODO PONOVO NE RADI (U PICKU MATERINU)
+    //RADI
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO login) {
         try{

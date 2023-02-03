@@ -97,11 +97,14 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
         return false;
     }
 
+    //TODO SKONTATI STA URADITI AKO JE NULL
     public boolean checkIfShiftBetween(String id, LocalDateTime localDateTime) {
         List<WorkingHour> workingHours24 = getWorkingHoursIn24h(getAllByDriverId(id), localDateTime);
         for (WorkingHour workingHour24 : workingHours24) {
-            if ((workingHour24.getStart().isBefore(localDateTime)) && (workingHour24.getEndTime().isAfter(localDateTime))) {
-                return true;
+            if (workingHour24.getEndTime() != null){
+                if ((workingHour24.getStart().isBefore(localDateTime)) && (workingHour24.getEndTime().isAfter(localDateTime))) {
+                    return true;
+                }
             }
         }
         return false;
