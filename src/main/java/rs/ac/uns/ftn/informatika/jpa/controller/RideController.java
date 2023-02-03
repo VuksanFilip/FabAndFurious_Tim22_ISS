@@ -225,6 +225,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/{userId}/report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getReportDays(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport){
         if(!this.userService.existsById(userId)){
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
@@ -245,6 +246,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/{userId}/report/kms", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getReportKms(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport){
         if(!this.userService.existsById(userId)){
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
@@ -265,6 +267,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/{userId}/report/money", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getReportMoney(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport) {
         if (!this.userService.existsById(userId)) {
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
@@ -308,6 +311,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/admin-report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getAdminReportDays(@RequestBody RequestReportDTO requestReport){
         List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
         List<ResponseReportDayDTO> dates = this.rideService.countRidesForDay(rides, requestReport.getFrom(), requestReport.getTo());
@@ -317,6 +321,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/admin-report/kms", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getAdminReportKms(@RequestBody RequestReportDTO requestReport){
         List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
         List<ResponseReportDayDTO> dates = this.rideService.countKmsForDay(rides, requestReport.getFrom(), requestReport.getTo());
@@ -326,6 +331,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/admin-report/money", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getAdminReportMoney(@RequestBody RequestReportDTO requestReport) {
         List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
         List<ResponseReportDayDTO> dates = this.rideService.countMoneyForDay(rides, requestReport.getFrom(), requestReport.getTo());
