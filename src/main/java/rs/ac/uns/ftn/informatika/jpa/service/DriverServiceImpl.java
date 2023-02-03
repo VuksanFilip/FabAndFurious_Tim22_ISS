@@ -61,17 +61,20 @@ public class DriverServiceImpl implements IDriverService {
 
     public Driver getPerfectDriver(VehicleName name, Date date, RequestLocationDTO requestLocationDTO){
 
-        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
         List<Driver> drivers = getDriverByVehicleName(name);
-        Driver perfectDriver = new Driver();
+
+        List<Driver> driverWithShift = new ArrayList<>();
+        Driver perfectDriver = null;
         double perfectDistance = Double.POSITIVE_INFINITY;
 
-        for(Driver driver : drivers){
-            if(!workingHourService.checkIfShiftBetween(driver.getId().toString(), localDateTime)){
-                drivers.remove(driver);
+        for(Driver driver : drivers) {
+            if (workingHourService.checkIfShiftBetween(driver.getId().toString(), localDateTime)) {
+                driverWithShift.add(driver);
             }
         }
-        for(Driver driver: drivers){
+
+        for(Driver driver: driverWithShift){
             double distance = vehicleTypeService.distance(requestLocationDTO.getDeparture().getLatitude(),
                     driver.getVehicle().getCurrentLocation().getLatitude(),
                     requestLocationDTO.getDeparture().getLongitude(),

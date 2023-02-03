@@ -19,7 +19,7 @@ public class Document {
     private String name;
     private String image;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Driver driver;
 
     public Document(Long id, String name, String image, Long driverId) {

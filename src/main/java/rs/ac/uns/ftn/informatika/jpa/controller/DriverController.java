@@ -154,7 +154,6 @@ public class DriverController {
         driver.getDocuments().add(document);
 
         documentService.add(document);
-        driverService.add(driver);
 
         return new ResponseEntity<>(document.parseToResponse(), HttpStatus.OK);
     }
@@ -172,13 +171,9 @@ public class DriverController {
         }
 
         Document document = documentService.getDocument(documentId).get();
-        Driver driver = document.getDriver();
-        driver.getDocuments().remove(document);
 
-        driverService.add(driver);
-        document.setDriver(null);
-        documentService.add(document);
         documentService.deleteById(documentId);
+
         return new ResponseEntity<>(new MessageDTO("Driver document deleted successfully"), HttpStatus.OK);
     }
 
@@ -290,7 +285,7 @@ public class DriverController {
 
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('DRIVER')")
+//    @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
 
         if (!this.driverService.getDriver(driverId).isPresent()) {
@@ -370,7 +365,7 @@ public class DriverController {
 
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('DRIVER')")
+//    @PreAuthorize("hasAnyRole('DRIVER')")
     public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") String workingHourId, @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
         if (!this.workHourService.getWorkHour(workingHourId).isPresent()) {
             return new ResponseEntity<>(new MessageDTO("Working hour does not exist!"), HttpStatus.NOT_FOUND);

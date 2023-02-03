@@ -50,13 +50,9 @@ insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:0
 
 --document
 insert into DOCUMENT(image, name, driver_id) values ('image', 'vozacka dozvola', 5)
-insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (5, 1)
 insert into DOCUMENT(image, name, driver_id) values ('image', 'licna karta', 5)
-insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (5, 2)
 insert into DOCUMENT(image, name, driver_id) values ('image', 'vozacka dozvola', 6)
-insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (6, 3)
 insert into DOCUMENT(image, name, driver_id) values ('image', 'licna karta', 6)
-insert into DRIVER_DOCUMENTS(driver_id, documents_id) values (6, 4)
 
 --TIMESTAMP '1999-01-31 10:00:00'
 
