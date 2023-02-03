@@ -191,6 +191,7 @@ public class UserController {
         } catch (Exception e){
             return new ResponseEntity<>(new MessageDTO("Wrong username or password!"), HttpStatus.BAD_REQUEST);
         }
+
     }
 
     //RADI
