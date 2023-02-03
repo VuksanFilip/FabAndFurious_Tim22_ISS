@@ -18,8 +18,12 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/driver")
@@ -295,9 +299,9 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je pre lokalnog vremena)
-//        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
-//            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
-//        }
+        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
+            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
+        }
         if (this.workHourService.checkIfShiftBetween(driverId, requestWorkingHour.getStart())) {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because it was already ongoing in that time!"), HttpStatus.BAD_REQUEST);
         }
@@ -313,7 +317,9 @@ public class DriverController {
         return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO TESTIRATI FROM I TO UPIT
+    // from= yyyy-MM-ddThh:mm:ss -> 2000-01-31T09:00:00
+    // to= yyyy-MM-ddThh:mm:ss -> 2000-01-31T09:00:00
+
     @GetMapping(value = "/{id}/ride")
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverRides(

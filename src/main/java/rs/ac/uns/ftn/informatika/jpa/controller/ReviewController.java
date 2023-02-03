@@ -43,7 +43,7 @@ public class ReviewController {
         this.driverService = driverService;
     }
 
-    //TODO IMA VEZE SA SEKJURITIJEM
+    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA)
     @PostMapping(value = "{rideId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO) {
@@ -99,7 +99,7 @@ public class ReviewController {
     }
 
 
-    //TODO IMA VEZE SA SEKJURITIJEM
+    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA)
     @PostMapping(value = "{rideId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO){

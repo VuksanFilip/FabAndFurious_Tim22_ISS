@@ -83,12 +83,21 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
         return workingHours24h;
     }
 
+    public Long getTotalWorkingMinutesIn24h(String id, LocalDateTime localDateTime) {
+        List<WorkingHour> workingHours24 = getWorkingHoursIn24h(getAllByDriverId(id), localDateTime);
+        long minutes = 0;
+        for (WorkingHour workingHour24 : workingHours24) {
+            long number = workingHour24.getStart().until(workingHour24.getEndTime(), ChronoUnit.MINUTES);
+            minutes += number;
+        }
+        return minutes;
+    }
+
     public boolean checkIfPassed8hLimit(String id, LocalDateTime localDateTime) {
         List<WorkingHour> workingHours24 = getWorkingHoursIn24h(getAllByDriverId(id), localDateTime);
         long minutes = 0;
         for (WorkingHour workingHour24 : workingHours24) {
             long number = workingHour24.getStart().until(workingHour24.getEndTime(), ChronoUnit.MINUTES);
-            System.out.println(number);
             minutes += number;
             if (minutes > 60 * limit) {
                 return true;
@@ -97,14 +106,57 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
         return false;
     }
 
-    //TODO SKONTATI STA URADITI AKO JE NULL
+    public Long getTotalWorkingMinutesIn24h(List<WorkingHour> workingHours24) {
+        long minutes = 0;
+        for (WorkingHour workingHour24 : workingHours24) {
+            if(workingHour24.getEndTime() != null){
+                long number = workingHour24.getStart().until(workingHour24.getEndTime(), ChronoUnit.MINUTES);
+                minutes += number;
+            }
+        }
+        return minutes;
+    }
+
     public boolean checkIfShiftBetween(String id, LocalDateTime localDateTime) {
         List<WorkingHour> workingHours24 = getWorkingHoursIn24h(getAllByDriverId(id), localDateTime);
+
         for (WorkingHour workingHour24 : workingHours24) {
-            if (workingHour24.getEndTime() != null){
-                if ((workingHour24.getStart().isBefore(localDateTime)) && (workingHour24.getEndTime().isAfter(localDateTime))) {
+            if ((workingHour24.getStart().isBefore(localDateTime)) && (workingHour24.getEndTime().isAfter(localDateTime))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIfShiftBetweenToGetDriver(String id, LocalDateTime localDateTime) {
+        List<WorkingHour> workingHours24 = getWorkingHoursIn24h(getAllByDriverId(id), localDateTime);
+        long minutes = getTotalWorkingMinutesIn24h(workingHours24);
+        long minutesLeft = (8 * 60) - minutes;
+        int i;
+
+        for (i = 0; i <= workingHours24.size() - 1; i++) {
+            System.out.println("1");
+            if(workingHours24.get(0).getEndTime() == null) {
+                if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getStart().plusMinutes(minutesLeft).isAfter(localDateTime))) {
                     return true;
                 }
+                return false; //mozda ovo obrisati jos ne znam
+            }
+            if (i == workingHours24.size() - 2) {
+                if (workingHours24.get(i).getEndTime() == null) {
+                    if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getStart().plusMinutes(minutesLeft).isAfter(localDateTime))) {
+                        return true;
+                    }
+                }
+                if (workingHours24.get(i).getEndTime() != null) {
+                    if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getEndTime().isAfter(localDateTime))) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getEndTime().isAfter(localDateTime))) {
+                return true;
             }
         }
         return false;

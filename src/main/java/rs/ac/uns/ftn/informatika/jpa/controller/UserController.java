@@ -235,9 +235,9 @@ public class UserController {
         return new ResponseEntity<>("User is successfully ublocked", HttpStatus.NO_CONTENT);
     }
 
-    //TODO POZABAVITI SE SA OVIM
+    //RADI
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserMessages(@PathVariable("id") String id, Pageable page){
 
         if(!StringUtils.isNumeric(id)){
@@ -256,8 +256,9 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(messages.getTotalPages(), Arrays.asList(responseMessageDTOS.toArray())), HttpStatus.OK);
     }
 
+    //RADI
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, @RequestBody RequestMessageDTO requestMessageDTO){
 
         if(!StringUtils.isNumeric(id)){

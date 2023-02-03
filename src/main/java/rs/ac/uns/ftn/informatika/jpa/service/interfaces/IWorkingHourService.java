@@ -33,4 +33,6 @@ public interface IWorkingHourService {
     List<ResponseDriverWorkingHourDTO> getPageableDriverWorkingHours(String id, Pageable page);
 
     Page<WorkingHour> findAll(String id, Pageable page, Date from, Date to);
+
+    boolean checkIfShiftBetweenToGetDriver(String id, LocalDateTime localDateTime);
 }

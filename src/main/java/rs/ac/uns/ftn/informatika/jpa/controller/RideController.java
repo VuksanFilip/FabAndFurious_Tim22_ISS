@@ -42,7 +42,7 @@ public class RideController{
         this.userService = userService;
     }
 
-    //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
+    //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU (JAKO JAKO TESKO, PUNO RAZMISLJANJA)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
@@ -132,7 +132,7 @@ public class RideController{
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO promeniti usera
+    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA)
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER', 'PASSENGER')")
     public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
@@ -343,7 +343,38 @@ public class RideController{
         }
 
         return new ResponseEntity<>(new ResponsePageDTO(favoriteRoutesPage.getNumberOfElements(), Arrays.asList(responseFavoriteRouteWithoutPassengersDTOS.toArray())), HttpStatus.OK);
+    }
 
+    //RADI
+    @DeleteMapping(value = "/favorites/{routeId}/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('PASSENGER')")
+    public ResponseEntity<?> deleteFavoriteRouteOfPassenger(@PathVariable("routeId") String routeId, @PathVariable("passengerId") String passengerId) {
+
+        if(!StringUtils.isNumeric(routeId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.favoriteRouteService.existsById(routeId)){
+            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
+        }
+        if(!StringUtils.isNumeric(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.passengerService.existsById(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Passenger does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        FavoriteRoutes favoriteRoutes = favoriteRouteService.getFavoriteLocations(routeId).get();
+        Passenger passenger = this.passengerService.getPassenger(passengerId).get();
+        if(favoriteRoutes.getPassengers().contains(passenger)){
+            favoriteRoutes.getPassengers().remove(passenger);
+            passenger.getFavoriteRoutes().remove(favoriteRoutes);
+            this.passengerService.add(passenger);
+            this.favoriteRouteService.add(favoriteRoutes);
+            return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
+
+        }
+
+        return new ResponseEntity<>(new MessageDTO("Passenger dont have that favorite rute!"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/admin-report/days", produces = MediaType.APPLICATION_JSON_VALUE)
