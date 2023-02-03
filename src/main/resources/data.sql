@@ -96,3 +96,13 @@ insert into RIDE_REVIEWS(ride_id, reviews_id) values (1, 2)
 
 --panic
 insert into PANIC(reason, time, ride_id, user_id) values ('Strasan je', TIMESTAMP '1999-01-31 10:00:00', 1, 5)
+
+--favourite route 1
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime1', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (1,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (1,1)
+
+--favourite route 2
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime2', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (2,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (2,2)

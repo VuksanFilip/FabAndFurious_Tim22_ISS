@@ -16,7 +16,7 @@ public class ResponseMessageDTO {
 //                "receiverId": 123,
 //                "message": "The driver is going on a longer route on purpose",
 //                "type": "RIDE",
-//                "rideId": 123
+//                "idOfRide": 123
 //        }
 //  ]
 //    }

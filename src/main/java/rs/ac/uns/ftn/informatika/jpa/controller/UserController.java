@@ -15,11 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestNoteDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserChangePasswordDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestUserResetPasswordDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
+import rs.ac.uns.ftn.informatika.jpa.model.Message;
 import rs.ac.uns.ftn.informatika.jpa.model.Note;
 import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
@@ -46,12 +44,13 @@ public class UserController {
     private final IMailService mailService;
     private final IRideService rideService;
     private final PasswordEncoder passwordEncoder;
+    private final IMessageService messageService;
 
 //    @Autowired
     private TokenUtils tokenUtils;
 
     @Autowired
-    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, IRideService rideService, PasswordEncoder passwordEncoder){
+    public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, IRideService rideService, PasswordEncoder passwordEncoder, IMessageService messageService){
         this.userService = userService;
         this.passengerService = passengerService;
         this.driverService = driverService;
@@ -60,6 +59,7 @@ public class UserController {
         this.tokenUtils = tokenUtils;
         this.passwordEncoder = passwordEncoder;
         this.rideService = rideService;
+        this.messageService = messageService;
     }
 
     //RADI
@@ -246,8 +246,32 @@ public class UserController {
     //TODO POZABAVITI SE SA OVIM
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id){
-        return null;
+    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, RequestMessageDTO requestMessageDTO){
+
+        if (userService.getUser(id).isPresent()) {
+            return new ResponseEntity("Receiver does not exist!", HttpStatus.NOT_FOUND);
+        }
+
+        User receiver = userService.getUser(id).get();
+
+//        Integer idOfSender = this.userRequestValidation.getUserId(headers);
+
+        Long senderId = 2L; // kasnije zaminiti sa idofSender
+        if (userService.getUser(id).isPresent()) {
+            return new ResponseEntity("User does not exist!", HttpStatus.NOT_FOUND);
+        }
+
+        User sender = userService.getUser(id).get();
+
+        if (rideService.getRide(requestMessageDTO.getRideId().toString()) == null) {
+            return new ResponseEntity("Ride does not exist!", HttpStatus.NOT_FOUND);
+        }
+
+        Message message = requestMessageDTO.parseToMessage(sender, receiver);
+
+        this.messageService.add(message);
+
+        return new ResponseEntity<>(message.parseToResponse(), HttpStatus.OK);
     }
 
     //RADI

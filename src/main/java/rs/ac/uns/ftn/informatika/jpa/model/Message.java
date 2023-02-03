@@ -28,7 +28,7 @@ public class Message {
 
     @Enumerated(EnumType.STRING)
     private MessageType type;
-    private int driveId;
+    private Long rideId;
 
     public Message(User sender, User reciever, MessageType type, String message, Date sendingTime) {
         this.sender = sender;
@@ -38,16 +38,16 @@ public class Message {
         this.sendingTime = sendingTime;
     }
 
-    public Message(User sender, User reciever, MessageType type, String message, Date sendingTime, int driveId) {
+    public Message(User sender, User reciever, MessageType type, String message, Date sendingTime, Long rideId) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
         this.type = type;
         this.sendingTime = sendingTime;
-        this.driveId = driveId;
+        this.rideId = rideId;
     }
 
-    public ResponseMessageDTO parseToDTO(){
-        return new ResponseMessageDTO(this.id, this.sendingTime, this.sender.getId(), this.reciever.getId(), this.message, this.type, Long.valueOf(this.driveId));
+    public ResponseMessageDTO parseToResponse(){
+        return new ResponseMessageDTO(this.id, this.sendingTime, this.sender.getId(), this.reciever.getId(), this.message, this.type, this.rideId);
     }
 }

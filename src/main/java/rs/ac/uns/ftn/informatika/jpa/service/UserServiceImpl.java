@@ -66,7 +66,7 @@ public class UserServiceImpl implements IUserService {
         Set<Message> messages = messageRepository.findBySender(user);
         Set<ResponseMessageDTO> messageDTOS = new HashSet<>();
         for(Message m : messages){
-            messageDTOS.add(m.parseToDTO());
+            messageDTOS.add(m.parseToResponse());
         }
         return messageDTOS;
     }
