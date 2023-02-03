@@ -104,8 +104,6 @@ public class Ride {
         this.driver = driver;
     }
 
-
-
     public Ride(Date startTime, Date endTime, int totalCost, Driver driver, List<Passenger> passengers, List<Location> locations, List<Route> routes, int estimatedTimeInMinutes, List<Review> reviews, RejectionLetter letter, boolean panic, boolean babyTransport, boolean petTransport, Vehicle vehicle, RideStatus status) {
         this.startTime = startTime;
         this.endTime = endTime;
@@ -135,90 +133,6 @@ public class Ride {
         this.scheduledTime = scheduledTime;
     }
 
-    public void copyValues(Ride ride) {
-        this.startTime = ride.getStartTime();
-        this.endTime = ride.getEndTime();
-        this.totalCost = (int) ride.getTotalCost();
-        this.driver = ride.getDriver();
-        this.passengers = ride.getPassengers();
-        this.locations = ride.getLocations();
-        this.routes = ride.getRoutes();
-        this.estimatedTimeInMinutes = (int) ride.getEstimatedTimeInMinutes();
-        this.reviews = ride.getReviews();
-        this.letter = ride.getLetter();
-        this.panic = ride.isPanic();
-        this.babyTransport = ride.isBabyTransport();
-        this.petTransport = ride.isPetTransport();
-        this.vehicle = ride.getVehicle();
-        this.status = ride.getStatus();
-    }
-
-    public ResponseRideDTO parseToResponse(){
-        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-        for(Passenger p : passengers){
-            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-        }
-
-        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        for(Route r : routes){
-            responseLocationDTOS.add(new ResponseLocationDTO(r.getDeparture().parseToResponse(), r.getDestination().parseToResponse()));
-        }
-
-        //TODO NA OVOME PORADITI
-        this.setLetter(new RejectionLetter(this, "a",this.driver, new Date()));
-
-        ResponseDriverIdEmailDTO responseDriverIdEmailDTO = new ResponseDriverIdEmailDTO(driver.getId(), driver.getEmail());
-
-        ResponseRejectionReasonTimeOfDetectionDTO rejectionReasonTimeOfDetectionDTO = new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime());
-
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this, responsPassengerIdEmailDTOS, responseLocationDTOS, responseDriverIdEmailDTO, rejectionReasonTimeOfDetectionDTO);
-        return rideResponse;
-    }
-
-    public ResponseRideDTO parseToResponseDefault(){
-        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-        for(Passenger p : passengers){
-            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-        }
-
-        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        for(Route r : routes){
-            responseLocationDTOS.add(new ResponseLocationDTO(r.getDeparture().parseToResponse(), r.getDestination().parseToResponse()));
-        }
-
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()), responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS, this.status);
-
-        return rideResponse;
-    }
-
-    public ResponseRideDTO parseToResponseWithStatus(){
-        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-        for(Passenger p : passengers){
-            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-        }
-
-        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        for(Route r : routes){
-            responseLocationDTOS.add(new ResponseLocationDTO(r.getDeparture().parseToResponse(), r.getDestination().parseToResponse()));
-        }
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, responseLocationDTOS, this.status);
-        return rideResponse;
-    }
-
-    public ResponseRideDTO parseToResponseWithStatusAndReason(){
-        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-        for(Passenger p : passengers){
-            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-        }
-
-        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        for(Route r : routes){
-            responseLocationDTOS.add(new ResponseLocationDTO(r.getDeparture().parseToResponse(), r.getDestination().parseToResponse()));
-        }
-        ResponseRideDTO rideResponse = new ResponseRideDTO(this.id, responsPassengerIdEmailDTOS, this.vehicle.getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, responseLocationDTOS, this.status, new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()));
-        return rideResponse;
-    }
-
     public ResponseRideNoStatusDTO parseToResponseNoStatus(){
 
         ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
@@ -233,43 +147,29 @@ public class Ride {
 
         ResponseDriverIdEmailDTO responseDriverIdEmailDTO = new ResponseDriverIdEmailDTO(driver.getId(), driver.getEmail());
 
-        //TODO NA OVOME PORADITI
-        this.setLetter(new RejectionLetter(this, "a",this.driver, new Date()));
+        if(this.letter == null){
+            return new ResponseRideNoStatusDTO(this, responsPassengerIdEmailDTOS, responseLocationDTOS, responseDriverIdEmailDTO, null);
+        }
 
-        ResponseRejectionReasonTimeOfDetectionDTO rejectionReasonTimeOfDetectionDTO = new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime());
-
-        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this, responsPassengerIdEmailDTOS, responseLocationDTOS, responseDriverIdEmailDTO, rejectionReasonTimeOfDetectionDTO);
-        return rideResponse;
+        return new ResponseRideNoStatusDTO(this, responsPassengerIdEmailDTOS, responseLocationDTOS, responseDriverIdEmailDTO, this.letter.parseToResponse());
     }
 
-    public ResponseRideNoStatusDTO parseToResponseNoStatusForUser(){
-        ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();
-        for(Passenger p : passengers){
-            responsPassengerIdEmailDTOS.add(new ResponsePassengerIdEmailDTO(p.getId(), p.getEmail()));
-        }
-        ArrayList<ResponseLocationDTO> responseLocationDTOS = new ArrayList<ResponseLocationDTO>();
-        for(Route r : routes){
-            responseLocationDTOS.add(new ResponseLocationDTO(r.getDeparture().parseToResponse(), r.getDestination().parseToResponse()));
-        }
-        ResponseRideNoStatusDTO rideResponse = new ResponseRideNoStatusDTO(this.id,
-                this.startTime, this.endTime, this.totalCost, new ResponseDriverIdEmailDTO(this.driver.getId(), this.driver.getEmail()),
-                responsPassengerIdEmailDTOS, this.estimatedTimeInMinutes, this.vehicle.getVehicleType().getVehicleName(), this.babyTransport, this.petTransport,
-                new ResponseRejectionReasonTimeOfDetectionDTO(this.letter.getReason(), this.letter.getTime()), responseLocationDTOS);
-        return rideResponse;
-    }
+    public ResponseRideNewDTO parseToResponse() {
 
-    public ResponseRideNewDTO parseToResponseNew() {
         List<ResponsePassengerIdEmailDTO> passengers = new ArrayList<>();
         for(Passenger p : this.passengers){
             passengers.add(p.parseToResponseIdEmail());
         }
+
         List<RequestLocationDTO> locations = new ArrayList<>();
         for(Route r : this.routes){
             locations.add(r.parseToResponse());
         }
+
         if(this.letter != null){
             return new ResponseRideNewDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, this.letter.parseToResponse(), locations, this.status, this.scheduledTime);
         }
+
         return new ResponseRideNewDTO(this.id, this.startTime, this.endTime, this.totalCost, this.driver.parseToResponseIdEmail(), passengers, this.estimatedTimeInMinutes, this.driver.getVehicle().getVehicleType().getVehicleName(), this.babyTransport, this.petTransport, null, locations, this.status, scheduledTime);
     }
 }

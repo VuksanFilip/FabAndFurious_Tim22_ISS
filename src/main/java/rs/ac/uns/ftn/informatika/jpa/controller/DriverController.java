@@ -313,8 +313,7 @@ public class DriverController {
         return new ResponseEntity<>(workingHour.parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO PORADITI NA SETLETTERU UKOLIKO JE NULL KOD RESPONSA
-    //TESTIRATI FROM I TO UPIT
+    //TODO TESTIRATI FROM I TO UPIT
     @GetMapping(value = "/{id}/ride")
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverRides(

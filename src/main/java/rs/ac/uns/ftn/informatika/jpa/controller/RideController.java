@@ -57,7 +57,7 @@ public class RideController{
 
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
 
-        return new ResponseEntity<>(newRide.parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(newRide.parseToResponse(), HttpStatus.OK);
     }
 
     //RADI
@@ -73,7 +73,7 @@ public class RideController{
         }
         Ride ride = rideService.getaActiveRideByDriverId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseNew(), HttpStatus.OK);
+            return new ResponseEntity<>(ride.parseToResponse(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageDTO("Active ride does not exist!"), HttpStatus.NOT_FOUND);
     }
@@ -91,7 +91,7 @@ public class RideController{
         }
         Ride ride = rideService.getActiveRideByPassengerId(id);
         if(ride != null){
-            return new ResponseEntity<>(ride.parseToResponseNew(), HttpStatus.OK);
+            return new ResponseEntity<>(ride.parseToResponse(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageDTO("Active ride does not exist!"), HttpStatus.NOT_FOUND);
     }
@@ -111,7 +111,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getRide(id).get();
-        return new ResponseEntity<>(ride.parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(ride.parseToResponse(), HttpStatus.OK);
     }
 
     //RADI
@@ -129,7 +129,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.CANCELED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
     //TODO promeniti usera
@@ -165,7 +165,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status ACCEPTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.STARTED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
     //RADI
@@ -183,7 +183,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot start a ride that is not in status PENDING!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.ACCEPTED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
     //RADI
@@ -201,7 +201,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Cannot endTime a ride that is not in status STARTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.FINISHED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
     //RADI
@@ -221,7 +221,7 @@ public class RideController{
         RejectionLetter rejectionLetter = letter.parseToRejectionLetter();
 
         rideService.updateRideByRejectionLetterAndStatus(id, rejectionLetter, RideStatus.CANCELED);
-        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponseNew(), HttpStatus.OK);
+        return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

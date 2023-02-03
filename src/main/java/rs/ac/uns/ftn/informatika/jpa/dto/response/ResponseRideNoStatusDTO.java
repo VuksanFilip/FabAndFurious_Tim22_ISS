@@ -24,21 +24,6 @@ public class ResponseRideNoStatusDTO {
     public ResponseRideNoStatusDTO() {
     }
 
-    public ResponseRideNoStatusDTO(Long id, ArrayList<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleVehicleName, boolean babyTransport, boolean petTransport, ArrayList<ResponseLocationDTO> locations) {
-        this.id = id;
-        this.passengers = passengers;
-        this.vehicleVehicleName = vehicleVehicleName;
-        this.babyTransport = babyTransport;
-        this.petTransport = petTransport;
-        this.locations = locations;
-        this.startTime = null;
-        this.endTime = null;
-        this.totalCost = 0;
-        this.driver = new ResponseDriverIdEmailDTO(123L, null);
-        this.rejection = new ResponseRejectionReasonTimeOfDetectionDTO();
-        this.estimatedTimeInMinutes = 0;
-    }
-
     public ResponseRideNoStatusDTO(Ride ride, ArrayList<ResponsePassengerIdEmailDTO> passengers, ArrayList<ResponseLocationDTO> locations, ResponseDriverIdEmailDTO driver, ResponseRejectionReasonTimeOfDetectionDTO rejection) {
         this.id = ride.getId();
         this.passengers = passengers;

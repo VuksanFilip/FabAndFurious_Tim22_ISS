@@ -134,7 +134,6 @@ public class PassengerController{
         return new ResponseEntity<>(passengerForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO PORADITI NA SETLETTERU UKOLIKO JE NULL KOD RESPONSA
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassengerRides(@PathVariable("id") String id, Pageable page) {

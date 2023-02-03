@@ -9,47 +9,6 @@ import java.util.List;
 
 public class ResponseRideNewDTO {
 
-//    {
-//        "id": 123,
-//            "startTime": "2017-07-21T17:32:28Z",
-//            "endTime": "2017-07-21T17:45:14Z",
-//            "totalCost": 1235,
-//            "driver": {
-//        "id": 123,
-//                "email": "user@example.com"
-//    },
-//        "passengers": [
-//        {
-//            "id": 123,
-//                "email": "user@example.com"
-//        }
-//  ],
-//        "estimatedTimeInMinutes": 5,
-//            "vehicleType": "STANDARD",
-//            "babyTransport": true,
-//            "petTransport": true,
-//            "rejection": {
-//        "reason": "Ride is canceled due to previous problems with the passenger",
-//                "timeOfRejection": "2022-11-25T17:32:28Z"
-//    },
-//        "locations": [
-//        {
-//            "departure": {
-//            "address": "Bulevar oslobodjenja 46",
-//                    "latitude": 45.267136,
-//                    "longitude": 19.833549
-//        },
-//            "destination": {
-//            "address": "Bulevar oslobodjenja 46",
-//                    "latitude": 45.267136,
-//                    "longitude": 19.833549
-//        }
-//        }
-//  ],
-//        "status": "PENDING",
-//            "scheduledTime": "2023-01-11T17:45:00Z"
-//    }
-
     private Long id;
     private Date startTime;
     private Date endTime;
