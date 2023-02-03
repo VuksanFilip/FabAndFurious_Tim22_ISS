@@ -16,13 +16,15 @@ import java.util.Date;
 public class Message {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private User sender;
 
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private User reciever;
+
     private String message;
     private Date sendingTime;
 

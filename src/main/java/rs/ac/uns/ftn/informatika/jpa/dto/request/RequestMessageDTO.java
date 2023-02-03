@@ -46,20 +46,6 @@ public class RequestMessageDTO {
         this.rideId = rideId;
     }
 
-//        private Long id;
-//
-//    @OneToOne
-//    private User sender;
-//
-//    @OneToOne
-//    private User reciever;
-//    private String message;
-//    private Date sendingTime;
-//
-//    @Enumerated(EnumType.STRING)
-//    private MessageType type;
-//    private int driveId;s
-
     public Message parseToMessage(User sender, User reciever){
         return new Message(sender, reciever,  this.type, this.message, Date.from(Instant.now()), this.rideId);
     }

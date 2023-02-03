@@ -6,17 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseMessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.Message;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -56,20 +52,20 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    @Override
-    public Set<ResponseMessageDTO> findMessagesOfUser(String id) {
-        Optional<User> userO = userRepository.findById(id);
-        if(!userO.isPresent()){
-            return null;
-        }
-        User user = userO.get();
-        Set<Message> messages = messageRepository.findBySender(user);
-        Set<ResponseMessageDTO> messageDTOS = new HashSet<>();
-        for(Message m : messages){
-            messageDTOS.add(m.parseToResponse());
-        }
-        return messageDTOS;
-    }
+//    @Override
+//    public Set<ResponseMessageDTO> findMessagesOfUser(String id) {
+//        Optional<User> userO = userRepository.findById(id);
+//        if(!userO.isPresent()){
+//            return null;
+//        }
+//        User user = userO.get();
+//        Set<Message> messages = messageRepository.findBySender(user);
+//        Set<ResponseMessageDTO> messageDTOS = new HashSet<>();
+//        for(Message m : messages){
+//            messageDTOS.add(m.parseToResponse());
+//        }
+//        return messageDTOS;
+//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.Message;
 import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
@@ -30,5 +32,9 @@ public class MessageServiceImpl implements IMessageService {
 
     public void add(Message message) {
         this.messageRepository.save(message);
+    }
+
+    public Page<Message> getUserMessages(String userId, Pageable page){
+        return this.messageRepository.getUserMessages(Long.parseLong(userId), page);
     }
 }

@@ -237,38 +237,52 @@ public class UserController {
 
     //TODO POZABAVITI SE SA OVIM
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> getUserMessages(@PathVariable("id") String id){
-        Set<ResponseMessageDTO> messageDTOS = userService.findMessagesOfUser(id);
-        return new ResponseEntity<>(new ResponseMessagePageDTO(messageDTOS.size(), messageDTOS), HttpStatus.OK);
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    public ResponseEntity<?> getUserMessages(@PathVariable("id") String id, Pageable page){
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if (!userService.getUser(id).isPresent()) {
+            return new ResponseEntity(new MessageDTO("Receiver does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        Page<Message> messages = this.messageService.getUserMessages(id, page);
+
+        List<ResponseMessageDTO> responseMessageDTOS = new ArrayList<>();
+        for(Message message : messages){
+            responseMessageDTOS.add(message.parseToResponse());
+        }
+        return new ResponseEntity<>(new ResponsePageDTO(messages.getTotalPages(), Arrays.asList(responseMessageDTOS.toArray())), HttpStatus.OK);
     }
 
-    //TODO POZABAVITI SE SA OVIM
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, RequestMessageDTO requestMessageDTO){
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, @RequestBody RequestMessageDTO requestMessageDTO){
 
-        if (userService.getUser(id).isPresent()) {
-            return new ResponseEntity("Receiver does not exist!", HttpStatus.NOT_FOUND);
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if (!userService.getUser(id).isPresent()) {
+            return new ResponseEntity(new MessageDTO("Receiver does not exist!"), HttpStatus.NOT_FOUND);
         }
 
         User receiver = userService.getUser(id).get();
 
 //        Integer idOfSender = this.userRequestValidation.getUserId(headers);
 
-        Long senderId = 2L; // kasnije zaminiti sa idofSender
-        if (userService.getUser(id).isPresent()) {
-            return new ResponseEntity("User does not exist!", HttpStatus.NOT_FOUND);
+        String senderId = "2"; // kasnije zaminiti sa idofSender
+        if (!userService.getUser(id).isPresent()) {
+            return new ResponseEntity(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
         }
 
-        User sender = userService.getUser(id).get();
+        User sender = userService.getUser(senderId).get();
 
         if (rideService.getRide(requestMessageDTO.getRideId().toString()) == null) {
             return new ResponseEntity("Ride does not exist!", HttpStatus.NOT_FOUND);
         }
 
         Message message = requestMessageDTO.parseToMessage(sender, receiver);
-
         this.messageService.add(message);
 
         return new ResponseEntity<>(message.parseToResponse(), HttpStatus.OK);
