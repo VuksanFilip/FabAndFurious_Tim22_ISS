@@ -49,13 +49,16 @@ public class RideController{
         this.userService = userService;
     }
 
+    //TODO JOS PROVERITI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
-//        Driver driver = this.driverService.getDriver("6").get();
 
         //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU
         Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
+        if(perfectDriver == null){
+            return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.BAD_REQUEST);
+        }
 
 //        if(rideService.checkIfDriverHasPandingRides(perfectDriver)){
 //            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);

@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 public class Driver extends User{
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "driver", fetch = FetchType.LAZY)
     private List<Document> documents;
 
     @OneToMany(cascade = {CascadeType.ALL})
