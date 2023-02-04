@@ -115,6 +115,17 @@ public class User implements UserDetails {
         this.active = active;
     }
 
+    public User(String firstName, String lastName, String picture, String phoneNumber, String email, String address, boolean blocked, boolean active) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.picture = picture;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.blocked = blocked;
+        this.active = active;
+    }
+
     public User(Long id, String firstName, String lastName, String picture, String phoneNumber, String email, String address, String password, boolean blocked, boolean active) {
         this.id = id;
         this.firstName = firstName;
