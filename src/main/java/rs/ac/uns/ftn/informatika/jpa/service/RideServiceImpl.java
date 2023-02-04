@@ -64,6 +64,13 @@ public class RideServiceImpl implements IRideService {
         return this.rideRepository.findAllRidesByPassengerIdAndRideStatus(Long.parseLong(passengerId), rideStatus);
     }
 
+    public boolean checkIfPassengerExistInRide(String rideId, String passengerId){
+        if(this.rideRepository.findRideByRideIdAndPassengerId(Long.parseLong(rideId), Long.parseLong(passengerId)) != null){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public List<Ride> getRidesOfDriver(Driver driver) {
         List<Ride> allRides = new ArrayList<>();
@@ -352,6 +359,16 @@ public class RideServiceImpl implements IRideService {
     @Override
     public float getAverageReport(List<ResponseReportDayDTO> dates) {
         return getSumReport(dates)/dates.size();
+    }
+
+    public boolean checkIfAnyPassengerIsBlocked(RequestRideDTO requestRideDTO){
+        for(ResponsePassengerIdEmailDTO r : requestRideDTO.getPassengers()){
+            Passenger p = this.passengerService.getPassenger(r.getId().toString()).get();
+            if(p.isBlocked()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

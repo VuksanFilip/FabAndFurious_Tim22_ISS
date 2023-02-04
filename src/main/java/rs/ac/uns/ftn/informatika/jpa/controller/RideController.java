@@ -44,17 +44,27 @@ public class RideController{
         this.userService = userService;
     }
 
-    //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU (JAKO JAKO TESKO, PUNO RAZMISLJANJA)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU (JAKO JAKO TESKO, PUNO RAZMISLJANJA) "TESTIRATI"
+    @PostMapping(value = "/passengerId", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
+    public ResponseEntity<?> createNewRide(@PathVariable("passengerId") String passengerId,
+                                           @Valid @RequestBody RequestRideDTO requestRideDTO){
 
+        if(!StringUtils.isNumeric(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.passengerService.existsById(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
+        }
         Driver perfectDriver = this.driverService.getPerfectDriver(VehicleName.valueOf(requestRideDTO.getVehicleType()), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
         if(perfectDriver == null){
             return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.BAD_REQUEST);
         }
-        if(!rideService.findAllRidesByPassengerIdAndRideStatus(requestRideDTO.getPassengers().get(0).getId().toString(), RideStatus.PENDING).isEmpty()){
+        if(!rideService.findAllRidesByPassengerIdAndRideStatus(this.passengerService.getPassenger(passengerId).toString(), RideStatus.PENDING).isEmpty()){
             return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
+        }
+        if(rideService.checkIfAnyPassengerIsBlocked(requestRideDTO)){
+            return new ResponseEntity<>(new MessageDTO("Some of the passengers are blocked!"), HttpStatus.BAD_REQUEST);
         }
 
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
@@ -134,11 +144,19 @@ public class RideController{
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
-    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA)
-    @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA) "TESTIRATI"
+    @PutMapping(value = "/{id}/{userId}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
+    public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason,
+                                            @PathVariable String id,
+                                            @PathVariable String userId) throws Exception {
 
+        if(!StringUtils.isNumeric(userId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.userService.existsById(userId)){
+            return new ResponseEntity<>(new MessageDTO("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
@@ -146,7 +164,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Ride does not exist"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getRide(id).get();
-        Panic panic = panicService.createPanicByRide(this.driverService.getDriver("5").get(), ride, reason.getReason());
+        Panic panic = panicService.createPanicByRide(this.driverService.getDriver(userId).get(), ride, reason.getReason());
 
         panicService.add(panic);
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);

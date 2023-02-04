@@ -79,4 +79,8 @@ public interface IRideService {
     Page<Ride> getRidesForDriver(String driverId, Pageable page);
 
     List<Ride> findAllRidesByPassengerIdAndRideStatus(String passengerId, RideStatus rideStatus);
+
+    boolean checkIfPassengerExistInRide(String rideId, String passengerId);
+
+    boolean checkIfAnyPassengerIsBlocked(RequestRideDTO requestRideDTO);
 }

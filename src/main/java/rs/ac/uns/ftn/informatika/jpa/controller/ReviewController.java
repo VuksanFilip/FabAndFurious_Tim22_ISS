@@ -44,11 +44,19 @@ public class ReviewController {
         this.driverService = driverService;
     }
 
-    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA)
-    @PostMapping(value = "{rideId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @Valid @RequestBody RequestReviewDTO requestReviewDTO) {
+    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA), "TESTIRATI"
+    @PostMapping(value = "{rideId}/{passengerId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('PASSENGER')")
+    public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId,
+                                                 @PathVariable("passengerId") String passengerId,
+                                                 @Valid @RequestBody RequestReviewDTO requestReviewDTO) {
 
+        if(!StringUtils.isNumeric(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.passengerService.existsById(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
+        }
         if(!StringUtils.isNumeric(rideId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
@@ -58,10 +66,13 @@ public class ReviewController {
         if(this.rideService.getRide(rideId).get().getVehicle() == null){
             return new ResponseEntity<>(new MessageDTO("Vehicle does not exist!"), HttpStatus.NOT_FOUND);
         }
+        if(!this.rideService.checkIfPassengerExistInRide(rideId, passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Passenger is not in that ride!"), HttpStatus.NOT_FOUND);
+        }
 
 
         Ride ride = this.rideService.getRide(rideId).get();
-        Review review = new Review(requestReviewDTO.getRating(), requestReviewDTO.getComment(), ride, this.passengerService.getPassenger("2").get(), ReviewType.VEHICLE);
+        Review review = new Review(requestReviewDTO.getRating(), requestReviewDTO.getComment(), ride, this.passengerService.getPassenger(passengerId).get(), ReviewType.VEHICLE);
         this.reviewService.add(review);
         ride.getReviews().add(review);
         this.rideService.add(ride);
@@ -100,20 +111,31 @@ public class ReviewController {
     }
 
 
-    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA)
-    @PostMapping(value = "{rideId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA) "TESTIRATI"
+    @PostMapping(value = "{rideId}/{passengerId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId, @Valid @RequestBody RequestReviewDTO requestReviewDTO){
+    public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId,
+                                                @PathVariable("passengerId") String passengerId,
+                                                @Valid @RequestBody RequestReviewDTO requestReviewDTO){
 
+        if(!StringUtils.isNumeric(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.passengerService.existsById(passengerId)){
+            return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
+        }
         if(!StringUtils.isNumeric(rideId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
         if(!this.rideService.existsById(rideId.toString())){
             return new ResponseEntity<>("Ride does not exist!", HttpStatus.NOT_FOUND);
         }
+        if(!this.rideService.checkIfPassengerExistInRide(rideId, passengerId)){
+            return new ResponseEntity<>(new MessageDTO("Passenger is not in that ride!"), HttpStatus.NOT_FOUND);
+        }
 
         Ride ride = this.rideService.getRide(rideId).get();
-        Review review = new Review(requestReviewDTO.getRating(), requestReviewDTO.getComment(), ride, this.passengerService.getPassenger("2").get(), ReviewType.DRIVER);
+        Review review = new Review(requestReviewDTO.getRating(), requestReviewDTO.getComment(), ride, this.passengerService.getPassenger(passengerId).get(), ReviewType.DRIVER);
         this.reviewService.add(review);
         ride.getReviews().add(review);
         this.rideService.add(ride);

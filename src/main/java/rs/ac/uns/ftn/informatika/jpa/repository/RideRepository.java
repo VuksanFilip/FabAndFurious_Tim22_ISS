@@ -48,4 +48,6 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
     @Query("select r from Ride r, Passenger p where p.id=:passengerId and p member of r.passengers and r.status=:rideStatus")
     List<Ride> findAllRidesByPassengerIdAndRideStatus(Long passengerId, RideStatus rideStatus);
 
+    @Query("select r from Ride r, Passenger p where r.id = :rideId and p.id = :passengerId and p member of r.passengers")
+    Ride findRideByRideIdAndPassengerId(Long rideId, Long passengerId);
 }
