@@ -183,7 +183,7 @@ public class UserController {
 
     //RADI
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO login) {
+    public ResponseEntity<?> login(@RequestBody RequestLoginDTO login) {
         try{
             User user = this.userService.findByEmail(login.getEmail());
             ResponseLoginDTO responseLogin = new ResponseLoginDTO();
@@ -261,10 +261,11 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(messages.getTotalPages(), Arrays.asList(responseMessageDTOS.toArray())), HttpStatus.OK);
     }
 
+    //TODO CHECK IF RIDE IS VALID
     //RADI
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, @RequestBody RequestMessageDTO requestMessageDTO){
+//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, @Valid @RequestBody RequestMessageDTO requestMessageDTO){
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -297,7 +298,7 @@ public class UserController {
     //RADI
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> createNote(@PathVariable("id") String id, @RequestBody RequestNoteDTO requestNoteDTO){
+    public ResponseEntity<?> createNote(@PathVariable("id") String id, @Valid @RequestBody RequestNoteDTO requestNoteDTO){
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);

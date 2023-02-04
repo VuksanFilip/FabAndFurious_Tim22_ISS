@@ -13,6 +13,8 @@ import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.ILocationService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/vehicle")
 public class VehicleController {
@@ -28,7 +30,7 @@ public class VehicleController {
     //RADI
     @PutMapping(value = "/{id}/location", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
-    public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
+    public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @Valid @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);

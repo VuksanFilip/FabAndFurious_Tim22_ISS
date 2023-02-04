@@ -118,7 +118,7 @@ public class PassengerController{
     //RADI
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
-    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestBody RequestPassengerDTO requestPassengerDTO) {
+    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @Valid @RequestBody RequestPassengerDTO requestPassengerDTO) {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);

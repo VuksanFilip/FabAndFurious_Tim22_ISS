@@ -15,8 +15,10 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,9 +47,9 @@ public class RideController{
     //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU (JAKO JAKO TESKO, PUNO RAZMISLJANJA)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createNewRide(@RequestBody RequestRideDTO requestRideDTO){
+    public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
 
-        Driver perfectDriver = this.driverService.getPerfectDriver(requestRideDTO.getVehicleType(), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
+        Driver perfectDriver = this.driverService.getPerfectDriver(VehicleName.valueOf(requestRideDTO.getVehicleType()), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
         if(perfectDriver == null){
             return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.BAD_REQUEST);
         }
@@ -135,7 +137,7 @@ public class RideController{
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA)
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
+    public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason, @PathVariable String id) throws Exception {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -207,7 +209,7 @@ public class RideController{
     //RADI
     @PutMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER')")
-    public ResponseEntity<?> cancelRide(@RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) {
+    public ResponseEntity<?> cancelRide(@Valid @RequestBody RequestRejectionLetterDTO letter, @PathVariable String id) {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -226,7 +228,7 @@ public class RideController{
 
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createFavoriteRoute(@RequestBody RequestFavoriteRouteDTO requestFavoriteRoute){
+    public ResponseEntity<?> createFavoriteRoute(@Valid @RequestBody RequestFavoriteRouteDTO requestFavoriteRoute){
 
         List<Passenger> passengers = passengerService.getPassengersFromFavoriteRouteRequest(requestFavoriteRoute);
         if(passengerService.hasTenFavoriteRoutesForPassengers(passengers)){
@@ -261,7 +263,7 @@ public class RideController{
 
     @GetMapping(value = "/{userId}/report/days", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> getReportDays(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport){
+    public ResponseEntity<?> getReportDays(@PathVariable("userId") String userId, @Valid @RequestBody RequestReportDTO requestReport){
 
         if(!this.userService.existsById(userId)){
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
@@ -283,7 +285,7 @@ public class RideController{
 
     @GetMapping(value = "/{userId}/report/kms", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> getReportKms(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport){
+    public ResponseEntity<?> getReportKms(@PathVariable("userId") String userId, @Valid @RequestBody RequestReportDTO requestReport){
         if(!this.userService.existsById(userId)){
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -304,7 +306,7 @@ public class RideController{
 
     @GetMapping(value = "/{userId}/report/money", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> getReportMoney(@PathVariable("userId") String userId, @RequestBody RequestReportDTO requestReport) {
+    public ResponseEntity<?> getReportMoney(@PathVariable("userId") String userId, @Valid @RequestBody RequestReportDTO requestReport) {
         if (!this.userService.existsById(userId)) {
             return new ResponseEntity<>(new MessageDTO("User with this id does not exist!"), HttpStatus.NOT_FOUND);
         }
@@ -379,7 +381,7 @@ public class RideController{
 
     @GetMapping(value = "/admin-report/passengers/days", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportPassengersDays(@RequestBody RequestReportDTO requestReport){
+    public ResponseEntity<?> getAdminReportPassengersDays(@RequestBody @Valid RequestReportDTO requestReport){
         List<Passenger> allPassengers = this.passengerService.getAll();
         List<Ride> allRides = this.rideService.getAll();
         List<Ride> passengersDrives = new ArrayList<>();
@@ -401,7 +403,7 @@ public class RideController{
 
     @GetMapping(value = "/admin-report/passengers/kms", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportPassengersKms(@RequestBody RequestReportDTO requestReport){
+    public ResponseEntity<?> getAdminReportPassengersKms(@Valid @RequestBody RequestReportDTO requestReport){
         List<Passenger> allPassengers = this.passengerService.getAll();
         List<Ride> allRides = this.rideService.getAll();
         List<Ride> passengersDrives = new ArrayList<>();
@@ -423,7 +425,7 @@ public class RideController{
 
     @GetMapping(value = "/admin-report/passengers/money", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportPassengersMoney(@RequestBody RequestReportDTO requestReport) {
+    public ResponseEntity<?> getAdminReportPassengersMoney(@Valid @RequestBody RequestReportDTO requestReport) {
         List<Passenger> allPassengers = this.passengerService.getAll();
         List<Ride> allRides = this.rideService.getAll();
         List<Ride> passengersDrives = new ArrayList<>();
@@ -445,7 +447,7 @@ public class RideController{
 
     @GetMapping(value = "/admin-report/drivers/days", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportDriversDays(@RequestBody RequestReportDTO requestReport){
+    public ResponseEntity<?> getAdminReportDriversDays(@Valid @RequestBody RequestReportDTO requestReport){
         List<Driver> allDrivers = this.driverService.getAll();
         List<Ride> allRides = this.rideService.getAll();
         List<Ride> driversRides = new ArrayList<>();
@@ -465,7 +467,7 @@ public class RideController{
 
     @GetMapping(value = "/admin-report/drivers/kms", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportDriversKms(@RequestBody RequestReportDTO requestReport){
+    public ResponseEntity<?> getAdminReportDriversKms(@Valid @RequestBody RequestReportDTO requestReport){
         List<Driver> allDrivers = this.driverService.getAll();
         List<Ride> allRides = this.rideService.getAll();
         List<Ride> driversRides = new ArrayList<>();
@@ -485,7 +487,7 @@ public class RideController{
 
     @GetMapping(value = "/admin-report/drivers/money", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportDriversMoney(@RequestBody RequestReportDTO requestReport) {
+    public ResponseEntity<?> getAdminReportDriversMoney(@Valid @RequestBody RequestReportDTO requestReport) {
         List<Driver> allDrivers = this.driverService.getAll();
         List<Ride> allRides = this.rideService.getAll();
         List<Ride> driversRides = new ArrayList<>();

@@ -11,6 +11,8 @@ import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleTypeService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/unregisteredUser")
 public class UnregisteredUserController {
@@ -23,7 +25,7 @@ public class UnregisteredUserController {
 
     //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssumption(@RequestBody RequestAssumptionDTO requestAssumptionDTO) {
+    public ResponseEntity<?> getAssumption(@Valid @RequestBody RequestAssumptionDTO requestAssumptionDTO) {
 
         int estimatedCost = vehicleTypeService.getEstimatedCost(requestAssumptionDTO);
         int estimatedTimeInMinutes = vehicleTypeService.getEstimatedTimeInMinutes(requestAssumptionDTO);

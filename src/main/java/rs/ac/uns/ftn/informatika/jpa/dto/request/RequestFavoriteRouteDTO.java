@@ -1,103 +1,38 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestFavoriteRouteDTO {
-//    {
-//        "favoriteName": "Home - to - Work",
-//            "locations": [
-//        {
-//            "departure": {
-//            "address": "Bulevar oslobodjenja 46",
-//                    "latitude": 45.267136,
-//                    "longitude": 19.833549
-//        },
-//            "destination": {
-//            "address": "Bulevar oslobodjenja 46",
-//                    "latitude": 45.267136,
-//                    "longitude": 19.833549
-//        }
-//        }
-//  ],
-//        "passengers": [
-//        {
-//            "id": 123,
-//                "email": "user@example.com"
-//        }
-//  ],
-//        "vehicleType": "STANDARD",
-//            "babyTransport": true,
-//            "petTransport": true
-//    }
 
+    @NotBlank(message = "Cant be empty")
+    @Length(max = 50, message = "You have exceeded the allowed length (50)")
     private String favoriteName;
+
+    @Size(min=1, message = "Cannot be empty")
     private List<RequestLocationDTO> locations;
+
+    @Size(min=1, message = "Cannot be empty")
     private List<ResponsePassengerIdEmailDTO> passengers;
-    private VehicleName vehicleType;
+
+    @Pattern(regexp = "STANDARD|LUXURY|VAN", flags = Pattern.Flag.CASE_INSENSITIVE, message = "must be STANDARD/LUXURY/VAN")
+    private String vehicleType;
+
+    @NotNull
     private boolean babyTransport;
+
+    @NotNull
     private boolean petTransport;
-
-    public RequestFavoriteRouteDTO() {
-    }
-
-    public RequestFavoriteRouteDTO(String favoriteName, List<RequestLocationDTO> locations, List<ResponsePassengerIdEmailDTO> passengers, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
-        this.favoriteName = favoriteName;
-        this.locations = locations;
-        this.passengers = passengers;
-        this.vehicleType = vehicleType;
-        this.babyTransport = babyTransport;
-        this.petTransport = petTransport;
-    }
-
-    public String getFavoriteName() {
-        return favoriteName;
-    }
-
-    public void setFavoriteName(String favoriteName) {
-        this.favoriteName = favoriteName;
-    }
-
-    public List<RequestLocationDTO> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<RequestLocationDTO> locations) {
-        this.locations = locations;
-    }
-
-    public List<ResponsePassengerIdEmailDTO> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(List<ResponsePassengerIdEmailDTO> passengers) {
-        this.passengers = passengers;
-    }
-
-    public VehicleName getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleName vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-    public boolean isBabyTransport() {
-        return babyTransport;
-    }
-
-    public void setBabyTransport(boolean babyTransport) {
-        this.babyTransport = babyTransport;
-    }
-
-    public boolean isPetTransport() {
-        return petTransport;
-    }
-
-    public void setPetTransport(boolean petTransport) {
-        this.petTransport = petTransport;
-    }
-
 }

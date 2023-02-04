@@ -1,22 +1,33 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import org.hibernate.validator.constraints.Length;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 
-public class RequestEditDriverDTO {
-    //    {
-//        "name": "Pera",
-//            "surname": "Perić",
-//            "profilePicture": "U3dhZ2dlciByb2Nrcw==",
-//            "telephoneNumber": "+381123123",
-//            "email": "pera.peric@email.com",
-//            "address": "Bulevar Oslobodjenja 74"
-//    }
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
+public class RequestEditDriverDTO {
+
+    @NotBlank(message = "Cant be empty")
+    @Length(max = 50, message = "You have exceeded the allowed length (50)")
     private String name;
+
+    @NotBlank(message = "Can't be empty")
+    @Length(max = 50, message = "You have exceeded the allowed length (50)")
     private String surname;
+
     private String profilePicture;
+
+    @NotBlank(message = "Cant't be empty")
+    @Pattern(regexp = "^(?=.*[0-9])(?!.*[^0-9])(.{5,50})$", message = "Must contain only numbers (MIN 5, MAX 50)")
     private String telephoneNumber;
+
+    @Email(message = "Invalid format")
     private String email;
+
+    @NotBlank(message = "{required}")
+    @Length(max = 100, message = "Minimum 8, maximum 15 characters")
     private String address;
 
     public RequestEditDriverDTO() {

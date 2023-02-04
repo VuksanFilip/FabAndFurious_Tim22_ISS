@@ -1,47 +1,30 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseReviewDTO;
-import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
-import rs.ac.uns.ftn.informatika.jpa.model.Review;
-import rs.ac.uns.ftn.informatika.jpa.model.Ride;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestReviewDTO {
 
+    @Min(1) @Max(5)
     private int rating;
+
+    @NotBlank(message = "Cant be empty")
+    @Length(max = 500, message = "You have exceeded the allowed length (500)")
     private String comment;
-
-    public RequestReviewDTO() {
-    }
-
-    public RequestReviewDTO(int rating, String comment) {
-        this.rating = rating;
-        this.comment = comment;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     public ResponseReviewDTO parseToResponse(Long id){
         ResponseReviewDTO reviewResponse = new ResponseReviewDTO(this.rating, this.comment);
         reviewResponse.setId(id);
         return reviewResponse;
     }
-
-    public Review parseToReviewVehicle(Ride ride){
-        return new Review(this.rating, this.comment, ride, new Passenger());
-    }
-
 }

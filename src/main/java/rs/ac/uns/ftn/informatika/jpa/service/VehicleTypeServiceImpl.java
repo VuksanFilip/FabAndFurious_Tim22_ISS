@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationAssumptionDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.VehicleType;
-import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 import rs.ac.uns.ftn.informatika.jpa.repository.VehicleTypeRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IVehicleTypeService;
 
@@ -38,7 +37,7 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
 
     public int getEstimatedCost(RequestAssumptionDTO requestAssumptionDTO){
         double priceByVehicleType = getPriceByVehicleType(requestAssumptionDTO.getVehicleType());
-        double km = calculateDistance(requestAssumptionDTO.getLocationDTOS());
+        double km = calculateDistance(requestAssumptionDTO.getLocations());
         if(requestAssumptionDTO.isBabyTransport() == true && requestAssumptionDTO.isPetTransport() == true){
             return (int) (priceByVehicleType + (km * 120)) + 200;
         }
@@ -52,13 +51,14 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
     }
 
     public int getEstimatedTimeInMinutes(RequestAssumptionDTO requestAssumptionDTO){
-        return (int) ((calculateDistance(requestAssumptionDTO.getLocationDTOS()) / kmPerHour) * 60);
+        return (int) ((calculateDistance(requestAssumptionDTO.getLocations()) / kmPerHour) * 60);
     }
 
-    public double getPriceByVehicleType(VehicleName name){
+    public double getPriceByVehicleType(String name){
         List<VehicleType> vehiclesType = getAll();
+        System.out.println(vehiclesType.size());
         for(VehicleType vehicleType : vehiclesType){
-            if(vehicleType.getVehicleName().equals(name)) {
+            if(vehicleType.getVehicleName().toString().equals(name)) {
                 return vehicleType.getPricePerKm();
             }
         }

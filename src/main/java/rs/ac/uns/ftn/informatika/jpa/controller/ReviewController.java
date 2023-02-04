@@ -19,6 +19,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Vehicle;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.ReviewType;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,8 +46,8 @@ public class ReviewController {
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA)
     @PostMapping(value = "{rideId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO) {
+//    @PreAuthorize("hasAnyRole('PASSENGER')")
+    public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @Valid @RequestBody RequestReviewDTO requestReviewDTO) {
 
         if(!StringUtils.isNumeric(rideId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -102,7 +103,7 @@ public class ReviewController {
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA)
     @PostMapping(value = "{rideId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
-    public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId, @RequestBody RequestReviewDTO requestReviewDTO){
+    public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId, @Valid @RequestBody RequestReviewDTO requestReviewDTO){
 
         if(!StringUtils.isNumeric(rideId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);

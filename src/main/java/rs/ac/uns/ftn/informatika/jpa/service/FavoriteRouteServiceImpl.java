@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.FavoriteRoutes;
 import rs.ac.uns.ftn.informatika.jpa.model.Location;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
 import rs.ac.uns.ftn.informatika.jpa.model.Route;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 import rs.ac.uns.ftn.informatika.jpa.repository.FavoriteRouteRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IFavoriteRouteService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.ILocationService;
@@ -77,7 +78,7 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()) {
             allPassengers.add(this.passengerService.findByEmail(p.getEmail()));
         }
-        FavoriteRoutes favoriteRoutes = new FavoriteRoutes(requestFavoriteRoute.getFavoriteName(), routes, allPassengers, requestFavoriteRoute.getVehicleType(), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
+        FavoriteRoutes favoriteRoutes = new FavoriteRoutes(requestFavoriteRoute.getFavoriteName(), routes, allPassengers, VehicleName.valueOf(requestFavoriteRoute.getVehicleType()), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
         add(favoriteRoutes);
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()){
             Passenger passenger = this.passengerService.findByEmail(p.getEmail());

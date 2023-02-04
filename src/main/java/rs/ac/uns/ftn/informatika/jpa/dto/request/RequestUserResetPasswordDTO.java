@@ -1,26 +1,14 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestUserResetPasswordDTO {
 
     private String newPassword;
     private String code;
-
-    public RequestUserResetPasswordDTO() {
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 }

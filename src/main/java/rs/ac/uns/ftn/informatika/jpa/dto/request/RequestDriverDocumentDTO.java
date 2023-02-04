@@ -1,47 +1,26 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDocumentDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Document;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 
+import javax.validation.constraints.NotBlank;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestDriverDocumentDTO {
 
-    private Long id;
+    @NotBlank
+    @Length(max = 50, message = "You have exceeded the allowed length (50)")
     private String name;
+
+    @NotBlank(message = "Cant be empty")
     private String documentImage;
-
-    public RequestDriverDocumentDTO() {
-    }
-
-    public RequestDriverDocumentDTO(Long id, String name, String documentImage) {
-        this.id = id;
-        this.name = name;
-        this.documentImage = documentImage;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDocumentImage() {
-        return documentImage;
-    }
-
-    public void setDocumentImage(String documentImage) {
-        this.documentImage = documentImage;
-    }
 
     public ResponseDriverDocumentDTO parseToResponse(Long id, Long driverId){
         ResponseDriverDocumentDTO driverDocumentResponse = new ResponseDriverDocumentDTO(id, this.name, this.documentImage, driverId);

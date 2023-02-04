@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -53,7 +54,7 @@ public class DriverController {
     //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> createNewDriver(@RequestBody RequestDriverDTO requestDriverDTO) throws Exception {
+    public ResponseEntity<?> createNewDriver(@Valid @RequestBody RequestDriverDTO requestDriverDTO) {
 
         if (this.userService.findByEmail(requestDriverDTO.getEmail()) != null) {
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
@@ -104,7 +105,7 @@ public class DriverController {
     //RADI
     @PostMapping(value="/{driverId}/request-edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('DRIVER')")
-    public ResponseEntity<?> sendRequestForEdit(@PathVariable("driverId") String driverId, @RequestBody RequestEditDriverDTO requestDriverDTO){
+    public ResponseEntity<?> sendRequestForEdit(@PathVariable("driverId") String driverId, @Valid @RequestBody RequestEditDriverDTO requestDriverDTO){
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>(new MessageDTO("Driver with this id does not exist!"), HttpStatus.OK);
         }
@@ -119,7 +120,7 @@ public class DriverController {
     //RADI
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestEditApprovalDTO approval) {
+    public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @Valid @RequestBody RequestEditApprovalDTO approval) {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.BAD_REQUEST);
@@ -183,8 +184,8 @@ public class DriverController {
 
     //RADI
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> addDriverDocument(@PathVariable("id") String id, @RequestBody RequestDriverDocumentDTO requestDriverDocumentDTO) throws Exception {
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> addDriverDocument(@PathVariable("id") String id, @Valid @RequestBody RequestDriverDocumentDTO requestDriverDocumentDTO) throws Exception {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -240,8 +241,8 @@ public class DriverController {
 
     //RADI
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> addDriverVehicle(@PathVariable("id") String id, @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) throws Exception {
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> addDriverVehicle(@PathVariable("id") String id, @Valid @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) throws Exception {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -266,7 +267,7 @@ public class DriverController {
     //RADI
     @PutMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> changeDriverVehicle(@PathVariable("id") String driverId, @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) {
+    public ResponseEntity<?> changeDriverVehicle(@PathVariable("id") String driverId, @Valid @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) {
 
         if(!StringUtils.isNumeric(driverId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -329,7 +330,7 @@ public class DriverController {
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('DRIVER')")
-    public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
+    public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @Valid @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
 
         if (!this.driverService.getDriver(driverId).isPresent()) {
             return new ResponseEntity<>(new MessageDTO("Driver does not exist"), HttpStatus.NOT_FOUND);
@@ -410,7 +411,7 @@ public class DriverController {
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyRole('DRIVER')")
-    public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") String workingHourId, @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
+    public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") String workingHourId, @Valid @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
         if (!this.workHourService.getWorkHour(workingHourId).isPresent()) {
             return new ResponseEntity<>(new MessageDTO("Working hour does not exist!"), HttpStatus.NOT_FOUND);
         }

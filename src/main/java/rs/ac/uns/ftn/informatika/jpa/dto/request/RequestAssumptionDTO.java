@@ -1,63 +1,30 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
 
-import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestAssumptionDTO {
+
+    @Size(min=1, message = "Cannot be empty")
     private List<RequestLocationAssumptionDTO> locations;
-    private VehicleName vehicleType;
+
+    @NotBlank(message = "{required}")
+    @Pattern(regexp = "STANDARD|LUXURY|VAN", flags = Pattern.Flag.CASE_INSENSITIVE, message = "Must be STANDARD/LUXURY/VAN")
+    private String vehicleType;
+
+    @NotNull
     private boolean babyTransport;
+
+    @NotNull
     private boolean petTransport;
-
-    public RequestAssumptionDTO() {
-    }
-
-    public RequestAssumptionDTO(List<RequestLocationAssumptionDTO> locations, VehicleName vehicleType, boolean babyTransport, boolean petTransport) {
-        this.locations = locations;
-        this.vehicleType = vehicleType;
-        this.babyTransport = babyTransport;
-        this.petTransport = petTransport;
-    }
-
-    public List<RequestLocationAssumptionDTO> getLocationDTOS() {
-        return locations;
-    }
-
-    public void setLocationDTOS(List<RequestLocationAssumptionDTO> locations) {
-        this.locations = locations;
-    }
-
-    public VehicleName getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleName vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-    public boolean isBabyTransport() {
-        return babyTransport;
-    }
-
-    public void setBabyTransport(boolean babyTransport) {
-        this.babyTransport = babyTransport;
-    }
-
-    public boolean isPetTransport() {
-        return petTransport;
-    }
-
-    public void setPetTransport(boolean petTransport) {
-        this.petTransport = petTransport;
-    }
-
-    public List<RequestLocationAssumptionDTO> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<RequestLocationAssumptionDTO> locations) {
-        this.locations = locations;
-    }
-
 }
