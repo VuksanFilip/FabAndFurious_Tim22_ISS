@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestEditDriverDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,5 +40,9 @@ public class DriverEdit {
         this.telephoneNumber = telephoneNumber;
         this.email = email;
         this.address = address;
+    }
+
+    public RequestEditDriverDTO parseToDTO() {
+        return new RequestEditDriverDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);
     }
 }

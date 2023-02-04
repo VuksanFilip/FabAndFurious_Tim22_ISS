@@ -144,6 +144,20 @@ public class DriverController {
         return new ResponseEntity<>(new MessageDTO("Successfully rejected request for updating driver!"), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/edit-requests", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> getAllEditRequests(){
+        List<ResponseEditRequestDTO> allRequestsList = new ArrayList<>();
+        ResponseAllRequestsDTO allRequests = new ResponseAllRequestsDTO();
+        for(Driver d : this.driverService.getAll()){
+            if(d.getEdit() != null){
+                allRequestsList.add(new ResponseEditRequestDTO(d.getId().toString(), d.getEdit().parseToDTO()));
+            }
+        }
+        allRequests.setAllRequests(allRequestsList);
+        return new ResponseEntity<>(allRequests, HttpStatus.OK);
+    }
+
     //RADI
     @GetMapping(value = "/{id}/documents", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
