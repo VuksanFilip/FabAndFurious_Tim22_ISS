@@ -36,9 +36,10 @@ public class DriverController {
     private final IRideService rideService;
     private final IUserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final IDriverEditService driverEditService;
 
 
-    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService, IRideService rideService, IUserService userService, PasswordEncoder passwordEncoder) {
+    public DriverController(IDriverService driverService, IDocumentService documentService, IVehicleService vehicleService, IWorkingHourService workHourService, IRideService rideService, IUserService userService, PasswordEncoder passwordEncoder, IDriverEditService driverEditService) {
         this.driverService = driverService;
         this.documentService = documentService;
         this.vehicleService = vehicleService;
@@ -46,6 +47,7 @@ public class DriverController {
         this.rideService = rideService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.driverEditService = driverEditService;
     }
 
     //RADI
@@ -100,23 +102,60 @@ public class DriverController {
     }
 
     //RADI
+    @PostMapping(value="/{driverId}/request-edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyRole('DRIVER')")
+    public ResponseEntity<?> sendRequestForEdit(@PathVariable("driverId") String driverId, @RequestBody RequestEditDriverDTO requestDriverDTO){
+        if(!this.driverService.getDriver(driverId).isPresent()){
+            return new ResponseEntity<>(new MessageDTO("Driver with this id does not exist!"), HttpStatus.OK);
+        }
+        DriverEdit driverEdit = new DriverEdit(requestDriverDTO.getName(), requestDriverDTO.getSurname(), requestDriverDTO.getProfilePicture(), requestDriverDTO.getTelephoneNumber(), requestDriverDTO.getEmail(), requestDriverDTO.getAddress());
+        this.driverEditService.add(driverEdit);
+        Driver driver = this.driverService.getDriver(driverId).get();
+        driver.setEdit(driverEdit);
+        this.driverService.add(driver);
+        return new ResponseEntity<>(new MessageDTO("Successfully sent request for updating driver!"), HttpStatus.OK);
+    }
+
+    //RADI
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestDriverDTO requestDriverDTO) {
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @RequestBody RequestEditApprovalDTO approval) {
 
         if(!StringUtils.isNumeric(id)){
-            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.BAD_REQUEST);
         }
         if (!this.driverService.getDriver(id).isPresent()) {
             return new ResponseEntity<>("Driver does not exist", HttpStatus.NOT_FOUND);
         }
+        if(this.driverService.getDriver(id).get().getEdit() == null){
+            return new ResponseEntity<>(new MessageDTO("This driver does not have request for update!"), HttpStatus.BAD_REQUEST);
+        }
 
+        if(approval.isApproval()){
+            Driver driverForUpdate = driverService.getDriver(id).get();
+            driverForUpdate.update();
+            driverForUpdate.setEdit(null);
+            driverService.add(driverForUpdate);
+            return new ResponseEntity<>(new MessageDTO("Successfully updated driver!"), HttpStatus.OK);
+        }
         Driver driverForUpdate = driverService.getDriver(id).get();
-        Driver driver = requestDriverDTO.parseToDriver();
-        driverForUpdate.update(driver);
+        driverForUpdate.setEdit(null);
         driverService.add(driverForUpdate);
+        return new ResponseEntity<>(new MessageDTO("Successfully rejected request for updating driver!"), HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(driverForUpdate.parseToResponse(), HttpStatus.OK);
+    @GetMapping(value = "/edit-requests", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> getAllEditRequests(){
+        List<ResponseEditRequestDTO> allRequestsList = new ArrayList<>();
+        ResponseAllRequestsDTO allRequests = new ResponseAllRequestsDTO();
+        for(Driver d : this.driverService.getAll()){
+            if(d.getEdit() != null){
+                allRequestsList.add(new ResponseEditRequestDTO(d.getId().toString(), d.getEdit().parseToDTO()));
+            }
+        }
+        allRequests.setAllRequests(allRequestsList);
+        return new ResponseEntity<>(allRequests, HttpStatus.OK);
     }
 
     //RADI

@@ -377,30 +377,126 @@ public class RideController{
         return new ResponseEntity<>(new MessageDTO("Passenger dont have that favorite rute!"), HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(value = "/admin-report/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/admin-report/passengers/days", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportDays(@RequestBody RequestReportDTO requestReport){
-        List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
+    public ResponseEntity<?> getAdminReportPassengersDays(@RequestBody RequestReportDTO requestReport){
+        List<Passenger> allPassengers = this.passengerService.getAll();
+        List<Ride> allRides = this.rideService.getAll();
+        List<Ride> passengersDrives = new ArrayList<>();
+        for(Passenger p : allPassengers){
+            for(Ride r : allRides){
+                for(Passenger rp : r.getPassengers()){
+                    if(rp.getId() == p.getId()){
+                        passengersDrives.add(r);
+                    }
+                }
+            }
+        }
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(passengersDrives, requestReport.getFrom(), requestReport.getTo());
         List<ResponseReportDayDTO> dates = this.rideService.countRidesForDay(rides, requestReport.getFrom(), requestReport.getTo());
         int sum = this.rideService.getSumReport(dates);
         float average = this.rideService.getAverageReport(dates);
         return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/admin-report/kms", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/admin-report/passengers/kms", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportKms(@RequestBody RequestReportDTO requestReport){
-        List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
+    public ResponseEntity<?> getAdminReportPassengersKms(@RequestBody RequestReportDTO requestReport){
+        List<Passenger> allPassengers = this.passengerService.getAll();
+        List<Ride> allRides = this.rideService.getAll();
+        List<Ride> passengersDrives = new ArrayList<>();
+        for(Passenger p : allPassengers){
+            for(Ride r : allRides){
+                for(Passenger rp : r.getPassengers()){
+                    if(rp.getId() == p.getId()){
+                        passengersDrives.add(r);
+                    }
+                }
+            }
+        }
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(passengersDrives, requestReport.getFrom(), requestReport.getTo());
         List<ResponseReportDayDTO> dates = this.rideService.countKmsForDay(rides, requestReport.getFrom(), requestReport.getTo());
         int sum = this.rideService.getSumReport(dates);
         float average = this.rideService.getAverageReport(dates);
         return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/admin-report/money", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/admin-report/passengers/money", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> getAdminReportMoney(@RequestBody RequestReportDTO requestReport) {
-        List<Ride> rides = this.rideService.getUserRidesBetweenDates(this.rideService.getAll(), requestReport.getFrom(), requestReport.getTo());
+    public ResponseEntity<?> getAdminReportPassengersMoney(@RequestBody RequestReportDTO requestReport) {
+        List<Passenger> allPassengers = this.passengerService.getAll();
+        List<Ride> allRides = this.rideService.getAll();
+        List<Ride> passengersDrives = new ArrayList<>();
+        for(Passenger p : allPassengers){
+            for(Ride r : allRides){
+                for(Passenger rp : r.getPassengers()){
+                    if(rp.getId() == p.getId()){
+                        passengersDrives.add(r);
+                    }
+                }
+            }
+        }
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(passengersDrives, requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countMoneyForDay(rides, requestReport.getFrom(), requestReport.getTo());
+        int sum = this.rideService.getSumReport(dates);
+        float average = this.rideService.getAverageReport(dates);
+        return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/admin-report/drivers/days", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> getAdminReportDriversDays(@RequestBody RequestReportDTO requestReport){
+        List<Driver> allDrivers = this.driverService.getAll();
+        List<Ride> allRides = this.rideService.getAll();
+        List<Ride> driversRides = new ArrayList<>();
+        for(Ride r : allRides){
+            for(Driver d : allDrivers){
+                if(r.getDriver().getId() == d.getId()){
+                    driversRides.add(r);
+                }
+            }
+        }
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(driversRides, requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countRidesForDay(rides, requestReport.getFrom(), requestReport.getTo());
+        int sum = this.rideService.getSumReport(dates);
+        float average = this.rideService.getAverageReport(dates);
+        return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/admin-report/drivers/kms", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> getAdminReportDriversKms(@RequestBody RequestReportDTO requestReport){
+        List<Driver> allDrivers = this.driverService.getAll();
+        List<Ride> allRides = this.rideService.getAll();
+        List<Ride> driversRides = new ArrayList<>();
+        for(Ride r : allRides){
+            for(Driver d : allDrivers){
+                if(r.getDriver().getId() == d.getId()){
+                    driversRides.add(r);
+                }
+            }
+        }
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(driversRides, requestReport.getFrom(), requestReport.getTo());
+        List<ResponseReportDayDTO> dates = this.rideService.countKmsForDay(rides, requestReport.getFrom(), requestReport.getTo());
+        int sum = this.rideService.getSumReport(dates);
+        float average = this.rideService.getAverageReport(dates);
+        return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/admin-report/drivers/money", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> getAdminReportDriversMoney(@RequestBody RequestReportDTO requestReport) {
+        List<Driver> allDrivers = this.driverService.getAll();
+        List<Ride> allRides = this.rideService.getAll();
+        List<Ride> driversRides = new ArrayList<>();
+        for(Ride r : allRides){
+            for(Driver d : allDrivers){
+                if(r.getDriver().getId() == d.getId()){
+                    driversRides.add(r);
+                }
+            }
+        }
+        List<Ride> rides = this.rideService.getUserRidesBetweenDates(driversRides, requestReport.getFrom(), requestReport.getTo());
         List<ResponseReportDayDTO> dates = this.rideService.countMoneyForDay(rides, requestReport.getFrom(), requestReport.getTo());
         int sum = this.rideService.getSumReport(dates);
         float average = this.rideService.getAverageReport(dates);

@@ -26,6 +26,9 @@ public class Driver extends User{
     @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Vehicle vehicle;
 
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private DriverEdit edit;
+
     public Driver(Long id) {
         super(id);
     }
@@ -49,13 +52,29 @@ public class Driver extends User{
         this.vehicle = vehicle;
     }
 
-    public void update(Driver driver){
-        this.setFirstName(driver.getFirstName());
-        this.setLastName(driver.getLastName());
-        this.setPicture(driver.getPicture());
-        this.setPhoneNumber(driver.getPhoneNumber());
-        this.setEmail(driver.getEmail());
-        this.setAddress(driver.getAddress());
+    public Driver(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, boolean b, boolean b1) {
+        super(name, surname, profilePicture, telephoneNumber, email, address, b, b1);
+    }
+
+    public void update(){
+        if(this.edit.getName() != null){
+            this.setFirstName(this.edit.getName());
+        }
+        if(this.edit.getSurname() != null){
+            this.setLastName(this.edit.getSurname());
+        }
+        if(this.edit.getProfilePicture() != null){
+            this.setPicture(this.edit.getProfilePicture());
+        }
+        if(this.edit.getTelephoneNumber() != null){
+            this.setPhoneNumber(this.edit.getTelephoneNumber());
+        }
+        if(this.edit.getEmail() != null){
+            this.setEmail(this.edit.getEmail());
+        }
+        if(this.edit.getAddress() != null){
+            this.setAddress(this.edit.getAddress());
+        }
     }
 
     public void addVehicle(Vehicle vehicle){
