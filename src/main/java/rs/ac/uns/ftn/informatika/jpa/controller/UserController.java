@@ -338,18 +338,8 @@ public class UserController {
 
     @MessageMapping("/message")
     @SendTo("/topic/greetings")
-    public String transferMessages(RequestMessageWithIdDTO requestMessageWithIdDTO) {
-
-        Message message = new Message();
-        User sender = this.userService.getUser(requestMessageWithIdDTO.getSender().toString()).get();
-        message.setSender(sender);
-        User receiver = this.userService.getUser(requestMessageWithIdDTO.getSender().toString()).get();
-        message.setReciever(receiver);
-        message.setRideId(requestMessageWithIdDTO.getRideId());
-        message.setSendingTime(requestMessageWithIdDTO.getSentDateTime());
-        message.setType(requestMessageWithIdDTO.getType());
-        message.setMessage(requestMessageWithIdDTO.getMessage());
-        this.messageService.add(message);
+    public String transferMessages() {
+        
         return "LOL";
     }
 }

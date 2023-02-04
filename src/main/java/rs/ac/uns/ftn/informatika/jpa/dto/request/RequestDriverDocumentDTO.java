@@ -5,12 +5,7 @@ import rs.ac.uns.ftn.informatika.jpa.model.Document;
 import rs.ac.uns.ftn.informatika.jpa.model.Driver;
 
 public class RequestDriverDocumentDTO {
-//    {
-//        "id": 123,
-//            "name": "Vozačka dozvola",
-//            "documentImage": "U3dhZ2dlciByb2Nrcw=",
-//            "driverId": 10
-//    }
+
     private Long id;
     private String name;
     private String documentImage;

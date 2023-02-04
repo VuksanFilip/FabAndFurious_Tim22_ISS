@@ -1,86 +1,42 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestPassengerDTO {
 
+    @NotBlank(message = "Cant be empty")
+    @Length(max = 50, message = "You have exceeded the allowed length")
     private String name;
+
+    @NotBlank(message = "Can't be empty")
+    @Length(max = 50, message = "You have exceeded the allowed length")
     private String surname;
+
     private String profilePicture;
+
     private String telephoneNumber;
+
+    @Email(message = "Invalid format")
     private String email;
+
     private String address;
+
+    @NotBlank(message = "Can't be empty")
+    @Length(min = 8, max = 15, message = "Minimum 8, maximum 15 characters")
+    @Pattern(regexp = "^(?=.*[A-Z])(?!.*[^a-zA-Z0-9])(.{8,15})$", message = "Must contain 1 big letter")
     private String password;
-
-    public RequestPassengerDTO() {
-    }
-
-    public RequestPassengerDTO(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.profilePicture = profilePicture;
-        this.telephoneNumber = telephoneNumber;
-        this.email = email;
-        this.address = address;
-        this.password = password;
-    }
-
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public String getTelephoneNumber() {
-        return telephoneNumber;
-    }
-
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public ResponsePassengerDTO parseToResponse(Long id){
         ResponsePassengerDTO passengerResponse = new ResponsePassengerDTO(this.name, this.surname, this.profilePicture, this.telephoneNumber, this.email, this.address);

@@ -23,6 +23,7 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IRideService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,15 +46,14 @@ public class PassengerController{
         this.passwordEncoder = passwordEncoder;
     }
 
-    //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createPassenger(@RequestBody RequestPassengerDTO requestPassengerDTO) throws Exception {
+    public ResponseEntity<?> createPassenger(@Valid @RequestBody RequestPassengerDTO requestPassengerDTO) throws Exception {
 
-        if(this.userService.findByEmail(requestPassengerDTO.getEmail()) != null){
+        if (this.userService.findByEmail(requestPassengerDTO.getEmail()) != null) {
             return new ResponseEntity<>(new MessageDTO("User with that email already exists!"), HttpStatus.BAD_REQUEST);
         }
 
-        Passenger passenger =  requestPassengerDTO.parseToPassenger();
+        Passenger passenger = requestPassengerDTO.parseToPassenger();
         passenger.setPassword(passwordEncoder.encode(requestPassengerDTO.getPassword()));
         passenger.setRole(Role.PASSENGER);
         passenger.setActive(true);
@@ -62,7 +62,6 @@ public class PassengerController{
 
         passengerService.add(passenger);
         userActivationService.add(activation);
-
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
