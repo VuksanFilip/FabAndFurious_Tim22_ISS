@@ -71,6 +71,14 @@ public class RideServiceImpl implements IRideService {
         return false;
     }
 
+    public boolean checkIfDriverExistInRide(String rideId, String driverId){
+        if(this.rideRepository.findRideByRideIdAndDriverId(Long.parseLong(rideId), Long.parseLong(driverId)) != null){
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public List<Ride> getRidesOfDriver(Driver driver) {
         List<Ride> allRides = new ArrayList<>();

@@ -52,12 +52,8 @@ public class RideController{
     public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
 
         String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
-        System.out.println(passengerId);
 
-        if(!StringUtils.isNumeric(passengerId)){
-            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
-        }
-        if(!this.passengerService.existsById(passengerId)){
+        if(!this.passengerService.existsById(passengerId) && !StringUtils.isNumeric(passengerId)){
             return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
         }
         Driver perfectDriver = this.driverService.getPerfectDriver(VehicleName.valueOf(requestRideDTO.getVehicleType()), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
@@ -147,12 +143,10 @@ public class RideController{
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA) "TESTIRATI"
 
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason, @PathVariable String id) {
+    @PreAuthorize("hasAnyAuthority('DRIVER', 'PASSENGER')")
+    public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) {
 
         String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
-        System.out.println(userId);
-
 
         if(!StringUtils.isNumeric(userId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -167,7 +161,11 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Ride does not exist"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getRide(id).get();
-        Panic panic = panicService.createPanicByRide(this.driverService.getDriver(userId).get(), ride, reason.getReason());
+        if(!rideService.checkIfPassengerExistInRide(id, userId) && !rideService.checkIfDriverExistInRide(id, userId)){
+            return new ResponseEntity<>(new MessageDTO("Cannot crate panic for this ride"), HttpStatus.NOT_FOUND);
+        }
+
+        Panic panic = panicService.createPanicByRide(this.userService.getUser(userId).get(), ride, reason.getReason());
 
         panicService.add(panic);
         return new ResponseEntity<>(panic.parseToResponseSmallerData(), HttpStatus.OK);

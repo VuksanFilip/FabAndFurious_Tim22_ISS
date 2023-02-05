@@ -83,4 +83,6 @@ public interface IRideService {
     boolean checkIfPassengerExistInRide(String rideId, String passengerId);
 
     boolean checkIfAnyPassengerIsBlocked(RequestRideDTO requestRideDTO);
+
+    boolean checkIfDriverExistInRide(String rideId, String driverId);
 }
