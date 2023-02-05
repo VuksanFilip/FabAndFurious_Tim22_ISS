@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Provider;
 import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
@@ -49,6 +50,20 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User findByEmail(String email) {
         return this.userRepository.findByEmail(email);
+    }
+
+    public void processOAuthPostLogin(String email) {
+        User existUser = this.userRepository.findByEmail(email);
+
+        if (existUser == null) {
+            User newUser = new User();
+            newUser.setEmail(email);
+            newUser.setProvider(Provider.FACEBOOK);
+            newUser.setActive(true);
+
+            this.userRepository.save(newUser);
+        }
+
     }
 
 

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseUserWithIdDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Provider;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 
 import javax.persistence.*;
@@ -56,6 +57,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @JsonIgnore
     @Override
