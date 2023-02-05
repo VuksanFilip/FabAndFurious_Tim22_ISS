@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 import rs.ac.uns.ftn.informatika.jpa.security.TokenAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
@@ -47,8 +48,10 @@ public class WebSecurityConfig {
 //                .antMatchers("/h2-console/**").permitAll()
 //                .antMatchers("/api/passenger/**").permitAll()
 //                .antMatchers("/api/driver/**").permitAll()
-                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
-
+//                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
+                .antMatchers("/**").permitAll()//ovo kasnije izbrisati
+//                .antMatchers("/socket/info**").permitAll()
+//                .antMatchers("/socket").permitAll()
 //                .antMatchers("/**").authenticated()
                 .and()
                 .headers().frameOptions().disable().and()
@@ -60,6 +63,19 @@ public class WebSecurityConfig {
         return http.build();
 
     }
+
+//    @Bean
+//    CorsCconfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        // This Origin header you can see that in Network tab
+//        configuration.setAllowedOrigins(Arrays.asList("http:/url_1", "http:/url_2"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+//        configuration.setAllowedHeaders(Arrays.asList("content-type"));
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
