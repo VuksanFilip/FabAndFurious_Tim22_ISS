@@ -27,9 +27,8 @@ public class VehicleController {
         this.locationService = locationService;
     }
 
-    //RADI
     @PutMapping(value = "/{id}/location", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('DRIVER')")
+    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @Valid @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
 
         if(!StringUtils.isNumeric(id)){
