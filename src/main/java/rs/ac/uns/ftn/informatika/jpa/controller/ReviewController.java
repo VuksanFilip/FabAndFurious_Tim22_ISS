@@ -46,7 +46,7 @@ public class ReviewController {
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA), "TESTIRATI"
     @PostMapping(value = "{rideId}/{passengerId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('PASSENGER')")
+    @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId,
                                                  @PathVariable("passengerId") String passengerId,
                                                  @Valid @RequestBody RequestReviewDTO requestReviewDTO) {
@@ -84,7 +84,7 @@ public class ReviewController {
 
     //RADI (NA SWAGGERU NE PISE DA TREBA PAGEABLE TAKO DA NIJE PAGEABLE)
     @GetMapping(value = "/vehicle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getVehicleReviews(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -113,7 +113,7 @@ public class ReviewController {
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA) "TESTIRATI"
     @PostMapping(value = "{rideId}/{passengerId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('PASSENGER')")
+    @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId,
                                                 @PathVariable("passengerId") String passengerId,
                                                 @Valid @RequestBody RequestReviewDTO requestReviewDTO){
@@ -143,7 +143,7 @@ public class ReviewController {
     }
 
     @GetMapping(value = "/driver/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getDriverReviews(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -163,9 +163,8 @@ public class ReviewController {
         return new ResponseEntity<>(new ResponsePageDTO(reviewsForDriver.size(), Arrays.asList(responseReviewDTOS.toArray())), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{rideId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getRideReviews(@PathVariable("rideId") String rideId) {
 
         if(!StringUtils.isNumeric(rideId)){

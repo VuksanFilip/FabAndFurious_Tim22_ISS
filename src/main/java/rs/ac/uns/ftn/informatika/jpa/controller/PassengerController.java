@@ -65,9 +65,8 @@ public class PassengerController{
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getAllPassengers(Pageable page) {
 
         int results = passengerService.getAll().size();
@@ -76,9 +75,8 @@ public class PassengerController{
         return new ResponseEntity<>(new ResponsePageDTO(results, Arrays.asList(responsePassengerDTOS.toArray())), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -91,7 +89,6 @@ public class PassengerController{
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/activate/{activationId}")
     public ResponseEntity<?> activatePassenger(@PathVariable("activationId") String id) {
 
@@ -115,9 +112,8 @@ public class PassengerController{
         return new ResponseEntity<>(new MessageDTO("Successful account activation!"), HttpStatus.OK);
     }
 
-    //RADI
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @Valid @RequestBody RequestPassengerDTO requestPassengerDTO) {
 
         if(!StringUtils.isNumeric(id)){
@@ -134,7 +130,7 @@ public class PassengerController{
     }
 
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassengerRides(@PathVariable("id") String id, Pageable page) {
 
         if(!StringUtils.isNumeric(id)){
