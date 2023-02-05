@@ -40,16 +40,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-//                .antMatchers("/api/login/*").permitAll()
-//                .antMatchers("/api/unregisteredUser/**").permitAll()
-//                .antMatchers("/api/user/login").permitAll()
-//                .antMatchers("/api/user/*/resetPassword").permitAll()
-//                .antMatchers("/h2-console/**").permitAll()
-//                .antMatchers("/api/passenger/**").permitAll()
-//                .antMatchers("/api/driver/**").permitAll()
-                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
+                .antMatchers("/api/login/*").permitAll()
+                .antMatchers("/api/unregisteredUser/**").permitAll()
+                .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/user/*/resetPassword").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/api/passenger/**").permitAll()
+                .antMatchers("/api/driver/**").permitAll()
+//                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
 
-//                .antMatchers("/**").authenticated()
+                .antMatchers("/**").authenticated()
                 .and()
                 .headers().frameOptions().disable().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

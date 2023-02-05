@@ -135,7 +135,6 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
         int i;
 
         for (i = 0; i <= workingHours24.size() - 1; i++) {
-            System.out.println("1");
             if(workingHours24.get(0).getEndTime() == null) {
                 if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getStart().plusMinutes(minutesLeft).isAfter(localDateTime))) {
                     return true;

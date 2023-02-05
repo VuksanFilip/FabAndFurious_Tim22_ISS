@@ -51,8 +51,8 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final IMessageService messageService;
 
-//    @Autowired
-    private TokenUtils tokenUtils;
+    @Autowired
+    private final TokenUtils tokenUtils;
 
     @Autowired
     public UserController(IUserService userService, IPassengerService passengerService, IDriverService driverService, INoteService noteService, IMailService mailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, IRideService rideService, PasswordEncoder passwordEncoder, IMessageService messageService){
@@ -67,9 +67,8 @@ public class UserController {
         this.messageService = messageService;
     }
 
-    //RADI
     @PutMapping (value = "/{id}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody RequestUserChangePasswordDTO requestUserChangePasswordDTO) {
 
         if(!StringUtils.isNumeric(id)){
@@ -88,8 +87,8 @@ public class UserController {
         return new ResponseEntity<>(new MessageDTO("Current password is not matching!"), HttpStatus.BAD_REQUEST);
     }
 
-    //RADI
     @GetMapping(value = "/{id}/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> resetPassword(@PathVariable("id") String id) throws MessagingException, UnsupportedEncodingException {
 
         if(!StringUtils.isNumeric(id)){
@@ -110,8 +109,8 @@ public class UserController {
         return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
     }
 
-    //RADI
     @PutMapping (value = "/{id}/resetPassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> changePasswordWithResetCode(@PathVariable("id") String id, @RequestBody RequestUserResetPasswordDTO requestUserResetPasswordDTO) {
 
 
@@ -134,9 +133,8 @@ public class UserController {
         return new ResponseEntity<>("Password successfully changed!", HttpStatus.NO_CONTENT);
     }
 
-    //RADI
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserRides(@PathVariable("id") String id, Pageable page) {
 
         if(!StringUtils.isNumeric(id)){
@@ -167,9 +165,8 @@ public class UserController {
         return new ResponseEntity<>(new MessageDTO("Cant get rides for ADMIN"), HttpStatus.NOT_FOUND);
     }
 
-    //RADI
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getUsers(Pageable page) {
 
         Page<User> users = userService.findAll(page);
@@ -181,7 +178,6 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.OK);
     }
 
-    //RADI
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@RequestBody RequestLoginDTO login) {
         try{
@@ -198,9 +194,8 @@ public class UserController {
 
     }
 
-    //RADI
     @PutMapping(value = "/{id}/block")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> blockUser(@PathVariable("id") String id){
 
         if(!StringUtils.isNumeric(id)){
@@ -219,9 +214,8 @@ public class UserController {
         return new ResponseEntity<>("User is successfully blocked", HttpStatus.NO_CONTENT);
     }
 
-    //RADI
     @PutMapping(value = "/{id}/unblock")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> ublockUser(@PathVariable("id") String id){
 
         if(!StringUtils.isNumeric(id)){
@@ -240,9 +234,8 @@ public class UserController {
         return new ResponseEntity<>("User is successfully ublocked", HttpStatus.NO_CONTENT);
     }
 
-    //RADI
     @GetMapping(value = "/{id}/message", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getUserMessages(@PathVariable("id") String id, Pageable page){
 
         if(!StringUtils.isNumeric(id)){
@@ -264,7 +257,7 @@ public class UserController {
     //TODO CHECK IF RIDE IS VALID
     //RADI
     @PostMapping(value = "/{id}/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> sendMessageToUser(@PathVariable("id") String id, @Valid @RequestBody RequestMessageDTO requestMessageDTO){
 
         if(!StringUtils.isNumeric(id)){
@@ -295,9 +288,8 @@ public class UserController {
         return new ResponseEntity<>(message.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @PostMapping(value = "/{id}/note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNote(@PathVariable("id") String id, @Valid @RequestBody RequestNoteDTO requestNoteDTO){
 
         if(!StringUtils.isNumeric(id)){
@@ -315,9 +307,8 @@ public class UserController {
         return new ResponseEntity<>(note.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{id}/note", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getUserNotes(@PathVariable("id") String id, Pageable page){
 
         if(!StringUtils.isNumeric(id)){
