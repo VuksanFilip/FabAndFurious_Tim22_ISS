@@ -196,18 +196,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/logout")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> logoutUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (!(auth instanceof AnonymousAuthenticationToken)){
-            SecurityContextHolder.clearContext();
-
-            return new ResponseEntity<>(new MessageDTO("You successfully logged out!"), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new MessageDTO("Can not logout!"), HttpStatus.BAD_REQUEST);
-        }
-
+        SecurityContextHolder.clearContext();
+        return null;
     }
 
     @PutMapping(value = "/{id}/block")
