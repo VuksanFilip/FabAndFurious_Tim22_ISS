@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
@@ -16,6 +17,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
@@ -68,6 +70,9 @@ public class PassengerController{
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getAllPassengers(Pageable page) {
+
+        Long passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        System.out.println(passengerId);
 
         int results = passengerService.getAll().size();
         List<ResponsePassengerDTO> responsePassengerDTOS = passengerService.getAsPageableResponse(page);

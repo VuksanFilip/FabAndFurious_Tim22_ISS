@@ -406,11 +406,15 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
 
-        // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je posle lokalnog vremena)
+//         Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je posle lokalnog vremena)
 //        if(requestWorkingHour.getEnd().isAfter(LocalDateTime.now())){
 //            return new ResponseEntity<>(new MessageDTO("Cannot end shift in the future"), HttpStatus.BAD_REQUEST);
 //        }
         WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId).get();
+        System.out.println("aa");
+        if(workingHour.getStart().isAfter(requestWorkingHour.getEnd())){
+            return new ResponseEntity<>(new MessageDTO("Cannot end before start"), HttpStatus.BAD_REQUEST);
+        }
         if (!this.workHourService.checkIfEndIsNull(workingHour.getEndTime())) {
             return new ResponseEntity<>(new MessageDTO("Cannot end shift because it is already finished!"), HttpStatus.BAD_REQUEST);
         }
