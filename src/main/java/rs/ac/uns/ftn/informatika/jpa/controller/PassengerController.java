@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerUpdateDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
@@ -68,7 +69,7 @@ public class PassengerController{
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getAllPassengers(Pageable page) {
 
         Long passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -81,7 +82,7 @@ public class PassengerController{
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -118,8 +119,8 @@ public class PassengerController{
     }
 
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
-    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @Valid @RequestBody RequestPassengerDTO requestPassengerDTO) {
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @Valid @RequestBody RequestPassengerUpdateDTO requestPassengerDTO) {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -128,14 +129,13 @@ public class PassengerController{
             return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
         Passenger passengerForUpdate = passengerService.getPassenger(id).get();
-        Passenger passenger = requestPassengerDTO.parseToPassenger();
-        passengerForUpdate.update(passenger);
+        passengerForUpdate.update(requestPassengerDTO);
         passengerService.add(passengerForUpdate);
         return new ResponseEntity<>(passengerForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassengerRides(@PathVariable("id") String id, Pageable page) {
 
         if(!StringUtils.isNumeric(id)){

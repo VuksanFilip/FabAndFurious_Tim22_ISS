@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerUpdateDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRidePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
@@ -8,6 +9,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,13 +48,25 @@ public class Passenger extends User{
         this.favoriteRoutes = favoriteRoutes;
     }
 
-    public void update(Passenger passenger){
-        this.setFirstName(passenger.getFirstName());
-        this.setLastName(passenger.getLastName());
-        this.setPicture(passenger.getPicture());
-        this.setPhoneNumber(passenger.getPhoneNumber());
-        this.setEmail(passenger.getEmail());
-        this.setAddress(passenger.getAddress());
+    public void update(RequestPassengerUpdateDTO passenger){
+        if(!Objects.equals(passenger.getName(), "")){
+            this.setFirstName(passenger.getName());
+        }
+        if(!Objects.equals(passenger.getSurname(), "")){
+            this.setLastName(passenger.getSurname());
+        }
+        if(!Objects.equals(passenger.getProfilePicture(), "")){
+            this.setPicture(passenger.getProfilePicture());
+        }
+        if(!Objects.equals(passenger.getTelephoneNumber(), "")){
+            this.setPhoneNumber(passenger.getTelephoneNumber());
+        }
+        if(!Objects.equals(passenger.getEmail(), "")){
+            this.setEmail(passenger.getEmail());
+        }
+        if(!Objects.equals(passenger.getAddress(), "")){
+            this.setAddress(passenger.getAddress());
+        }
     }
 
     public void activate(){
