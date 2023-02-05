@@ -47,20 +47,13 @@ public class ReviewController {
     }
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA), "TESTIRATI"
-<<<<<<< HEAD
+
     @PostMapping(value = "{rideId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId, @Valid @RequestBody RequestReviewDTO requestReviewDTO) {
 
         String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
         System.out.println(passengerId);
-=======
-    @PostMapping(value = "{rideId}/{passengerId}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
-    public ResponseEntity<?> createVehicleReview(@PathVariable("rideId") String rideId,
-                                                 @PathVariable("passengerId") String passengerId,
-                                                 @Valid @RequestBody RequestReviewDTO requestReviewDTO) {
->>>>>>> 7d66ae65cf8c5b2d11ef6b667391c269d8466f13
 
         if(!StringUtils.isNumeric(passengerId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -123,20 +116,14 @@ public class ReviewController {
 
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI PASSENGERA) "TESTIRATI"
-<<<<<<< HEAD
+
     @PostMapping(value = "{rideId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('PASSENGER')")
     public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId, @Valid @RequestBody RequestReviewDTO requestReviewDTO){
 
         String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
         System.out.println(passengerId);
-=======
-    @PostMapping(value = "{rideId}/{passengerId}/driver",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
-    public ResponseEntity<?> createDriverReview(@PathVariable("rideId") String rideId,
-                                                @PathVariable("passengerId") String passengerId,
-                                                @Valid @RequestBody RequestReviewDTO requestReviewDTO){
->>>>>>> 7d66ae65cf8c5b2d11ef6b667391c269d8466f13
+
 
         if(!StringUtils.isNumeric(passengerId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);

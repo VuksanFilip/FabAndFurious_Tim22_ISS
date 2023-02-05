@@ -46,19 +46,13 @@ public class RideController{
     }
 
     //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU (JAKO JAKO TESKO, PUNO RAZMISLJANJA) "TESTIRATI"
-<<<<<<< HEAD
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
 
         String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
         System.out.println(passengerId);
-=======
-    @PostMapping(value = "/passengerId", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
-    public ResponseEntity<?> createNewRide(@PathVariable("passengerId") String passengerId,
-                                           @Valid @RequestBody RequestRideDTO requestRideDTO){
->>>>>>> 7d66ae65cf8c5b2d11ef6b667391c269d8466f13
 
         if(!StringUtils.isNumeric(passengerId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -151,20 +145,14 @@ public class RideController{
     }
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA) "TESTIRATI"
-<<<<<<< HEAD
+
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('DRIVER', 'PASSENGER')")
     public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason, @PathVariable String id) {
 
         String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
         System.out.println(userId);
-=======
-    @PutMapping(value = "/{id}/{userId}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason,
-                                            @PathVariable String id,
-                                            @PathVariable String userId) throws Exception {
->>>>>>> 7d66ae65cf8c5b2d11ef6b667391c269d8466f13
+
 
         if(!StringUtils.isNumeric(userId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
