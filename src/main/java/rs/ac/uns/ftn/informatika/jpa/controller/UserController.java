@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -190,6 +191,21 @@ public class UserController {
             return new ResponseEntity<>(responseLogin, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(new MessageDTO("Wrong username or password!"), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping(value = "/logout", produces = MediaType.TEXT_PLAIN_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
+    public ResponseEntity<?> logoutUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(auth instanceof AnonymousAuthenticationToken)){
+            SecurityContextHolder.clearContext();
+
+            return new ResponseEntity<>(new MessageDTO("You successfully logged out!"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageDTO("Can not logout!"), HttpStatus.BAD_REQUEST);
         }
 
     }
