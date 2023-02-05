@@ -195,7 +195,7 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/logout", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/logout")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> logoutUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
