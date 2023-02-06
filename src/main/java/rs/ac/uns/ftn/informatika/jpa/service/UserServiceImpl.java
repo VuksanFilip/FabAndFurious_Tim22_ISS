@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Provider;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
@@ -50,6 +52,28 @@ public class UserServiceImpl implements IUserService {
     public User findByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
+
+    public void processOAuthPostLogin(String email, String name) {
+        User existUser = this.userRepository.findByEmail(email);
+
+        if (existUser == null) {
+            User newUser = new User();
+            newUser.setFirstName(name.split(" ")[0]);
+            newUser.setLastName(name.split(" ")[1]);
+            newUser.setEmail(email);
+            newUser.setProvider(Provider.FACEBOOK);
+            newUser.setRole(Role.PASSENGER);
+            newUser.setActive(true);
+
+            this.userRepository.save(newUser);
+        }
+    }
+
+//    public void updateAuthenticationType(String username, String providerName) {
+//        Provider provider = Provider.valueOf(providerName.toUpperCase());
+//        repo.updateAuthenticationType(username, authType);
+//        System.out.println("Updated user's authentication type to " + authType);
+//    }
 
 
 //    @Override

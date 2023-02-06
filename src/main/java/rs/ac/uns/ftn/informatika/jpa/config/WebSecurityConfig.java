@@ -10,19 +10,31 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import rs.ac.uns.ftn.informatika.jpa.auth.CustomOAuth2User;
+import rs.ac.uns.ftn.informatika.jpa.auth.CustomOAuth2UserService;
 import org.springframework.web.cors.CorsConfigurationSource;
 import rs.ac.uns.ftn.informatika.jpa.security.TokenAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
+
+    @Autowired
+    private CustomOAuth2UserService oauth2UserService;
 
     @Autowired
     private TokenAuthenticationFilter tokenAuthenticationFilter;
@@ -48,14 +60,32 @@ public class WebSecurityConfig {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/passenger/**").permitAll()
                 .antMatchers("/api/driver/**").permitAll()
+                .antMatchers("**").permitAll()
+                .antMatchers("/list").permitAll()
 //                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
-
                 .antMatchers("/**").authenticated()
                 .and()
                 .headers().frameOptions().disable().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint);;
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                    .oauth2Login()
+                    .loginPage("/registration")
+                    .userInfoEndpoint()
+                    .userService(oauth2UserService)
+                .and()
+                .successHandler(new AuthenticationSuccessHandler() {
+
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                        Authentication authentication) throws IOException, ServletException {
+
+                        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+                        userService.processOAuthPostLogin(oauthUser.getEmail(), oauthUser.getName());
+                    }
+                });
+
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
