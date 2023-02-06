@@ -24,5 +24,5 @@ public interface IUserService extends UserDetailsService {
 
     User findByEmail(String email);
 
-    void processOAuthPostLogin(String email);
+    void processOAuthPostLogin(String email, String name);
 }

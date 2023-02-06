@@ -59,6 +59,8 @@ public class WebSecurityConfig {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/passenger/**").permitAll()
                 .antMatchers("/api/driver/**").permitAll()
+                .antMatchers("**").permitAll()
+                .antMatchers("/list").permitAll()
 //                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
                 .antMatchers("/**").authenticated()
                 .and()
@@ -68,7 +70,7 @@ public class WebSecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                     .oauth2Login()
-                    .loginPage("/login")
+                    .loginPage("/registration")
                     .userInfoEndpoint()
                     .userService(oauth2UserService)
                 .and()
@@ -79,10 +81,7 @@ public class WebSecurityConfig {
                                                         Authentication authentication) throws IOException, ServletException {
 
                         CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-
-                        userService.processOAuthPostLogin(oauthUser.getEmail());
-
-                        response.sendRedirect("/list");
+                        userService.processOAuthPostLogin(oauthUser.getEmail(), oauthUser.getName());
                     }
                 });
 

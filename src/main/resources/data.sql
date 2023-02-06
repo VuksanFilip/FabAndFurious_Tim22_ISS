@@ -1,20 +1,20 @@
 --admin
 --pass: fica123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, reset_password_token, reset_password_token_expiration, role) values (true, 'Bulevar oslobodjenja 12 Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', '$2a$10$xxZY6ssiuGbG/YwQ.3Uf..Ac5mS8zW8viMNsOcot7JLUYVUg6rqTm', '0664587545', 'picture', 'token', '2017-10-01 21:58:58.508-07', 'ADMIN')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, reset_password_token, reset_password_token_expiration, role) values (true, 'Bulevar oslobodjenja 12 Novi Sad', false, 'admin@gmail.com', 'Filip', 'Vuksan', '$2a$10$xxZY6ssiuGbG/YwQ.3Uf..Ac5mS8zW8viMNsOcot7JLUYVUg6rqTm', '0664587545', 'picture', 'LOCAL', 'token', '2017-10-01 21:58:58.508-07', 'ADMIN')
 insert into ADMINS(id) values (1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 1)
 
 --passenger
 --pass: marko123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', '$2a$10$pW7xhKHkW/n6UAr1zlrK8OG9lZgio/Ix/K3dltB512sCDRL8h9ZI2', '06652685', 'picture', 'PASSENGER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, role) values (true, 'Bulevar oslobodjenja 127, Novi Sad', false, 'marko.markovic@gmail.com', 'Marko', 'Markovic', '$2a$10$pW7xhKHkW/n6UAr1zlrK8OG9lZgio/Ix/K3dltB512sCDRL8h9ZI2', '06652685', 'picture', 'LOCAL', 'PASSENGER')
 insert into PASSENGER(id) values (2)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 2)
 --pass: petar123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 2, Novi Sad', false, 'petar.petrovic@gmail.com', 'Petar', 'Petrovic', '$2a$10$cQnYiXJL0XHGoX27SCRLjOhoHRzKWlzkNP5sEXjStrFdtjAntCHH6', '066874521', 'picture', 'PASSENGER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, role) values (true, 'Bulevar oslobodjenja 2, Novi Sad', false, 'petar.petrovic@gmail.com', 'Petar', 'Petrovic', '$2a$10$cQnYiXJL0XHGoX27SCRLjOhoHRzKWlzkNP5sEXjStrFdtjAntCHH6', '066874521', 'picture', 'LOCAL', 'PASSENGER')
 insert into PASSENGER(id) values (3)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 3)
 --pass: janko123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 44, Novi Sad', false, 'janko.jankovic@gmail.com', 'Janko', 'Jankovic', '$2a$10$gbCmI8/02BLAcEAov2.H9eyCwWDhE7aenS7bxfByfERuRnP1Buaa2', '0654784595', 'picture', 'PASSENGER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, role) values (true, 'Bulevar oslobodjenja 44, Novi Sad', false, 'janko.jankovic@gmail.com', 'Janko', 'Jankovic', '$2a$10$gbCmI8/02BLAcEAov2.H9eyCwWDhE7aenS7bxfByfERuRnP1Buaa2', '0654784595', 'picture', 'LOCAL', 'PASSENGER')
 insert into PASSENGER(id) values (4)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 4)
 
@@ -36,15 +36,15 @@ insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_
 
 --driver
 --pass: andrea123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 78, Novi Sad', false, 'andrea.katzenberger@gmail.com', 'Andrea', 'Katzenberger', '$2a$10$PelwlV29qdhWztr21ChMBeYYQUkWMuJhJhYqLKBKQiTa7he8qaIN6', '0641254658', 'picture', 'DRIVER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, role) values (true, 'Bulevar oslobodjenja 78, Novi Sad', false, 'andrea.katzenberger@gmail.com', 'Andrea', 'Katzenberger', '$2a$10$PelwlV29qdhWztr21ChMBeYYQUkWMuJhJhYqLKBKQiTa7he8qaIN6', '0641254658', 'picture', 'LOCAL', 'DRIVER')
 insert into DRIVER(id, vehicle_id) values (5, 1)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 5)
 --pass: bojana123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 27, Novi Sad', false, 'bojana.popov@gmail.com', 'Bojana', 'Popov', '$2a$10$L0CStOxSs0ZS.aFea9/AaOvk2//F5/3SDIGr266nwbm7EURWDKgaK', '0634857954', 'picture', 'DRIVER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, role) values (true, 'Bulevar oslobodjenja 27, Novi Sad', false, 'bojana.popov@gmail.com', 'Bojana', 'Popov', '$2a$10$L0CStOxSs0ZS.aFea9/AaOvk2//F5/3SDIGr266nwbm7EURWDKgaK', '0634857954', 'picture', 'LOCAL', 'DRIVER')
 insert into DRIVER(id, vehicle_id) values (6, 2)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 6)
 --pass: mirko123
-insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, role) values (true, 'Bulevar oslobodjenja 7, Novi Sad', false, 'mirko.mirkovic@gmail.com', 'Mirko', 'Mirkovic', '$2a$10$bm0/QkZmhQEQVI8LwFV9QeescIjZjdJSHre/xK2lJw020xCHJxV0m', '0645879458', 'picture', 'DRIVER')
+insert into USERS(active, address, blocked, email, first_name, last_name, password, phone_number, picture, provider, role) values (true, 'Bulevar oslobodjenja 7, Novi Sad', false, 'mirko.mirkovic@gmail.com', 'Mirko', 'Mirkovic', '$2a$10$bm0/QkZmhQEQVI8LwFV9QeescIjZjdJSHre/xK2lJw020xCHJxV0m', '0645879458', 'picture', 'LOCAL', 'DRIVER')
 insert into DRIVER(id, vehicle_id) values (7, null)
 insert into USER_ACTIVATION(date, lifespan, user_id) values ('2023-01-20 13:51:00.900595', 3, 7)
 
