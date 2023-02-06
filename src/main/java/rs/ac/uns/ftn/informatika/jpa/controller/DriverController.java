@@ -316,7 +316,7 @@ public class DriverController {
 
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('DRIVER')")
+//    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @Valid @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
 
         if (!this.driverService.getDriver(driverId).isPresent()) {
@@ -326,9 +326,9 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je pre lokalnog vremena)
-        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
-            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
-        }
+//        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
+//            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
+//        }
         if (this.workHourService.checkIfShiftBetween(driverId, requestWorkingHour.getStart())) {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because it was already ongoing in that time!"), HttpStatus.BAD_REQUEST);
         }
@@ -382,7 +382,7 @@ public class DriverController {
 
     //RADI
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('ADMIN', 'DRIVER')")
+    @PreAuthorize("hasAnyAuthority('DRIVER')")
     public ResponseEntity<?> getWorkingHour(@PathVariable("working-hour-id") String workingHourId) {
 
         if(!StringUtils.isNumeric(workingHourId)){
@@ -397,7 +397,7 @@ public class DriverController {
 
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('DRIVER')")
+//    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") String workingHourId, @Valid @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
         if (!this.workHourService.getWorkHour(workingHourId).isPresent()) {
             return new ResponseEntity<>(new MessageDTO("Working hour does not exist!"), HttpStatus.NOT_FOUND);

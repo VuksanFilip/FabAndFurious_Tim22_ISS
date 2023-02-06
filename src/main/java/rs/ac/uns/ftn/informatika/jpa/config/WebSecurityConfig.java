@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.auth.CustomOAuth2User;
 import rs.ac.uns.ftn.informatika.jpa.auth.CustomOAuth2UserService;
+import org.springframework.web.cors.CorsConfigurationSource;
 import rs.ac.uns.ftn.informatika.jpa.security.TokenAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
@@ -90,6 +91,7 @@ public class WebSecurityConfig {
         return http.build();
 
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
