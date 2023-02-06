@@ -38,6 +38,7 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
     public int getEstimatedCost(RequestAssumptionDTO requestAssumptionDTO){
         double priceByVehicleType = getPriceByVehicleType(requestAssumptionDTO.getVehicleType());
         double km = calculateDistance(requestAssumptionDTO.getLocations());
+        System.out.println(km+"km");
         if(requestAssumptionDTO.isBabyTransport() == true && requestAssumptionDTO.isPetTransport() == true){
             return (int) (priceByVehicleType + (km * 120)) + 200;
         }
@@ -51,7 +52,9 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
     }
 
     public int getEstimatedTimeInMinutes(RequestAssumptionDTO requestAssumptionDTO){
-        return (int) ((calculateDistance(requestAssumptionDTO.getLocations()) / kmPerHour) * 60);
+
+        //System.out.println((calculateDistance(requestAssumptionDTO.getLocations()))/kmPerHour);
+        return (int) ((calculateDistance(requestAssumptionDTO.getLocations()))/kmPerHour);
     }
 
     public double getPriceByVehicleType(String name){
@@ -93,6 +96,7 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
 
         double distance = radius * c * 1000; // convert to meters
         distance = Math.pow(distance, 2);
+        System.out.println(distance);
 
         return Math.sqrt(distance);
     }
