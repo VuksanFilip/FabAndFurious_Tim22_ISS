@@ -17,13 +17,12 @@ import javax.validation.Valid;
 @RequestMapping("/api/unregisteredUser")
 public class UnregisteredUserController {
 
-    private IVehicleTypeService vehicleTypeService;
+    private final IVehicleTypeService vehicleTypeService;
 
     public UnregisteredUserController(IVehicleTypeService vehicleTypeService){
         this.vehicleTypeService = vehicleTypeService;
     }
 
-    //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAssumption(@Valid @RequestBody RequestAssumptionDTO requestAssumptionDTO) {
 

@@ -51,9 +51,8 @@ public class DriverController {
         this.driverEditService = driverEditService;
     }
 
-    //RADI
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNewDriver(@Valid @RequestBody RequestDriverDTO requestDriverDTO) {
 
         if (this.userService.findByEmail(requestDriverDTO.getEmail()) != null) {
@@ -69,9 +68,8 @@ public class DriverController {
         return new ResponseEntity<>(driver.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getAllDrivers(Pageable page) {
 
         Page<Driver> drivers = driverService.findAll(page);
@@ -85,9 +83,8 @@ public class DriverController {
         return new ResponseEntity<>(new ResponsePageDTO(results, Arrays.asList(responseDriverDTOS.toArray())), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriver(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -102,9 +99,8 @@ public class DriverController {
         return new ResponseEntity<>(driver.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @PostMapping(value="/{driverId}/request-edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('DRIVER')")
+    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> sendRequestForEdit(@PathVariable("driverId") String driverId, @Valid @RequestBody RequestEditDriverDTO requestDriverDTO){
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>(new MessageDTO("Driver with this id does not exist!"), HttpStatus.OK);
@@ -117,9 +113,8 @@ public class DriverController {
         return new ResponseEntity<>(new MessageDTO("Successfully sent request for updating driver!"), HttpStatus.OK);
     }
 
-    //RADI
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @Valid @RequestBody RequestEditApprovalDTO approval) {
 
         if(!StringUtils.isNumeric(id)){
@@ -146,7 +141,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/edit-requests", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getAllEditRequests(){
         List<ResponseEditRequestDTO> allRequestsList = new ArrayList<>();
         ResponseAllRequestsDTO allRequests = new ResponseAllRequestsDTO();
@@ -159,9 +154,8 @@ public class DriverController {
         return new ResponseEntity<>(allRequests, HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{id}/documents", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverDocuments(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -182,9 +176,8 @@ public class DriverController {
         return new ResponseEntity<>(driverDocumentDTOS, HttpStatus.OK);
     }
 
-    //RADI
     @PostMapping(value = "/{id}/documents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> addDriverDocument(@PathVariable("id") String id, @Valid @RequestBody RequestDriverDocumentDTO requestDriverDocumentDTO) throws Exception {
 
         if(!StringUtils.isNumeric(id)){
@@ -202,9 +195,8 @@ public class DriverController {
         return new ResponseEntity<>(document.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @DeleteMapping(value = "/document/{document-id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteDriverDocument(@PathVariable("document-id") String documentId) {
 
         if(!StringUtils.isNumeric(documentId)){
@@ -221,9 +213,8 @@ public class DriverController {
         return new ResponseEntity<>(new MessageDTO("Driver document deleted successfully"), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{id}/vehicle", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER', 'PASSENGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getDriverVehicle(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -239,9 +230,8 @@ public class DriverController {
         return new ResponseEntity<>(vehicle.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @PostMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> addDriverVehicle(@PathVariable("id") String id, @Valid @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) throws Exception {
 
         if(!StringUtils.isNumeric(id)){
@@ -264,9 +254,8 @@ public class DriverController {
         return new ResponseEntity<>(vehicle.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @PutMapping(value = "/{id}/vehicle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> changeDriverVehicle(@PathVariable("id") String driverId, @Valid @RequestBody RequestDriverVehicleDTO requestDriverVehicleDTO) {
 
         if(!StringUtils.isNumeric(driverId)){
@@ -288,10 +277,8 @@ public class DriverController {
         return new ResponseEntity<>(newVehicle.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
-    //TESTIRATI FROM I TO UPIT
     @GetMapping(value = "/{id}/working-hour", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverWorkingHours(@PathVariable("id") String driverId,
                                                    Pageable page,
                                                    @RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate from,
@@ -329,7 +316,7 @@ public class DriverController {
 
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PostMapping(value = "/{id}/working-hour", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('DRIVER')")
+//    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> createDriverWorkingHour(@PathVariable("id") String driverId, @Valid @RequestBody RequestDriverWorkingHourStartDTO requestWorkingHour) throws Exception {
 
         if (!this.driverService.getDriver(driverId).isPresent()) {
@@ -339,9 +326,9 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
         // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je pre lokalnog vremena)
-        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
-            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
-        }
+//        if(requestWorkingHour.getStart().isBefore(LocalDateTime.now())){
+//            return new ResponseEntity<>(new MessageDTO("Cannot start shift in the past"), HttpStatus.BAD_REQUEST);
+//        }
         if (this.workHourService.checkIfShiftBetween(driverId, requestWorkingHour.getStart())) {
             return new ResponseEntity<>(new MessageDTO("Cannot start shift because it was already ongoing in that time!"), HttpStatus.BAD_REQUEST);
         }
@@ -361,7 +348,7 @@ public class DriverController {
     // to= yyyy-MM-ddThh:mm:ss -> 2000-01-31T09:00:00
 
     @GetMapping(value = "/{id}/ride")
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverRides(
             @PathVariable("id") String driverId,
             Pageable page,
@@ -395,7 +382,7 @@ public class DriverController {
 
     //RADI
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")
+    @PreAuthorize("hasAnyAuthority('DRIVER')")
     public ResponseEntity<?> getWorkingHour(@PathVariable("working-hour-id") String workingHourId) {
 
         if(!StringUtils.isNumeric(workingHourId)){
@@ -410,7 +397,7 @@ public class DriverController {
 
     //RADI (NADAM SE DA SAM DOBRO ISTESTIRAO, MORA SE ODKOMENTARISATI ONAJ IF)
     @PutMapping(value = "/working-hour/{working-hour-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyRole('DRIVER')")
+//    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> updateWorkingHour(@PathVariable("working-hour-id") String workingHourId, @Valid @RequestBody RequestDriverWorkingHourEndDTO requestWorkingHour) {
         if (!this.workHourService.getWorkHour(workingHourId).isPresent()) {
             return new ResponseEntity<>(new MessageDTO("Working hour does not exist!"), HttpStatus.NOT_FOUND);
@@ -419,11 +406,15 @@ public class DriverController {
             return new ResponseEntity<>(new MessageDTO("Cannot end shift because the vehicle is not defined!"), HttpStatus.BAD_REQUEST);
         }
 
-        // Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je posle lokalnog vremena)
+//         Zakomentarisano radi lakseg unosanje u bazu (tj da ne pravi problem oko toga dal je posle lokalnog vremena)
 //        if(requestWorkingHour.getEnd().isAfter(LocalDateTime.now())){
 //            return new ResponseEntity<>(new MessageDTO("Cannot end shift in the future"), HttpStatus.BAD_REQUEST);
 //        }
         WorkingHour workingHour = this.workHourService.getWorkHour(workingHourId).get();
+        System.out.println("aa");
+        if(workingHour.getStart().isAfter(requestWorkingHour.getEnd())){
+            return new ResponseEntity<>(new MessageDTO("Cannot end before start"), HttpStatus.BAD_REQUEST);
+        }
         if (!this.workHourService.checkIfEndIsNull(workingHour.getEndTime())) {
             return new ResponseEntity<>(new MessageDTO("Cannot end shift because it is already finished!"), HttpStatus.BAD_REQUEST);
         }
@@ -442,6 +433,7 @@ public class DriverController {
     automatcki enduje u tih 24 sata
      */
     @PutMapping(value = "/working-hour/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> updateWorkingHour() {
         this.workHourService.refreshUnfinishedShifts();
         return new ResponseEntity<>(null);

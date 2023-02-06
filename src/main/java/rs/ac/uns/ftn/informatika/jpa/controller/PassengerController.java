@@ -8,14 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerUpdateDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideNoStatusDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.UserActivation;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IPassengerService;
@@ -65,10 +68,12 @@ public class PassengerController{
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponsePageDTO> getAllPassengers(Pageable page) {
+
+        Long passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        System.out.println(passengerId);
 
         int results = passengerService.getAll().size();
         List<ResponsePassengerDTO> responsePassengerDTOS = passengerService.getAsPageableResponse(page);
@@ -76,9 +81,8 @@ public class PassengerController{
         return new ResponseEntity<>(new ResponsePageDTO(results, Arrays.asList(responsePassengerDTOS.toArray())), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -91,7 +95,6 @@ public class PassengerController{
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
-    //RADI
     @GetMapping(value = "/activate/{activationId}")
     public ResponseEntity<?> activatePassenger(@PathVariable("activationId") String id) {
 
@@ -115,10 +118,9 @@ public class PassengerController{
         return new ResponseEntity<>(new MessageDTO("Successful account activation!"), HttpStatus.OK);
     }
 
-    //RADI
     @PutMapping (value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
-    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @Valid @RequestBody RequestPassengerDTO requestPassengerDTO) {
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+    public ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @Valid @RequestBody RequestPassengerUpdateDTO requestPassengerDTO) {
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -127,14 +129,13 @@ public class PassengerController{
             return new ResponseEntity<>("Passenger does not exist!", HttpStatus.NOT_FOUND);
         }
         Passenger passengerForUpdate = passengerService.getPassenger(id).get();
-        Passenger passenger = requestPassengerDTO.parseToPassenger();
-        passengerForUpdate.update(passenger);
+        passengerForUpdate.update(requestPassengerDTO);
         passengerService.add(passengerForUpdate);
         return new ResponseEntity<>(passengerForUpdate.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/ride", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PASSENGER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> getPassengerRides(@PathVariable("id") String id, Pageable page) {
 
         if(!StringUtils.isNumeric(id)){
