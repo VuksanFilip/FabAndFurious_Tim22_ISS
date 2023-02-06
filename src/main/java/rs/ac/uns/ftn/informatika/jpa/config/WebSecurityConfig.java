@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 import rs.ac.uns.ftn.informatika.jpa.security.TokenAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
@@ -60,6 +61,7 @@ public class WebSecurityConfig {
         return http.build();
 
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
