@@ -67,6 +67,7 @@ public class DriverServiceImpl implements IDriverService {
         List<Driver> driverWithShift = new ArrayList<>();
         Driver perfectDriver = null;
         double perfectDistance = Double.POSITIVE_INFINITY;
+        System.out.println("STASD");
 
         for(Driver driver : drivers) {
             if (workingHourService.checkIfShiftBetweenToGetDriver(driver.getId().toString(), localDateTime)) {
@@ -74,6 +75,7 @@ public class DriverServiceImpl implements IDriverService {
             }
         }
 
+        System.out.println("DISTANCA");
         for(Driver driver: driverWithShift){
             double distance = vehicleTypeService.distance(requestLocationDTO.getDeparture().getLatitude(),
                     driver.getVehicle().getCurrentLocation().getLatitude(),
@@ -84,6 +86,8 @@ public class DriverServiceImpl implements IDriverService {
                 perfectDriver = driver;
             }
         }
+        System.out.println("DISTANCAAA");
+        System.out.println(perfectDriver.getId());
         return perfectDriver;
     }
 

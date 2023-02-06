@@ -133,6 +133,19 @@ public class Ride {
         this.scheduledTime = scheduledTime;
     }
 
+    public Ride(Date startTime, Date endTime, int totalCost, int estimatedTimeInMinutes, boolean panic, boolean petTransport, boolean babyTransport, RideStatus status, Date scheduledTime){
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.totalCost = totalCost;
+        this.estimatedTimeInMinutes = estimatedTimeInMinutes;
+        this.panic = panic;
+        this.petTransport = petTransport;
+        this.babyTransport = babyTransport;
+        this.status = status;
+        this.scheduledTime = scheduledTime;
+    }
+
+
     public ResponseRideNoStatusDTO parseToResponseNoStatus(){
 
         ArrayList<ResponsePassengerIdEmailDTO> responsPassengerIdEmailDTOS = new ArrayList<ResponsePassengerIdEmailDTO>();

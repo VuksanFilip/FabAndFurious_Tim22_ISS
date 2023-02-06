@@ -134,20 +134,26 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
         long minutesLeft = (8 * 60) - minutes;
         int i;
 
+        System.out.println("A");
         for (i = 0; i <= workingHours24.size() - 1; i++) {
+            System.out.println("B");
             if(workingHours24.get(0).getEndTime() == null) {
+                System.out.println("1");
                 if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getStart().plusMinutes(minutesLeft).isAfter(localDateTime))) {
                     return true;
                 }
                 return false; //mozda ovo obrisati jos ne znam
             }
             if (i == workingHours24.size() - 2) {
+                System.out.println("2");
                 if (workingHours24.get(i).getEndTime() == null) {
+                    System.out.println("3");
                     if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getStart().plusMinutes(minutesLeft).isAfter(localDateTime))) {
                         return true;
                     }
                 }
                 if (workingHours24.get(i).getEndTime() != null) {
+                    System.out.println("4");
                     if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getEndTime().isAfter(localDateTime))) {
                         return true;
                     }
@@ -155,9 +161,11 @@ public class WorkingHourServiceImpl implements IWorkingHourService {
                 return false;
             }
             if ((workingHours24.get(i).getStart().isBefore(localDateTime)) && (workingHours24.get(i).getEndTime().isAfter(localDateTime))) {
+                System.out.println("5");
                 return true;
             }
         }
+        System.out.println("6");
         return false;
     }
 

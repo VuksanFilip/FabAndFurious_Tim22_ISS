@@ -45,9 +45,7 @@ public class RideController{
         this.userService = userService;
     }
 
-    //TODO FALI PROVERA KADA ZAVRSAVA VOZAC RADNJU (JAKO JAKO TESKO, PUNO RAZMISLJANJA) "TESTIRATI"
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+        @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
 
@@ -59,12 +57,6 @@ public class RideController{
         Driver perfectDriver = this.driverService.getPerfectDriver(VehicleName.valueOf(requestRideDTO.getVehicleType()), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
         if(perfectDriver == null){
             return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.BAD_REQUEST);
-        }
-        if(!rideService.findAllRidesByPassengerIdAndRideStatus(this.passengerService.getPassenger(passengerId).toString(), RideStatus.PENDING).isEmpty()){
-            return new ResponseEntity<>(new MessageDTO("Cannot create a ride while you have one already pending!"), HttpStatus.BAD_REQUEST);
-        }
-        if(rideService.checkIfAnyPassengerIsBlocked(requestRideDTO)){
-            return new ResponseEntity<>(new MessageDTO("Some of the passengers are blocked!"), HttpStatus.BAD_REQUEST);
         }
 
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
@@ -124,7 +116,7 @@ public class RideController{
     }
 
     @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
+    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> withdrawRide(@PathVariable String id){
 
         if(!StringUtils.isNumeric(id)){
