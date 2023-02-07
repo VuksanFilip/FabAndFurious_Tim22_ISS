@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
@@ -45,11 +44,11 @@ public class RideController{
         this.userService = userService;
     }
 
-        @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{passengerId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAuthority('PASSENGER')")
-    public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
+    public ResponseEntity<?> createNewRide(@PathVariable("passengerId") String passengerId, @Valid @RequestBody RequestRideDTO requestRideDTO){
 
-        String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
+//        String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
 
         if(!this.passengerService.existsById(passengerId) && !StringUtils.isNumeric(passengerId)){
             return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
