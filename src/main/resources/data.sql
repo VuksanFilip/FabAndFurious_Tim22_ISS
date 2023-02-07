@@ -107,4 +107,4 @@ insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicl
 insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (2,2)
 insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (2,2)
 
-insert into WORKING_HOUR(start, end_time, driver_id) values ('2023-02-07 17:00:00', '2023-02-07 23:00:00', 6)
+insert into WORKING_HOUR(start, end_time, driver_id) values (TIMESTAMP '2023-02-07 17:20:34.222', TIMESTAMP '2023-02-07 23:20:34.222', 5)
