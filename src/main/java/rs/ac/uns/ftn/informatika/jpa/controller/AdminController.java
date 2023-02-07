@@ -20,7 +20,7 @@ public class AdminController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getAdmin() {
         Admin admin = adminService.getAll().get(0);
         return new ResponseEntity<>(admin.parseToResponse(), HttpStatus.OK);
