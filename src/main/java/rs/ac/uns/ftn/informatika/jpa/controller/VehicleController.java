@@ -28,7 +28,7 @@ public class VehicleController {
     }
 
     @PutMapping(value = "/{id}/location", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('DRIVER')")
+//    @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> changeLocation(@PathVariable("id") String id, @Valid @RequestBody RequestCurrentLocationDTO requestCurrentLocationDTO) {
 
         if(!StringUtils.isNumeric(id)){
