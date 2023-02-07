@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.auth.CustomOAuth2User;
 import rs.ac.uns.ftn.informatika.jpa.auth.CustomOAuth2UserService;
-import org.springframework.web.cors.CorsConfigurationSource;
+import rs.ac.uns.ftn.informatika.jpa.security.RestAuthenticationEntryPoint;
 import rs.ac.uns.ftn.informatika.jpa.security.TokenAuthenticationFilter;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
@@ -38,6 +38,9 @@ public class WebSecurityConfig {
 
     @Autowired
     private TokenAuthenticationFilter tokenAuthenticationFilter;
+
+    @Autowired
+    private RestAuthenticationEntryPoint entryPoint;
 
     @Autowired
     private AuthenticationEntryPoint authenticationEntryPoint;
@@ -68,7 +71,7 @@ public class WebSecurityConfig {
                 .headers().frameOptions().disable().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint(entryPoint) //umesto authenticationEntryPoint
                 .and()
                     .oauth2Login()
                     .loginPage("/registration")

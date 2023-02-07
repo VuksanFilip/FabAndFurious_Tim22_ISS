@@ -31,7 +31,7 @@ insert into LOCATION(address, latitude, longitude) values ('Vladike Platona 2, N
 
 --vehicle
 insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (true, 'NS 234 NR', false, 4, 'Audi A4', 1, 1)
-insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (true, 'NS 444 VT', true, 4, 'Opel astra', 2, 2)
+insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (true, 'NS 444 VT', true, 4, 'Opel astra', 2, 1)
 insert into VEHICLE(baby_friendly, license_number, pet_friendly, seats, vehicle_model, current_location_id, vehicle_type_id) values (false, 'NS 444 VT', false, 4, 'BMW', 3, 3)
 
 --driver
@@ -106,3 +106,5 @@ insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (1,1)
 insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime2', false, 'STANDARD')
 insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (2,2)
 insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (2,2)
+
+insert into WORKING_HOUR(start, end_time, driver_id) values ('2023-02-07 17:00:00', '2023-02-07 23:00:00', 6)

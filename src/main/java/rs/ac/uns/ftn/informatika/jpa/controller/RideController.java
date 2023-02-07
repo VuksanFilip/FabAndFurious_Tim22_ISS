@@ -56,7 +56,7 @@ public class RideController{
         }
         Driver perfectDriver = this.driverService.getPerfectDriver(VehicleName.valueOf(requestRideDTO.getVehicleType()), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
         if(perfectDriver == null){
-            return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.NOT_FOUND);
         }
 
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
@@ -88,8 +88,8 @@ public class RideController{
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
-        if(!this.driverService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Driver does not exist!"), HttpStatus.NOT_FOUND);
+        if(!this.passengerService.existsById(id)){
+            return new ResponseEntity<>(new MessageDTO("Passenger does not exist!"), HttpStatus.NOT_FOUND);
         }
         Ride ride = rideService.getActiveRideByPassengerId(id);
         if(ride != null){
@@ -104,9 +104,6 @@ public class RideController{
 
         if(!StringUtils.isNumeric(id)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
-        }
-        if(!this.driverService.existsById(id)){
-            return new ResponseEntity<>(new MessageDTO("Driver does not exist!"), HttpStatus.NOT_FOUND);
         }
         else if(!rideService.existsById(id)){
             return new ResponseEntity<>(new MessageDTO("Ride does not exist!"), HttpStatus.NOT_FOUND);

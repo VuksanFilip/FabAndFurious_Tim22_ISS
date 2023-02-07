@@ -56,6 +56,19 @@ public class RideServiceImpl implements IRideService {
         return this.rideRepository.existsById(Long.parseLong(id));
     }
 
+    @Override
+    public Ride updateRide(Ride ride) {
+        return this.rideRepository.save(ride);
+    }
+
+    public void add(Ride ride) {
+        this.rideRepository.save(ride);
+    }
+
+    public long getSize() {
+        return this.rideRepository.count();
+    }
+
     public Page<Ride> findAll(Pageable page) {
         return rideRepository.findAll(page);
     }
@@ -88,19 +101,6 @@ public class RideServiceImpl implements IRideService {
             }
         }
         return allRides;
-    }
-
-    @Override
-    public Ride updateRide(Ride ride) {
-        return this.rideRepository.save(ride);
-    }
-
-    public void add(Ride ride) {
-        this.rideRepository.save(ride);
-    }
-
-    public long getSize() {
-        return this.rideRepository.count();
     }
 
     public Ride getaActiveRideByDriverId(String id) {
