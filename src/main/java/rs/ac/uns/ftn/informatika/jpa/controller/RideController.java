@@ -119,7 +119,7 @@ public class RideController{
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
         }
         if(rideService.checkIfNotPendingAndNotStartedById(id)){
-            return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO("Cannot withdraw a ride that is not in status PENDING or STARTED!"), HttpStatus.BAD_REQUEST);
         }
         rideService.updateRideByStatus(id, RideStatus.REJECTED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
@@ -242,11 +242,9 @@ public class RideController{
     @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> getFavoriteRoutes() {
 
-        System.out.println("AAAAAAAAAAAAAAAa");
         String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
 
         List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = favoriteRouteService.getResponseFavoriteRoutes(userId);
-        System.out.println("BBBB");
         return new ResponseEntity<>(responseFavoriteRoutes, HttpStatus.OK);
     }
 
