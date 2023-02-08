@@ -133,11 +133,11 @@ public class RideController{
 
     //TODO IMA VEZE SA SEKJURITIJEM (PROMENITI USERA) "TESTIRATI"
 
-    @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{userId}/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyAuthority('DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) {
+    public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable("id") String id,  @PathVariable("userId") String userId) {
 
-        String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
+//        String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
 
         if(!StringUtils.isNumeric(userId)){
             return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
@@ -153,7 +153,7 @@ public class RideController{
         }
         Ride ride = rideService.getRide(id).get();
         if(!rideService.checkIfPassengerExistInRide(id, userId) && !rideService.checkIfDriverExistInRide(id, userId)){
-            return new ResponseEntity<>(new MessageDTO("Cannot crate panic for this ride"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO("Cannot create panic for this ride"), HttpStatus.NOT_FOUND);
         }
 
         Panic panic = panicService.createPanicByRide(this.userService.getUser(userId).get(), ride, reason.getReason());
