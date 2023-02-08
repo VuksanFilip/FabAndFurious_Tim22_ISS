@@ -12,13 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationWithAddressDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLoginDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseLoginDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePassengerIdEmailDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
+import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,18 +22,23 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RideControllerTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private TestRestTemplate passengerRestTemplate, driverRestTemplate;
+    private TestRestTemplate passengerRestTemplate, driverRestTemplate, adminRestTemplate;
 
-    private String passengerJwtToken, driverJwtToken;
+    private String passengerJwtToken, driverJwtToken, adminJwtToken;
+
+    private String passengerEmail = "marko.markovic@gmail.com", driverEmail = "andrea.katzenberger@gmail.com", adminEmail = adminJwtToken = "admin@gmail.com";
+
     private final String BASEAPI = "http://localhost:8084/api/ride";
 
     @BeforeAll
@@ -45,11 +46,13 @@ public class RideControllerTests {
         createJwtTokens();
         createPassengerRestTemplate();
         createDriverRestTemplate();
+        createAdminRestTemplate();
     }
 
     private void createJwtTokens() {
         createPassengerJwtToken();
         createDriverJwtToken();
+        createAdminJwtToken();
     }
 
     private void createPassengerJwtToken() {
@@ -70,6 +73,15 @@ public class RideControllerTests {
         this.driverJwtToken = responseLogin.getBody().getAccessToken();
     }
 
+    private void createAdminJwtToken() {
+        HttpEntity<RequestLoginDTO> requestLogin = new HttpEntity<>(new RequestLoginDTO("admin@gmail.com", "fica123"));
+        ResponseEntity<ResponseLoginDTO> responseLogin = this.restTemplate.exchange("/api/user/login",
+                HttpMethod.POST,
+                requestLogin,
+                ResponseLoginDTO.class);
+        this.adminJwtToken = responseLogin.getBody().getAccessToken();
+    }
+
     private void createPassengerRestTemplate() {
         RestTemplateBuilder builder = new RestTemplateBuilder(rt -> rt.getInterceptors().add((request, body, execution) -> {
             request.getHeaders().add("Authorization", "Bearer " + this.passengerJwtToken);
@@ -86,29 +98,39 @@ public class RideControllerTests {
         this.driverRestTemplate = new TestRestTemplate(builder);
     }
 
-    private HttpEntity<RequestRideDTO> createRequestRideWithSomeData(){
+    private void createAdminRestTemplate() {
+        RestTemplateBuilder builder = new RestTemplateBuilder(rt -> rt.getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().add("Authorization", "Bearer " + this.adminJwtToken);
+            return execution.execute(request, body);
+        }));
+        this.adminRestTemplate = new TestRestTemplate(builder);
+    }
 
+    private List<RequestLocationDTO> createLocations() {
         List<RequestLocationDTO> requestLocationDTOS = new ArrayList<>();
         RequestLocationWithAddressDTO requestLocationWithAddressDTO1 = new RequestLocationWithAddressDTO("Bojanina kuca", 45.25523, 19.82325);
         RequestLocationWithAddressDTO requestLocationWithAddressDTO2 = new RequestLocationWithAddressDTO("Andreina kuca", 45.25643, 19.82980);
         RequestLocationDTO requestLocationDTO = new RequestLocationDTO(requestLocationWithAddressDTO1, requestLocationWithAddressDTO2);
         requestLocationDTOS.add(requestLocationDTO);
 
+        return requestLocationDTOS;
+    }
+
+    private List<ResponsePassengerIdEmailDTO> createPassengers() {
         List<ResponsePassengerIdEmailDTO> responsePassengerIdEmailDTOS = new ArrayList<>();
         ResponsePassengerIdEmailDTO responsePassengerIdEmailDTO = new ResponsePassengerIdEmailDTO(2L, "marko.markovic@gmail.com");
         responsePassengerIdEmailDTOS.add(responsePassengerIdEmailDTO);
+        return responsePassengerIdEmailDTOS;
+    }
 
+        private HttpEntity<RequestRideDTO> createRequestRideWithSomeData(){
+
+        List<RequestLocationDTO> requestLocationDTOS = createLocations();
+        List<ResponsePassengerIdEmailDTO> responsePassengerIdEmailDTOS = createPassengers();
         String vehicleType = "STANDARD";
         boolean babyTransport = true;
         boolean petTransport = true;
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, 2023);
-        calendar.set(Calendar.MONTH, 1);
-        calendar.set(Calendar.DAY_OF_MONTH, 7);
-        calendar.set(Calendar.HOUR, 7);
-
-        Date scheduledTime = calendar.getTime();
+        Date scheduledTime = validDate();
 
         return new HttpEntity<>(new RequestRideDTO(
                 requestLocationDTOS,
@@ -119,10 +141,89 @@ public class RideControllerTests {
                 scheduledTime));
     }
 
+    private HttpEntity<RequestRideDTO> createRequestRideWithInvalidData(){
+
+        List<RequestLocationDTO> requestLocationDTOS = createLocations();
+        List<ResponsePassengerIdEmailDTO> responsePassengerIdEmailDTOS = createPassengers();
+        String vehicleType = "NO ENUM";
+        boolean babyTransport = false;
+        boolean petTransport = false;
+        Date scheduledTime = validDate();
+
+        return new HttpEntity<>(new RequestRideDTO(
+                requestLocationDTOS,
+                responsePassengerIdEmailDTOS,
+                vehicleType,
+                babyTransport,
+                petTransport,
+                scheduledTime));
+    }
+
+    private Date validDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2023);
+        calendar.set(Calendar.MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 7);
+        calendar.set(Calendar.HOUR, 7);
+        return calendar.getTime();
+    }
+
     private Date invalidDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 9999);
         return calendar.getTime();
+    }
+
+    private HttpEntity<RequestFavoriteRouteDTO> createFavoriteRoute(){
+
+        String favoriteName = "Home - Work";
+        List<RequestLocationDTO> locations = createLocations();
+        List<ResponsePassengerIdEmailDTO> passengers = createPassengers();
+        String vehicleType = "STANDARD";
+        boolean babyTransport = true;
+        boolean petTransport = true;
+
+        return new HttpEntity<>(new RequestFavoriteRouteDTO(
+                favoriteName,
+                locations,
+                passengers,
+                vehicleType,
+                babyTransport,
+                petTransport));
+    }
+
+    private HttpEntity<RequestFavoriteRouteDTO> createFavoriteRouteInvalid(){
+
+        String favoriteName = null;
+        List<RequestLocationDTO> locations = createLocations();
+        List<ResponsePassengerIdEmailDTO> passengers = createPassengers();
+        String vehicleType = "NOT ENUM";
+        boolean babyTransport = true;
+        boolean petTransport = true;
+
+        return new HttpEntity<>(new RequestFavoriteRouteDTO(
+                favoriteName,
+                locations,
+                passengers,
+                vehicleType,
+                babyTransport,
+                petTransport));
+    }
+
+    private HttpEntity<RequestRejectionLetterDTO> createRejectionLetter(){
+        return new HttpEntity<>(new RequestRejectionLetterDTO("I broke my leg"));
+    }
+
+    private HttpEntity<RequestRejectionLetterDTO> createRejectionLetterInvalid(){
+        return new HttpEntity<>(new RequestRejectionLetterDTO());
+    }
+
+    private HttpEntity<RequestPanicStringDTO> createReason(){
+        return new HttpEntity<>(new RequestPanicStringDTO("He wants to kill me"));
+    }
+
+    private HttpEntity<RequestPanicStringDTO> createReasonInvalid(){
+        return new HttpEntity<>(new RequestPanicStringDTO());
     }
 
     @Order(1)
@@ -132,7 +233,7 @@ public class RideControllerTests {
 
         HttpEntity<RequestRideDTO> requestRide = createRequestRideWithSomeData();
 
-        ResponseEntity<String> message = this.restTemplate.exchange(
+        ResponseEntity<String> response = this.restTemplate.exchange(
                 "http://localhost:8084/api/ride",
                 HttpMethod.GET,
                 requestRide,
@@ -140,7 +241,7 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Order(2)
@@ -150,7 +251,14 @@ public class RideControllerTests {
 
         HttpEntity<RequestRideDTO> requestRide = createRequestRideWithSomeData();
 
-        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+        ResponseEntity<String> response1 = this.driverRestTemplate.exchange(
+                "http://localhost:8084/api/ride",
+                HttpMethod.POST,
+                requestRide,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+        ResponseEntity<String> response2 = this.adminRestTemplate.exchange(
                 "http://localhost:8084/api/ride",
                 HttpMethod.POST,
                 requestRide,
@@ -158,38 +266,18 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, response1.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, response2.getStatusCode());
     }
 
     @Order(3)
     @Test
     @DisplayName("Creating ride for passenger")
-    public void createRideForPassenger(){
+    public void createRideForPassengerWithInvalidData(){
 
-        HttpEntity<RequestRideDTO> requestRide = createRequestRideWithSomeData();
+        HttpEntity<RequestRideDTO> requestRide = createRequestRideWithInvalidData();
 
-        ResponseEntity<ResponseRideDTO> message = this.passengerRestTemplate.exchange(
-                "http://localhost:8084/api/ride",
-                HttpMethod.POST,
-                requestRide,
-                new ParameterizedTypeReference<ResponseRideDTO>() {
-                }
-        );
-
-        System.out.println(message.getBody().getStatus());
-
-        assertEquals(HttpStatus.OK, message.getStatusCode());
-    }
-
-    @Order(4)
-    @Test
-    @DisplayName("Cant create ride for passenger baucause there is no free driver in that time ")
-    public void createRideForPassengerButNoFreeDriverAtThatTime(){
-
-        HttpEntity<RequestRideDTO> requestRide = createRequestRideWithSomeData();
-        requestRide.getBody().setScheduledTime(invalidDate());
-
-        ResponseEntity<MessageDTO> message = this.passengerRestTemplate.exchange(
+        ResponseEntity<MessageDTO> response = this.passengerRestTemplate.exchange(
                 "http://localhost:8084/api/ride",
                 HttpMethod.POST,
                 requestRide,
@@ -197,10 +285,58 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(response.getBody().getMessage().replace("\n", ""), "Field vehicleType: Must be STANDARD/LUXURY/VAN");
+
+    }
+
+    @Order(4)
+    @Test
+    @DisplayName("Creating ride for passenger")
+    public void createRideForPassenger(){
+
+        HttpEntity<RequestRideDTO> requestRide = createRequestRideWithSomeData();
+
+        ResponseEntity<ResponseRideNewDTO> response = this.passengerRestTemplate.exchange(
+                "http://localhost:8084/api/ride",
+                HttpMethod.POST,
+                requestRide,
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(response.getBody().getPassengers().size(), requestRide.getBody().getPassengers().size());
+        assertEquals(response.getBody().getPassengers().get(0).getId(), requestRide.getBody().getPassengers().get(0).getId());
+        assertEquals(response.getBody().getPassengers().get(0).getEmail(), requestRide.getBody().getPassengers().get(0).getEmail());
+        assertEquals(response.getBody().getLocations().size(), requestRide.getBody().getLocations().size());
+        assertEquals(response.getBody().getLocations(), requestRide.getBody().getLocations());
+        assertEquals(response.getBody().getScheduledTime(), requestRide.getBody().getScheduledTime());
+        assertTrue(response.getBody().getVehicleType().toString().equals(requestRide.getBody().getVehicleType()));
+        assertEquals(response.getBody().getStatus(), RideStatus.PENDING);
     }
 
     @Order(5)
+    @Test
+    @DisplayName("Cant create ride for passenger baucause there is no free driver in that time ")
+    public void createRideForPassengerButNoFreeDriverAtThatTime(){
+
+        HttpEntity<RequestRideDTO> requestRide = createRequestRideWithSomeData();
+        requestRide.getBody().setScheduledTime(invalidDate());
+
+        ResponseEntity<MessageDTO> response = this.passengerRestTemplate.exchange(
+                "http://localhost:8084/api/ride",
+                HttpMethod.POST,
+                requestRide,
+                new ParameterizedTypeReference<MessageDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(response.getBody().getMessage(), "Recently there is no free drivers");
+    }
+
+    @Order(6)
     @Test
     @DisplayName("Cant create ride for passenger because there is no free driver in that time ")
     public void createRideForPassengerButNoFreeDriverWithThatVehicle(){
@@ -209,7 +345,7 @@ public class RideControllerTests {
         requestRide.getBody().setVehicleType("LUXURY");
 
 
-        ResponseEntity<MessageDTO> message = this.passengerRestTemplate.exchange(
+        ResponseEntity<MessageDTO> response = this.passengerRestTemplate.exchange(
                 "http://localhost:8084/api/ride",
                 HttpMethod.POST,
                 requestRide,
@@ -217,10 +353,11 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(response.getBody().getMessage(), "Recently there is no free drivers");
     }
 
-    @Order(6)
+    @Order(7)
     @Test
     @DisplayName("Cant find driver active ride because of authorization")
     public void cantFindDriverActiveRideIfUnathorized(){
@@ -236,12 +373,12 @@ public class RideControllerTests {
         assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
     }
 
-    @Order(7)
+    @Order(8)
     @Test
     @DisplayName("Cant find active driver ride because of roll")
     public void cantFindDriverActiveRide(){
 
-        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+        ResponseEntity<String> response = this.passengerRestTemplate.exchange(
                 BASEAPI + "/driver/5/active",
                 HttpMethod.GET,
                 null,
@@ -249,15 +386,15 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
-    @Order(8)
+    @Order(9)
     @Test
     @DisplayName("No active ride for valid driver")
     public void noActiveRideForValidDriver(){
 
-        ResponseEntity<MessageDTO> acceptResponse = this.driverRestTemplate.exchange(
+        ResponseEntity<MessageDTO> response = this.driverRestTemplate.exchange(
                 BASEAPI + "/driver/6/active",
                 HttpMethod.GET,
                 null,
@@ -265,15 +402,16 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.NOT_FOUND, acceptResponse.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(response.getBody().getMessage(), "Active ride does not exist!");
     }
 
-    @Order(9)
+    @Order(10)
     @Test
     @DisplayName("No active ride for invalid driver")
     public void noActiveRideForInvalidDriver(){
 
-        ResponseEntity<MessageDTO> acceptResponse = this.driverRestTemplate.exchange(
+        ResponseEntity<MessageDTO> response = this.driverRestTemplate.exchange(
                 BASEAPI + "/driver/a/active",
                 HttpMethod.GET,
                 null,
@@ -281,26 +419,27 @@ public class RideControllerTests {
                 }
         );
 
-        assertEquals(HttpStatus.NOT_FOUND, acceptResponse.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(response.getBody().getMessage(), "Id is not numeric");
     }
 
-    @Order(10)
+    @Order(11)
     @Test
     @DisplayName("Finding active ride for driver")
     public void findDriverActiveRide(){
 
-        ResponseEntity<MessageDTO> acceptResponse = this.driverRestTemplate.exchange(
+        ResponseEntity<ResponseRideNewDTO> response = this.driverRestTemplate.exchange(
                 BASEAPI + "/driver/5/active",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<MessageDTO>() {
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
                 }
         );
 
-        assertEquals(HttpStatus.OK, acceptResponse.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Order(11)
+    @Order(12)
     @Test
     @DisplayName("Cant find passenger active ride because of authorization")
     public void cantFindPassengerActiveRideIfUnathorized(){
@@ -316,7 +455,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
     }
 
-    @Order(12)
+    @Order(13)
     @Test
     @DisplayName("Cant find active passenger ride because of roll")
     public void cantFindPassengerActiveRide(){
@@ -332,7 +471,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
     }
 
-    @Order(13)
+    @Order(14)
     @Test
     @DisplayName("No active ride for valid passenger")
     public void noActiveRideForValidPassenger(){
@@ -348,7 +487,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.NOT_FOUND, acceptResponse.getStatusCode());
     }
 
-    @Order(14)
+    @Order(15)
     @Test
     @DisplayName("No active ride for invalid passenger")
     public void noActiveRideForInvalidPassenger(){
@@ -364,7 +503,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.NOT_FOUND, acceptResponse.getStatusCode());
     }
 
-    @Order(15)
+    @Order(16)
     @Test
     @DisplayName("Finding active ride for passenger")
     public void findPassengerActiveRide(){
@@ -380,7 +519,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.OK, acceptResponse.getStatusCode());
     }
 
-    @Order(16)
+    @Order(17)
     @Test
     @DisplayName("Cant find ride because of authorization")
     public void cantFindRideByIdIfUnauthorized(){
@@ -396,7 +535,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
     }
 
-    @Order(17)
+    @Order(18)
     @Test
     @DisplayName("Finding ride by invalid id")
     public void findRideByInvalidId(){
@@ -413,7 +552,7 @@ public class RideControllerTests {
     }
 
 
-    @Order(18)
+    @Order(19)
     @Test
     @DisplayName("Finding ride by id")
     public void findRideById(){
@@ -429,7 +568,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.OK, acceptResponse.getStatusCode());
     }
 
-    @Order(19)
+    @Order(20)
     @Test
     @DisplayName("Cant withdraw ride because of authetication")
     public void cantWithdrawRideIfUnathorized(){
@@ -445,7 +584,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
     }
 
-    @Order(20)
+    @Order(21)
     @Test
     @DisplayName("Cant withdraw ride becouse of roll")
     public void cantWithdrawRideIfForbiden(){
@@ -461,9 +600,9 @@ public class RideControllerTests {
         assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
     }
 
-    @Order(21)
+    @Order(22)
     @Test
-    @DisplayName("Cant withdraw ride because of roll")
+    @DisplayName("Cant withdraw ride because of invalid id")
     public void withdrawRideWithInvalidId(){
 
         ResponseEntity<String> message = this.driverRestTemplate.exchange(
@@ -477,7 +616,7 @@ public class RideControllerTests {
         assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
     }
 
-    @Order(22)
+    @Order(23)
     @Test
     @DisplayName("Cant withdraw ride because status is not pending or started")
     public void cantWithdrawRideIfStatusIsNotPendingOrStarted(){
@@ -493,23 +632,24 @@ public class RideControllerTests {
         assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
     }
 
-    @Order(23)
+    @Order(24)
     @Test
     @DisplayName("Withdraw ride")
     public void withdrawRide(){
 
-        ResponseEntity<MessageDTO> message = this.driverRestTemplate.exchange(
+        ResponseEntity<ResponseRideNewDTO> message = this.driverRestTemplate.exchange(
                 BASEAPI + "/1/withdraw",
                 HttpMethod.PUT,
                 null,
-                new ParameterizedTypeReference<MessageDTO>() {
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
                 }
         );
 
         assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getStatus(), RideStatus.REJECTED);
     }
 
-    @Order(24)
+    @Order(25)
     @Test
     @DisplayName("Cant accept ride because of authetication")
     public void cantAcceptRideIfUnathorized(){
@@ -525,9 +665,9 @@ public class RideControllerTests {
         assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
     }
 
-    @Order(25)
+    @Order(26)
     @Test
-    @DisplayName("Cant accept ride becouse of roll")
+    @DisplayName("Cant accept ride because of roll")
     public void cantAcceptRideIfForbiden(){
 
         ResponseEntity<String> message = this.passengerRestTemplate.exchange(
@@ -541,7 +681,23 @@ public class RideControllerTests {
         assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
     }
 
-    @Order(26)
+    @Order(27)
+    @Test
+    @DisplayName("Cant accept ride because of invalid id")
+    public void acceptRideWithInvalidId(){
+
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/a/accept",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
+
+    @Order(28)
     @Test
     @DisplayName("Cant accept ride because status is not pending")
     public void cantAcceptRideIfStatusIsNotPending(){
@@ -557,42 +713,604 @@ public class RideControllerTests {
         assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
     }
 
-//    @Order(27)
-//    @Test
-//    @DisplayName("Accept ride")
-//    public void acceptRide(){
-//
-//        ResponseEntity<MessageDTO> message = this.driverRestTemplate.exchange(
-//                BASEAPI + "/5/accept",
-//                HttpMethod.PUT,
-//                null,
-//                new ParameterizedTypeReference<MessageDTO>() {
-//                }
-//        );
-//
-//        ResponseEntity<ResponseRideDTO> responseRideDTO = this.passengerRestTemplate.getForEntity("http://localhost:8084/api/ride", ResponseRideDTO.class, 1);
-//
-//        System.out.println(responseRideDTO.getBody().getId());
-//
-//        System.out.println(message.getBody().getMessage());
-//        assertEquals(HttpStatus.OK, message.getStatusCode());
-//    }
-    //    @Test
-//    @DisplayName("Tries to accept non existing ride")
-//    public void invalid_passenger(){
-//
-//
-//        ResponseEntity<MessageDTO> acceptResponse = this.driverRestTemplate.exchange(
-//                BASEAPI + "/1234/accept",
-//                HttpMethod.PUT,
-//                null,
-//                new ParameterizedTypeReference<MessageDTO>() {
-//                }
-//        );
-//
-//        assertEquals("Ride does not exist!", acceptResponse.getBody().getMessage());
-//        assertEquals(HttpStatus.NOT_FOUND, acceptResponse.getStatusCode());
-//
-//    }
-//
+    @Test
+    @Order(29)
+    @DisplayName("Accept ride")
+    public void acceptRide(){
+
+        ResponseEntity<ResponseRideNewDTO> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/5/accept",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getStatus(), RideStatus.ACCEPTED);
+    }
+
+    @Order(30)
+    @Test
+    @DisplayName("Cant start ride because of authetication")
+    public void cantStartRideIfUnathorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/5/accept",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(31)
+    @Test
+    @DisplayName("Cant start ride because of roll")
+    public void cantStartRideIfForbiden(){
+
+        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/5/start",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+    }
+
+    @Order(32)
+    @Test
+    @DisplayName("Cant start ride because of invalid id")
+    public void startRideWithInvalidId(){
+
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/a/start",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
+
+    @Order(33)
+    @Test
+    @DisplayName("Cant start ride because status is not accepted")
+    public void cantStartRideIfStatusIsNotAccepted(){
+
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/2/start",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
+    }
+
+    @Order(34)
+    @Test
+    @DisplayName("Start ride")
+    public void startRide(){
+
+        ResponseEntity<ResponseRideNewDTO> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/5/start",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getStatus(), RideStatus.STARTED);
+
+    }
+
+    @Order(35)
+    @Test
+    @DisplayName("Cant end ride because of authetication")
+    public void cantEndRideIfUnathorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/5/end",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(36)
+    @Test
+    @DisplayName("Cant end ride becouse of roll")
+    public void cantEndRideIfForbiden(){
+
+        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/5/end",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+    }
+
+    @Order(37)
+    @Test
+    @DisplayName("Cant end ride because of invalid id")
+    public void endRideWithInvalidId(){
+
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/a/end",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
+
+    @Order(38)
+    @Test
+    @DisplayName("Cant end ride because status is not started")
+    public void cantEndRideIfStatusIsNotStarted(){
+
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/2/end",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
+    }
+
+
+    @Test
+    @Order(39)
+    @DisplayName("End ride")
+    public void endRide(){
+
+        ResponseEntity<ResponseRideNewDTO> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/5/end",
+                HttpMethod.PUT,
+                null,
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getStatus(), RideStatus.FINISHED);
+
+    }
+
+    @Order(40)
+    @Test
+    @DisplayName("Cant cancel ride because of authetication")
+    public void cantCancelRideIfUnathorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/3/cancel",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(41)
+    @Test
+    @DisplayName("Cant cancel ride becouse of roll")
+    public void cantCancelRideIfForbiden(){
+
+        HttpEntity<RequestRejectionLetterDTO> requestRejectionLetter = createRejectionLetter();
+        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/3/cancel",
+                HttpMethod.PUT,
+                requestRejectionLetter,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+    }
+
+    @Order(42)
+    @Test
+    @DisplayName("Cant cancel ride because of invalid id")
+    public void cancelRideWithInvalidId(){
+
+        HttpEntity<RequestRejectionLetterDTO> requestRejectionLetter = createRejectionLetter();
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/a/cancel",
+                HttpMethod.PUT,
+                requestRejectionLetter,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
+
+    @Order(43)
+    @Test
+    @DisplayName("Cant cancel ride because status is not started")
+    public void cantCancelRideIfStatusIsNotPendingOrAccepted(){
+
+        HttpEntity<RequestRejectionLetterDTO> requestRejectionLetter = createRejectionLetter();
+        ResponseEntity<String> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/2/cancel",
+                HttpMethod.PUT,
+                requestRejectionLetter,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
+    }
+
+    @Test
+    @Order(44)
+    @DisplayName("Cancel ride")
+    public void CancelRide(){
+
+        HttpEntity<RequestRejectionLetterDTO> requestRejectionLetter = createRejectionLetter();
+        ResponseEntity<ResponseRideNewDTO> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/3/cancel",
+                HttpMethod.PUT,
+                requestRejectionLetter,
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getStatus(), RideStatus.CANCELED);
+        assertEquals(message.getBody().getRejection().getReason(), requestRejectionLetter.getBody().getReason());
+    }
+
+    @Order(45)
+    @Test
+    @DisplayName("Cant create panic because of authetication")
+    public void cantPanicIfUnathorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/1/panic",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(46)
+    @Test
+    @DisplayName("Cant create panic becouse of roll")
+    public void cantPanicIfForbiden(){
+
+        HttpEntity<RequestPanicStringDTO> requestReason = createReason();
+        ResponseEntity<String> message = this.adminRestTemplate.exchange(
+                BASEAPI + "/1/panic",
+                HttpMethod.PUT,
+                requestReason,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+    }
+
+    @Test
+    @Order(47)
+    @DisplayName("Cant create panic because of invalid ride id")
+    public void panicForInvalidRide(){
+
+        HttpEntity<RequestPanicStringDTO> requestReason = createReason();
+        ResponseEntity<ResponseRideNewDTO> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/a/panic",
+                HttpMethod.PUT,
+                requestReason,
+                new ParameterizedTypeReference<ResponseRideNewDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
+
+    @Test
+    @Order(48)
+    @DisplayName("Cant create panic because of invalid ride id")
+    public void panicForOtherRide(){
+
+        HttpEntity<RequestPanicStringDTO> requestReason = createReason();
+        ResponseEntity<MessageDTO> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/3/panic",
+                HttpMethod.PUT,
+                requestReason,
+                new ParameterizedTypeReference<MessageDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
+
+    @Test
+    @Order(49)
+    @DisplayName("Create panic with invalid data")
+    public void createPanicWithInvalidData(){
+
+        HttpEntity<RequestPanicStringDTO> requestReason = createReasonInvalid();
+
+        ResponseEntity<MessageDTO> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/4/panic",
+                HttpMethod.PUT,
+                requestReason,
+                new ParameterizedTypeReference<MessageDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
+    }
+
+    @Test
+    @Order(50)
+    @DisplayName("Create panic by passenger")
+    public void createPanicByPassenger(){
+
+        HttpEntity<RequestPanicStringDTO> requestReason = createReason();
+
+        ResponseEntity<ResponsePanicSmallerDataDTO> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/4/panic",
+                HttpMethod.PUT,
+                requestReason,
+                new ParameterizedTypeReference<ResponsePanicSmallerDataDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getUser().getEmail(), this.passengerEmail.toString());
+        assertEquals(message.getBody().getRide().getId(), 4L);
+        assertEquals(message.getBody().getReason(), requestReason.getBody().getReason());
+    }
+
+    @Test
+    @Order(51)
+    @DisplayName("Create panic by driver")
+    public void createPanicByDriver(){
+
+        HttpEntity<RequestPanicStringDTO> requestReason = createReason();
+
+        ResponseEntity<ResponsePanicSmallerDataDTO> message = this.driverRestTemplate.exchange(
+                BASEAPI + "/4/panic",
+                HttpMethod.PUT,
+                requestReason,
+                new ParameterizedTypeReference<ResponsePanicSmallerDataDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getUser().getEmail(), this.driverEmail.toString());
+        assertEquals(message.getBody().getRide().getId(), 4L);
+        assertEquals(message.getBody().getReason(), requestReason.getBody().getReason());
+    }
+
+    @Order(52)
+    @Test
+    @DisplayName("Cant create favorite routes because of authorization")
+    public void createFavoriteRoutesIfUnathorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(53)
+    @Test
+    @DisplayName("Cant create favorite routes becouse of roll")
+    public void createFavoritRoutesIfForbiden(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRoute();
+        ResponseEntity<String> message = this.adminRestTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.POST,
+                requestReason,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+    }
+
+    @Order(54)
+    @Test
+    @DisplayName("Cant create favorit routes becouse of invalid data")
+    public void createFavoritRoutesIfInvalidData(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRouteInvalid();
+        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.POST,
+                requestReason,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
+    }
+
+    @Order(55)
+    @Test
+    @DisplayName("Create favorite routes")
+    public void createFavoritRoutes(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRoute();
+        ResponseEntity<ResponseFavoriteRouteWithScheduledTimeDTO> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.POST,
+                requestReason,
+                new ParameterizedTypeReference<ResponseFavoriteRouteWithScheduledTimeDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.OK, message.getStatusCode());
+        assertEquals(message.getBody().getPassengers().size(), requestReason.getBody().getPassengers().size());
+        assertEquals(message.getBody().getPassengers().get(0).getEmail(), requestReason.getBody().getPassengers().get(0).getEmail());
+        assertEquals(message.getBody().getPassengers().get(0).getId(), requestReason.getBody().getPassengers().get(0).getId());
+        assertEquals(message.getBody().getLocations().size(), requestReason.getBody().getLocations().size());
+        assertEquals(message.getBody().getFavoriteName(), requestReason.getBody().getFavoriteName());
+        assertEquals(message.getBody().isBabyTransport(), requestReason.getBody().isBabyTransport());
+        assertEquals(message.getBody().isPetTransport(), requestReason.getBody().isPetTransport());
+        assertEquals(message.getBody().getVehicleType().toString(), requestReason.getBody().getVehicleType());
+    }
+
+    @Order(56)
+    @Test
+    @DisplayName("Create favorite routes that exeed 10")
+    public void createFavoritRoutesWithMoreThan10(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRoute();
+        ResponseEntity<ResponseFavoriteRouteWithScheduledTimeDTO> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.POST,
+                requestReason,
+                new ParameterizedTypeReference<ResponseFavoriteRouteWithScheduledTimeDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, message.getStatusCode());
+    }
+
+    @Order(57)
+    @Test
+    @DisplayName("Cant find favorite routes because of authorization")
+    public void findFavoriteRoutesIfUnauthorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(58)
+    @Test
+    @DisplayName("Cant find favorite routes because of wrong roll")
+    public void findFavoriteRoutesIfForbiden(){
+
+        ResponseEntity<MessageDTO> acceptResponse = this.driverRestTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<MessageDTO>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, acceptResponse.getStatusCode());
+    }
+
+    @Order(59)
+    @Test
+    @DisplayName("Finding favorite routes")
+    public void findFavoriteRoutes(){
+
+        ResponseEntity<List<ResponseFavoriteRouteDTO>> acceptResponse = this.passengerRestTemplate.exchange(
+                BASEAPI + "/favorites",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ResponseFavoriteRouteDTO>>() {
+                }
+        );
+        assertEquals(HttpStatus.OK, acceptResponse.getStatusCode());
+    }
+
+    @Order(60)
+    @Test
+    @DisplayName("Cant delete favorite routes because of authorization")
+    public void deleteFavoriteRoutesIfUnathorized(){
+
+        ResponseEntity<String> message = this.restTemplate.exchange(
+                BASEAPI + "/favorites/1",
+                HttpMethod.DELETE,
+                null,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, message.getStatusCode());
+    }
+
+    @Order(61)
+    @Test
+    @DisplayName("Cant delete favorite routes becouse of roll")
+    public void deleteFavoriteRoutesIfForbiden(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRoute();
+        ResponseEntity<String> message = this.adminRestTemplate.exchange(
+                BASEAPI + "/favorites/1",
+                HttpMethod.DELETE,
+                requestReason,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, message.getStatusCode());
+    }
+
+    @Order(62)
+    @Test
+    @DisplayName("Delete favorite")
+    public void deleteFavoriteRoutes(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRoute();
+        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/favorites/1",
+                HttpMethod.DELETE,
+                requestReason,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NO_CONTENT, message.getStatusCode());
+    }
+
+    @Order(63)
+    @Test
+    @DisplayName("Cant delete favorite routes because of invalid id")
+    public void deleteFavoriteRoutesIfInvalid(){
+
+        HttpEntity<RequestFavoriteRouteDTO> requestReason = createFavoriteRoute();
+        ResponseEntity<String> message = this.passengerRestTemplate.exchange(
+                BASEAPI + "/favorites/a",
+                HttpMethod.DELETE,
+                requestReason,
+                new ParameterizedTypeReference<String>() {
+                }
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, message.getStatusCode());
+    }
 }

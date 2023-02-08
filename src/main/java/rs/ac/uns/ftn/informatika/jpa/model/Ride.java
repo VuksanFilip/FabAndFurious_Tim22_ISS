@@ -122,7 +122,7 @@ public class Ride {
         this.status = status;
     }
 
-    public Ride(Driver driver, List<Passenger> passengers, List<Route> routes, boolean babyTransport, boolean petTransport, Date scheduledTime){
+    public Ride(Driver driver, List<Passenger> passengers, List<Route> routes, boolean babyTransport, boolean petTransport, Date scheduledTime, Vehicle vehicle){
         this.driver = driver;
         this.passengers = passengers;
         this.routes = routes;
@@ -131,6 +131,7 @@ public class Ride {
         this.petTransport = petTransport;
         this.status = RideStatus.PENDING;
         this.scheduledTime = scheduledTime;
+        this.vehicle = vehicle;
     }
 
     public Ride(Date startTime, Date endTime, int totalCost, int estimatedTimeInMinutes, boolean panic, boolean petTransport, boolean babyTransport, RideStatus status, Date scheduledTime){

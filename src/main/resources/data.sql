@@ -72,10 +72,10 @@ insert into RIDE_PASSENGER(ride_id, passenger_id) values (2, 2)
 insert into DRIVER_RIDES(driver_id, rides_id) values (5, 2)
 
 --ride 3
-insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (false, TIMESTAMP '2023-01-28 16:00:00', 60, false, true, TIMESTAMP '2023-01-28 15:00:00', 'FINISHED', 2500, 5, null, 1)
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (false, TIMESTAMP '2023-01-28 16:00:00', 60, false, true, TIMESTAMP '2023-01-28 15:00:00', 'PENDING', 2500, 5, null, 1)
 insert into ROUTE(km, departure_id, destination_id) values (20, 1, 3)
 insert into RIDE_ROUTES(ride_id, routes_id) values (3, 3)
-insert into RIDE_PASSENGER(ride_id, passenger_id) values (3, 2)
+insert into RIDE_PASSENGER(ride_id, passenger_id) values (3, 3)
 insert into DRIVER_RIDES(driver_id, rides_id) values (5, 3)
 
 --ride 4
@@ -106,5 +106,33 @@ insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (1,1)
 insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime2', false, 'STANDARD')
 insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (2,2)
 insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (2,2)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime3', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (3,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (3,1)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime4', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (4,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (4,1)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime5', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (5,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (5,1)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime6', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (6,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (6,1)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime7', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (7,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (7,1)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime8', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (8,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (8,1)
+
+insert into FAVORITE_ROUTES(baby_transport, favorite_name, pet_transport, vehicle_type) values (true, 'ime9', false, 'STANDARD')
+insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (9,2)
+insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (9,1)
 
 insert into WORKING_HOUR(start, end_time, driver_id) values (TIMESTAMP '2023-02-07 17:20:34.222', TIMESTAMP '2023-02-07 23:20:34.222', 5)

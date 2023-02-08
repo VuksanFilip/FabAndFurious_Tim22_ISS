@@ -88,11 +88,15 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
         return favoriteRoutes;
     }
 
-    public List<ResponseFavoriteRouteDTO> getResponseFavoriteRoutes() {
+    public List<ResponseFavoriteRouteDTO> getResponseFavoriteRoutes(String passengerId) {
         List<FavoriteRoutes> favoriteRoutes = getAll();
         List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = new ArrayList<>();
         for (FavoriteRoutes r : favoriteRoutes) {
-            responseFavoriteRoutes.add(r.parseToResponse());
+            for(Passenger p : r.getPassengers()){
+                if(p.getId() == Long.parseLong(passengerId)){
+                    responseFavoriteRoutes.add(r.parseToResponse());
+                }
+            }
         }
         return responseFavoriteRoutes;
     }

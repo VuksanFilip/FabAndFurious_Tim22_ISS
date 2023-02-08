@@ -23,7 +23,7 @@ public interface IFavoriteRouteService {
     boolean existsById(String id);
     FavoriteRoutes postFavoriteRoute(List<Passenger> passengers, RequestFavoriteRouteDTO requestFavoriteRoute);
 
-    List<ResponseFavoriteRouteDTO> getResponseFavoriteRoutes();
+    List<ResponseFavoriteRouteDTO> getResponseFavoriteRoutes(String passengerId);
 
     void deleteFavouriteRoutesFromPassengers(String id);
 }

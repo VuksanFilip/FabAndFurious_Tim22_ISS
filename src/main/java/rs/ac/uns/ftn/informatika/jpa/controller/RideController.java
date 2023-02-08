@@ -3,8 +3,6 @@ package rs.ac.uns.ftn.informatika.jpa.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +10,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
-import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
-import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestFavoriteRouteDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPanicStringDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRejectionLetterDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestRideDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseFavoriteRouteDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.VehicleName;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -122,7 +121,7 @@ public class RideController{
         if(rideService.checkIfNotPendingAndNotStartedById(id)){
             return new ResponseEntity<>(new MessageDTO("Cannot cancel a ride that is not in status PENDING or STARTED!"), HttpStatus.BAD_REQUEST);
         }
-        rideService.updateRideByStatus(id, RideStatus.CANCELED);
+        rideService.updateRideByStatus(id, RideStatus.REJECTED);
         return new ResponseEntity<>(rideService.getRide(id).get().parseToResponse(), HttpStatus.OK);
     }
 
@@ -130,7 +129,7 @@ public class RideController{
 
     @PutMapping(value = "/{id}/panic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('DRIVER', 'PASSENGER')")
-    public ResponseEntity<?> setPanicReason(@RequestBody RequestPanicStringDTO reason, @PathVariable String id) {
+    public ResponseEntity<?> setPanicReason(@Valid @RequestBody RequestPanicStringDTO reason, @PathVariable String id) {
 
         String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
 
@@ -243,7 +242,11 @@ public class RideController{
     @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> getFavoriteRoutes() {
 
-        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = favoriteRouteService.getResponseFavoriteRoutes();
+        System.out.println("AAAAAAAAAAAAAAAa");
+        String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
+
+        List<ResponseFavoriteRouteDTO> responseFavoriteRoutes = favoriteRouteService.getResponseFavoriteRoutes(userId);
+        System.out.println("BBBB");
         return new ResponseEntity<>(responseFavoriteRoutes, HttpStatus.OK);
     }
 
@@ -262,55 +265,55 @@ public class RideController{
         return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping(value = "/favorites/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
-    public ResponseEntity<?> getFavoriteOfPassenger(@PathVariable("passengerId") String passengerId, Pageable page) {
-
-        if(!StringUtils.isNumeric(passengerId)){
-            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
-        }
-        if(!this.passengerService.existsById(passengerId)){
-            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
-        }
-
-        Page<FavoriteRoutes> favoriteRoutesPage = this.passengerService.findFavouriteRoutesByPassengerId(passengerId, page);
-
-        List<ResponseFavoriteRouteWithoutPassengersDTO> responseFavoriteRouteWithoutPassengersDTOS = new ArrayList<>();
-        for(FavoriteRoutes favorites : favoriteRoutesPage){
-            responseFavoriteRouteWithoutPassengersDTOS.add(favorites.parseToResponseWithoutPassengers());
-        }
-
-        return new ResponseEntity<>(new ResponsePageDTO(favoriteRoutesPage.getNumberOfElements(), Arrays.asList(responseFavoriteRouteWithoutPassengersDTOS.toArray())), HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/favorites/{routeId}/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
-    public ResponseEntity<?> deleteFavoriteRouteOfPassenger(@PathVariable("routeId") String routeId, @PathVariable("passengerId") String passengerId) {
-
-        if(!StringUtils.isNumeric(routeId)){
-            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
-        }
-        if(!this.favoriteRouteService.existsById(routeId)){
-            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
-        }
-        if(!StringUtils.isNumeric(passengerId)){
-            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
-        }
-        if(!this.passengerService.existsById(passengerId)){
-            return new ResponseEntity<>(new MessageDTO("Passenger does not exist!"), HttpStatus.NOT_FOUND);
-        }
-
-        FavoriteRoutes favoriteRoutes = favoriteRouteService.getFavoriteLocations(routeId).get();
-        Passenger passenger = this.passengerService.getPassenger(passengerId).get();
-        if(favoriteRoutes.getPassengers().contains(passenger)){
-            favoriteRoutes.getPassengers().remove(passenger);
-            passenger.getFavoriteRoutes().remove(favoriteRoutes);
-            this.passengerService.add(passenger);
-            this.favoriteRouteService.add(favoriteRoutes);
-            return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
-
-        }
-
-        return new ResponseEntity<>(new MessageDTO("Passenger dont have that favorite rute!"), HttpStatus.BAD_REQUEST);
-    }
+//    @GetMapping(value = "/favorites/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('PASSENGER')")
+//    public ResponseEntity<?> getFavoriteOfPassenger(@PathVariable("passengerId") String passengerId, Pageable page) {
+//
+//        if(!StringUtils.isNumeric(passengerId)){
+//            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+//        }
+//        if(!this.passengerService.existsById(passengerId)){
+//            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
+//        }
+//
+//        Page<FavoriteRoutes> favoriteRoutesPage = this.passengerService.findFavouriteRoutesByPassengerId(passengerId, page);
+//
+//        List<ResponseFavoriteRouteWithoutPassengersDTO> responseFavoriteRouteWithoutPassengersDTOS = new ArrayList<>();
+//        for(FavoriteRoutes favorites : favoriteRoutesPage){
+//            responseFavoriteRouteWithoutPassengersDTOS.add(favorites.parseToResponseWithoutPassengers());
+//        }
+//
+//        return new ResponseEntity<>(new ResponsePageDTO(favoriteRoutesPage.getNumberOfElements(), Arrays.asList(responseFavoriteRouteWithoutPassengersDTOS.toArray())), HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping(value = "/favorites/{routeId}/{passengerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('PASSENGER')")
+//    public ResponseEntity<?> deleteFavoriteRouteOfPassenger(@PathVariable("routeId") String routeId, @PathVariable("passengerId") String passengerId) {
+//
+//        if(!StringUtils.isNumeric(routeId)){
+//            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+//        }
+//        if(!this.favoriteRouteService.existsById(routeId)){
+//            return new ResponseEntity<>(new MessageDTO("Favorite location does not exist!"), HttpStatus.NOT_FOUND);
+//        }
+//        if(!StringUtils.isNumeric(passengerId)){
+//            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+//        }
+//        if(!this.passengerService.existsById(passengerId)){
+//            return new ResponseEntity<>(new MessageDTO("Passenger does not exist!"), HttpStatus.NOT_FOUND);
+//        }
+//
+//        FavoriteRoutes favoriteRoutes = favoriteRouteService.getFavoriteLocations(routeId).get();
+//        Passenger passenger = this.passengerService.getPassenger(passengerId).get();
+//        if(favoriteRoutes.getPassengers().contains(passenger)){
+//            favoriteRoutes.getPassengers().remove(passenger);
+//            passenger.getFavoriteRoutes().remove(favoriteRoutes);
+//            this.passengerService.add(passenger);
+//            this.favoriteRouteService.add(favoriteRoutes);
+//            return new ResponseEntity<>(new MessageDTO("Successful deletion of favorite location!"), HttpStatus.NO_CONTENT);
+//
+//        }
+//
+//        return new ResponseEntity<>(new MessageDTO("Passenger dont have that favorite rute!"), HttpStatus.BAD_REQUEST);
+//    }
 }
