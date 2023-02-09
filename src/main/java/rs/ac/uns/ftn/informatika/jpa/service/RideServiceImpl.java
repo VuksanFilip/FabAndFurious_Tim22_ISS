@@ -369,14 +369,5 @@ public class RideServiceImpl implements IRideService {
         return getSumReport(dates)/dates.size();
     }
 
-    public boolean checkIfAnyPassengerIsBlocked(RequestRideDTO requestRideDTO){
-        for(ResponsePassengerIdEmailDTO r : requestRideDTO.getPassengers()){
-            Passenger p = this.passengerService.getPassenger(r.getId().toString()).get();
-            if(p.isBlocked()){
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

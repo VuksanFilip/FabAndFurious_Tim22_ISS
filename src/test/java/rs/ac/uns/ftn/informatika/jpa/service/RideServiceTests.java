@@ -6,6 +6,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestLocationWithAddressDTO;
@@ -15,13 +18,11 @@ import rs.ac.uns.ftn.informatika.jpa.model.enums.RideStatus;
 import rs.ac.uns.ftn.informatika.jpa.repository.RideRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.*;
 
 import rs.ac.uns.ftn.informatika.jpa.model.*;
 
 @SpringBootTest
-//@TestPropertySource(locations="classpath:application-test.properties")
 public class RideServiceTests {
     @Autowired
     private RideServiceImpl rideService;
@@ -447,15 +448,6 @@ public class RideServiceTests {
         assertEquals(mockRide.getStatus(), RideStatus.ACCEPTED);
     }
 
-//    int driverId = 1;
-//    Pageable pageable = PageRequest.of(0, 10);
-//
-//    // when finding all rides by driver id from repository, return page with 2 rides
-//    when(rideRepository.findAllByDriver_Id(driverId, pageable)).thenReturn(new PageImpl<>(Arrays.asList(new Ride(), new Ride())));
-//
-//    // assert that page with 2 rides is returned from service
-//    assertEquals(rideService.findAllByDriver_Id(driverId, pageable).getNumberOfElements(), 2);
-
     @Test
     public void shouldReturnNumberOfRidesForPassenger(){
         Ride mockRide = new Ride();
@@ -468,4 +460,20 @@ public class RideServiceTests {
         Mockito.when(rideRepository.findAll()).thenReturn(Arrays.asList(mockRide));
         assertEquals(rideService.getNumberOfRidesForPessanger(mockPassenger.getId().toString()), 1);
     }
+
+    @Test
+    public void shouldReturnPageableRidesForPassenger(){
+        Long passengerId = 1L;
+        Mockito.when(rideRepository.getRidesForPassenger(passengerId, PageRequest.of(0, 10))).thenReturn(new PageImpl<>(Arrays.asList(new Ride(), new Ride(), new Ride())));
+        assertEquals(rideService.getRidesForPassenger(passengerId.toString(), PageRequest.of(0, 10)).getSize(), 3);
+    }
+
+    @Test
+    public void shouldReturnPageableRidesForDriver(){
+        Long driverId = 1L;
+        Mockito.when(rideRepository.getRidesForDriver(driverId, PageRequest.of(0, 10))).thenReturn(new PageImpl<>(Arrays.asList(new Ride(), new Ride(), new Ride())));
+        assertEquals(rideService.getRidesForDriver(driverId.toString(), PageRequest.of(0, 10)).getSize(), 3);
+    }
+
+
 }
