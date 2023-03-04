@@ -180,10 +180,29 @@ public class UserController {
         return new ResponseEntity<>(new ResponsePageDTO(size, Arrays.asList(responseUserDTOS.toArray())), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{email}/resetPasswordByEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email) throws MessagingException, UnsupportedEncodingException {
+
+        if(!userService.findByEmail(email).isPresent()){
+            return new ResponseEntity<>(new MessageDTO("User my this email does not exist"), HttpStatus.NOT_FOUND);
+        }
+
+        User user = userService.findByEmail(email).get();
+
+        String token = String.valueOf(new Random().nextInt(900000) + 100000);
+        user.setResetPasswordToken(token);
+        user.setResetPasswordTokenExpiration(LocalDateTime.now().plusMinutes(10));
+
+        mailService.sendMail("filipvuksan.iphone@gmail.com", token);
+        userService.add(user);
+
+        return new ResponseEntity<>("Email with reset code has been sent!", HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@RequestBody RequestLoginDTO login) {
         try{
-            User user = this.userService.findByEmail(login.getEmail());
+            User user = this.userService.findByEmail(login.getEmail()).get();
             ResponseLoginDTO responseLogin = new ResponseLoginDTO();
             responseLogin.setAccessToken(this.tokenUtils.generateToken(user));
             responseLogin.setRefreshToken(this.tokenUtils.generateRefreshToken(user));

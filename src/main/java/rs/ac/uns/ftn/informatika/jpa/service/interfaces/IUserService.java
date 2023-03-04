@@ -22,7 +22,7 @@ public interface IUserService extends UserDetailsService {
 
     boolean existsById(String id);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     void processOAuthPostLogin(String email, String name);
 }

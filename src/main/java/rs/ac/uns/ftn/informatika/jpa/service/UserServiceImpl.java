@@ -49,12 +49,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
 
     public void processOAuthPostLogin(String email, String name) {
-        User existUser = this.userRepository.findByEmail(email);
+        User existUser = this.userRepository.findByEmail(email).get();
 
         if (existUser == null) {
             User newUser = new User();
@@ -93,7 +93,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
+        User user = userRepository.findByEmail(username).get();
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {
