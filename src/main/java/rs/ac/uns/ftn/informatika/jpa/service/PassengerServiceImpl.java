@@ -58,7 +58,7 @@ public class PassengerServiceImpl implements IPassengerService {
     }
 
     @Override
-    public Passenger findByEmail(String email) {
+    public Optional<Passenger> findByEmail(String email) {
         return passengerRepository.findByEmail(email);
     }
 
@@ -94,7 +94,7 @@ public class PassengerServiceImpl implements IPassengerService {
     public List<Passenger> getPassengersFromFavoriteRouteRequest(RequestFavoriteRouteDTO requestFavoriteRoute) {
         List<Passenger> passengers = new ArrayList<>();
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()) {
-            passengers.add(findByEmail(p.getEmail()));
+            passengers.add(findByEmail(p.getEmail()).get());
         }
         return passengers;
     }

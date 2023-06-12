@@ -20,7 +20,7 @@ public interface IPassengerService {
 
     Page<Passenger> findAll(Pageable page);
 
-    Passenger findByEmail(String email);
+    Optional<Passenger> findByEmail(String email);
 
     List<Passenger> getAllWithStatusPending();
 

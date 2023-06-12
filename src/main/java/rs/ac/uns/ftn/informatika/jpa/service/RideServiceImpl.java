@@ -159,7 +159,7 @@ public class RideServiceImpl implements IRideService {
         }
         List<Passenger> passengers = new ArrayList<>();
         for (ResponsePassengerIdEmailDTO p : requestRideDTO.getPassengers()) {
-            passengers.add(this.passengerService.findByEmail(p.getEmail()));
+            passengers.add(this.passengerService.findByEmail(p.getEmail()).get());
         }
         Ride newRide = new Ride(driver, passengers, routes, requestRideDTO.isBabyTransport(), requestRideDTO.isPetTransport(), requestRideDTO.getScheduledTime(), driver.getVehicle());
         add(newRide);

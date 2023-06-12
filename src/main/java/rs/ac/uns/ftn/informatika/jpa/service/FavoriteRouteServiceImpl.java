@@ -76,12 +76,12 @@ public class FavoriteRouteServiceImpl implements IFavoriteRouteService {
         }
         List<Passenger> allPassengers = new ArrayList<>();
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()) {
-            allPassengers.add(this.passengerService.findByEmail(p.getEmail()));
+            allPassengers.add(this.passengerService.findByEmail(p.getEmail()).get());
         }
         FavoriteRoutes favoriteRoutes = new FavoriteRoutes(requestFavoriteRoute.getFavoriteName(), routes, allPassengers, VehicleName.valueOf(requestFavoriteRoute.getVehicleType()), requestFavoriteRoute.isBabyTransport(), requestFavoriteRoute.isPetTransport());
         add(favoriteRoutes);
         for (ResponsePassengerIdEmailDTO p : requestFavoriteRoute.getPassengers()){
-            Passenger passenger = this.passengerService.findByEmail(p.getEmail());
+            Passenger passenger = this.passengerService.findByEmail(p.getEmail()).get();
             passenger.getFavoriteRoutes().add(favoriteRoutes);
             this.passengerService.add(passenger);
         }

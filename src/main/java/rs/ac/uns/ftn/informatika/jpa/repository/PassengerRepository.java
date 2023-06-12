@@ -17,8 +17,9 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     List<Passenger> findAll();
     Optional<Passenger> findById(String Long);
     Page<Passenger> findAll(Pageable pageable);
-    Passenger findByEmail(String email);
+    Optional<Passenger> findByEmail(String email);
     boolean existsById(String Long);
+
 
     @Query("select p.favoriteRoutes from Passenger p where p.id = :passengerId")
     Page<FavoriteRoutes> findFavouriteRoutesByPassengerId(Long passengerId, Pageable page);
