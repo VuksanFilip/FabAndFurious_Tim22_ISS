@@ -94,7 +94,7 @@ public class PassengerController{
         return new ResponseEntity<>(passenger.parseToResponse(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/exist", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/exist", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPassengerIdByMail(@RequestBody RequestPassengerEmailDTO email){
 
         if(!this.passengerService.findByEmail(email.getEmail()).isPresent()){
