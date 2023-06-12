@@ -62,6 +62,8 @@ public class WebSecurityConfig {
                 .antMatchers("/api/user/*/resetPassword").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/passenger/**").permitAll()
+                .antMatchers("/api/ride/*").permitAll()
+                .antMatchers("/api/ride/**").permitAll()
                 .antMatchers("/api/driver/**").permitAll()
                 .antMatchers("/api/user/*/resetPasswordByEmail").permitAll()
                 .antMatchers("api/passenger/exist/*").permitAll()

@@ -45,14 +45,14 @@ public class RideController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('PASSENGER')")
+//    @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
 
-        String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
-
-        if(!this.passengerService.existsById(passengerId) && !StringUtils.isNumeric(passengerId)){
-            return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
-        }
+//        String passengerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString();
+//
+//        if(!this.passengerService.existsById(passengerId) && !StringUtils.isNumeric(passengerId)){
+//            return new ResponseEntity<>(new MessageDTO("PassengerId does not exist!"), HttpStatus.NOT_FOUND);
+//        }
         Driver perfectDriver = this.driverService.getPerfectDriver(VehicleName.valueOf(requestRideDTO.getVehicleType()), requestRideDTO.getScheduledTime(), requestRideDTO.getLocations().get(0));
         if(perfectDriver == null){
             return new ResponseEntity<>(new MessageDTO("Recently there is no free drivers"), HttpStatus.NOT_FOUND);
