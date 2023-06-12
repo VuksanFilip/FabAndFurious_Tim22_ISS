@@ -44,7 +44,7 @@ public class RideController{
         this.userService = userService;
     }
 
-        @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('PASSENGER')")
     public ResponseEntity<?> createNewRide(@Valid @RequestBody RequestRideDTO requestRideDTO){
 
@@ -60,7 +60,8 @@ public class RideController{
 
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
 
-        return new ResponseEntity<>(newRide.parseToResponse(), HttpStatus.OK);
+//        return new ResponseEntity<>(newRide.parseToResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)

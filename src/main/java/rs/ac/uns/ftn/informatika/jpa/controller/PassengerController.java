@@ -155,5 +155,4 @@ public class PassengerController{
         int passengerRidesNumber = rideService.getNumberOfRidesForPessanger(id);
         return new ResponseEntity<>(new ResponsePageDTO(passengerRidesNumber, Arrays.asList(responseRideDTOS.toArray())), HttpStatus.OK);
     }
-
 }
