@@ -84,7 +84,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriver(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -100,7 +100,7 @@ public class DriverController {
     }
 
     @PostMapping(value="/{driverId}/request-edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('DRIVER')")
+   // @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> sendRequestForEdit(@PathVariable("driverId") String driverId, @Valid @RequestBody RequestEditDriverDTO requestDriverDTO){
         if(!this.driverService.getDriver(driverId).isPresent()){
             return new ResponseEntity<>(new MessageDTO("Driver with this id does not exist!"), HttpStatus.OK);
@@ -114,7 +114,7 @@ public class DriverController {
     }
 
     @PutMapping (value = "update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+  //  @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
     public ResponseEntity<?> updateDriver2(@PathVariable("id") String id, @Valid @RequestBody RequestDriverUpdateDTO requestDriverUpdateDTO) {
 
         if(!StringUtils.isNumeric(id)){
@@ -364,7 +364,7 @@ public class DriverController {
     // to= yyyy-MM-ddThh:mm:ss -> 2000-01-31T09:00:00
 
     @GetMapping(value = "/{id}/ride")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
+  //  @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getDriverRides(
             @PathVariable("id") String driverId,
             Pageable page,

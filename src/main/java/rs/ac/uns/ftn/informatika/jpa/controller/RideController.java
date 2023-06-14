@@ -65,7 +65,7 @@ public class RideController{
     }
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
+  //  @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER')")
     public ResponseEntity<?> getActiveRideForDriver(@PathVariable("driverId") String id) {
 
         if(!StringUtils.isNumeric(id)){
@@ -113,7 +113,7 @@ public class RideController{
     }
 
     @PutMapping(value = "/{id}/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('DRIVER')")
+   // @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> withdrawRide(@PathVariable String id){
 
         if(!StringUtils.isNumeric(id)){
@@ -175,7 +175,7 @@ public class RideController{
     }
 
     @PutMapping(value = "/{id}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('DRIVER')")
+ //   @PreAuthorize("hasAuthority('DRIVER')")
     public ResponseEntity<?> acceptRide(@PathVariable String id){
 
         if(!StringUtils.isNumeric(id)){
