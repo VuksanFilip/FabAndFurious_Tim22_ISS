@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestDriverUpdateDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.request.RequestPassengerUpdateDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseDriverIdEmailDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRideDriverDTO;
@@ -8,6 +10,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponsePanicRideDriverDTO;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -55,6 +58,27 @@ public class Driver extends User{
     public Driver(String name, String surname, String profilePicture, String telephoneNumber, String email, String address, boolean b, boolean b1) {
         super(name, surname, profilePicture, telephoneNumber, email, address, b, b1);
     }
+    public void update2(RequestDriverUpdateDTO driverUpdateDTO){
+        if(!Objects.equals(driverUpdateDTO.getName(), "")){
+            this.setFirstName(driverUpdateDTO.getName());
+        }
+        if(!Objects.equals(driverUpdateDTO.getSurname(), "")){
+            this.setLastName(driverUpdateDTO.getSurname());
+        }
+        if(!Objects.equals(driverUpdateDTO.getProfilePicture(), "")){
+            this.setPicture(driverUpdateDTO.getProfilePicture());
+        }
+        if(!Objects.equals(driverUpdateDTO.getTelephoneNumber(), "")){
+            this.setPhoneNumber(driverUpdateDTO.getTelephoneNumber());
+        }
+        if(!Objects.equals(driverUpdateDTO.getEmail(), "")){
+            this.setEmail(driverUpdateDTO.getEmail());
+        }
+        if(!Objects.equals(driverUpdateDTO.getAddress(), "")){
+            this.setAddress(driverUpdateDTO.getAddress());
+        }
+    }
+
 
     public void update(){
         if(this.edit.getName() != null){

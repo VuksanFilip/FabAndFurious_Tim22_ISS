@@ -113,8 +113,24 @@ public class DriverController {
         return new ResponseEntity<>(new MessageDTO("Successfully sent request for updating driver!"), HttpStatus.OK);
     }
 
+    @PutMapping (value = "update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+    public ResponseEntity<?> updateDriver2(@PathVariable("id") String id, @Valid @RequestBody RequestDriverUpdateDTO requestDriverUpdateDTO) {
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        if(!this.driverService.getDriver(id).isPresent()){
+            return new ResponseEntity<>("Driver does not exist!", HttpStatus.NOT_FOUND);
+        }
+        Driver driverForUpdate = driverService.getDriver(id).get();
+        driverForUpdate.update2(requestDriverUpdateDTO);
+        driverService.add(driverForUpdate);
+        return new ResponseEntity<>(driverForUpdate.parseToResponse(), HttpStatus.OK);
+    }
+
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('ADMIN')")
+   @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateDriver(@PathVariable("id") String id, @Valid @RequestBody RequestEditApprovalDTO approval) {
 
         if(!StringUtils.isNumeric(id)){
