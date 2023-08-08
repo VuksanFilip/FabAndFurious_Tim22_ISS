@@ -67,6 +67,9 @@ public class WebSecurityConfig {
                 .antMatchers("/api/driver/**").permitAll()
                 .antMatchers("/api/user/*/resetPasswordByEmail").permitAll()
                 .antMatchers("api/passenger/exist/*").permitAll()
+                .antMatchers("api/websocket/send/**").permitAll()
+                .antMatchers("/socket").permitAll()
+                .antMatchers("/send/messsage").permitAll()
                 .antMatchers("**").permitAll()
                 .antMatchers("/list").permitAll()
 //                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati

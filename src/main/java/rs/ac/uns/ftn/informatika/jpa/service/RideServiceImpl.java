@@ -227,6 +227,19 @@ public class RideServiceImpl implements IRideService {
         return responseRideDTOS;
     }
 
+    public List<ResponseRideNoStatusDTO> getResponseRide(String id){
+        List<Ride> rides = getAll();
+        List<ResponseRideNoStatusDTO> responseRideDTOS = new ArrayList<>();
+        for(Ride r: rides) {
+            for (Passenger p : r.getPassengers()) {
+                if (p.getId() == Long.parseLong(id) && r.getStatus() == RideStatus.FINISHED) {
+                    responseRideDTOS.add(r.parseToResponseNoStatus());
+                }
+            }
+        }
+        return responseRideDTOS;
+    }
+
     public int getNumberOfRidesForPessanger(String id) {
         List<Ride> ridesForSize = getAll();
         int result = 0;

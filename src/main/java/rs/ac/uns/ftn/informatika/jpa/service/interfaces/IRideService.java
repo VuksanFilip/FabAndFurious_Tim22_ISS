@@ -58,6 +58,8 @@ public interface IRideService {
 
     List<ResponseRideNoStatusDTO> getPageableResponseRide(Pageable page, String id);
 
+    List<ResponseRideNoStatusDTO> getResponseRide(String id);
+
     int getNumberOfRidesForPessanger(String id);
 
     Page<Ride> findAll(String id, Pageable page, Date from, Date to);

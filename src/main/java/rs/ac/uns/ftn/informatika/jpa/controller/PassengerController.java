@@ -155,4 +155,15 @@ public class PassengerController{
         int passengerRidesNumber = rideService.getNumberOfRidesForPessanger(id);
         return new ResponseEntity<>(new ResponsePageDTO(passengerRidesNumber, Arrays.asList(responseRideDTOS.toArray())), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/{id}/rides", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+    public ResponseEntity<?> getPassengerRides(@PathVariable("id") String id) {
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        List<ResponseRideNoStatusDTO> responseRideDTOS = rideService.getResponseRide(id);
+        return new ResponseEntity<>(responseRideDTOS, HttpStatus.OK);
+    }
 }
