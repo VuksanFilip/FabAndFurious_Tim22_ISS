@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ResponseRideNewDTO {
 
+
     private Long id;
     private Date startTime;
     private Date endTime;

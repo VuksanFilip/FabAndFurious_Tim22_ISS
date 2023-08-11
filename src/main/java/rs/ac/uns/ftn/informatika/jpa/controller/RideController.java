@@ -61,7 +61,7 @@ public class RideController{
         Ride newRide = this.rideService.parseToRide(requestRideDTO, perfectDriver);
 
 //        return new ResponseEntity<>(newRide.parseToResponse(), HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(newRide.parseToResponse(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/driver/{driverId}/active", produces = MediaType.APPLICATION_JSON_VALUE)

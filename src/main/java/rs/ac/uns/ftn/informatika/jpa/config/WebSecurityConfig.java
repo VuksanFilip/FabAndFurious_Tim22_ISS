@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                 .antMatchers("/send/messsage").permitAll()
                 .antMatchers("**").permitAll()
                 .antMatchers("/list").permitAll()
+                .antMatchers("/api/driver/*/vehicle").permitAll()
 //                .antMatchers("/api/**").permitAll()//ovo kasnije izbrisati
                 .antMatchers("/**").authenticated()
                 .and()

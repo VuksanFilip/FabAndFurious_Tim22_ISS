@@ -19,7 +19,6 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -230,7 +229,7 @@ public class DriverController {
     }
 
     @GetMapping(value = "/{id}/vehicle", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'DRIVER', 'PASSENGER')")
     public ResponseEntity<?> getDriverVehicle(@PathVariable("id") String id) {
 
         if(!StringUtils.isNumeric(id)){
