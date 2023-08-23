@@ -1,19 +1,23 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import java.util.Date;
+
 public class ChatMessagesDTO {
 
     private String senderEmail;
     private String receiverEmail;
     private String message;
+    private Date sendingTime;
     private Long rideId;
 
     public ChatMessagesDTO() {
     }
 
-    public ChatMessagesDTO(String senderEmail, String receiverEmail, String message, Long rideId) {
+    public ChatMessagesDTO(String senderEmail, String receiverEmail, String message, Date sendingTime, Long rideId) {
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
         this.message = message;
+        this.sendingTime = sendingTime;
         this.rideId = rideId;
     }
 
@@ -47,5 +51,13 @@ public class ChatMessagesDTO {
 
     public void setRideId(Long rideId) {
         this.rideId = rideId;
+    }
+
+    public Date getSendingTime() {
+        return sendingTime;
+    }
+
+    public void setSendingTime(Date sendingTime) {
+        this.sendingTime = sendingTime;
     }
 }

@@ -17,25 +17,28 @@ import java.util.Map;
 
 @Controller
 public class WebSocketController {
-    @Autowired
+//    @Autowired
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    private SimpMessagingTemplate simpMessagingTemplate;
+    public WebSocketController(SimpMessagingTemplate simpMessagingTemplate){
+        this.simpMessagingTemplate = simpMessagingTemplate;
+    }
 
     // REST enpoint
-    @RequestMapping(value="/sendMessageRest", method = RequestMethod.POST)
-    public ResponseEntity<?> sendMessage(@RequestBody Map<String, String> message) {
-        if (message.containsKey("message")) {
-            if (message.containsKey("toId") && message.get("toId") != null && !message.get("toId").equals("")) {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("toId"), message);
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("fromId"), message);
-            } else {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher", message);
-            }
-            return new ResponseEntity<>(message, new HttpHeaders(), HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
+//    @RequestMapping(value="/sendMessageRest", method = RequestMethod.POST)
+//    public ResponseEntity<?> sendMessage(@RequestBody Map<String, String> message) {
+//        if (message.containsKey("message")) {
+//            if (message.containsKey("toId") && message.get("toId") != null && !message.get("toId").equals("")) {
+//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("toId"), message);
+//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("fromId"), message);
+//            } else {
+//                this.simpMessagingTemplate.convertAndSend("/socket-publisher", message);
+//            }
+//            return new ResponseEntity<>(message, new HttpHeaders(), HttpStatus.OK);
+//        }
+//
+//        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
+//    }
 
     /*
      * WebSockets endpoint
