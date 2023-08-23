@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.model;
 
 import lombok.*;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ChatMessagesDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseMessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.MessageType;
 
@@ -51,5 +52,9 @@ public class Message {
 
     public ResponseMessageDTO parseToResponse(){
         return new ResponseMessageDTO(this.id, this.sendingTime, this.sender.getId(), this.reciever.getId(), this.message, this.type, this.rideId);
+    }
+
+    public ChatMessagesDTO parseToDTO(){
+        return new ChatMessagesDTO(sender.getEmail(), reciever.getEmail(), message, rideId);
     }
 }
