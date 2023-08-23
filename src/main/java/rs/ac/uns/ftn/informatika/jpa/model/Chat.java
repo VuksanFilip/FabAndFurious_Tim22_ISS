@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ChatMessagesDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseChatDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,5 +34,13 @@ public class Chat {
     public Chat(User user1, User user2){
         this.user1 = user1;
         this.user2 = user2;
+    }
+
+    public ResponseChatDTO parseToDTO(){
+        List<ChatMessagesDTO> messagesDTOS = new ArrayList<>();
+        for (Message m : messages){
+            messagesDTOS.add(m.parseToDTO());
+        }
+        return new ResponseChatDTO(id, messagesDTOS);
     }
 }

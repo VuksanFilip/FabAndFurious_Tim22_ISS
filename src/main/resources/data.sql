@@ -143,3 +143,14 @@ insert into FAVOURITE_ROUTE_PASSENGER(favourite_route_id, passenger_id) values (
 insert into FAVOURITE_ROUTE_ROUTE (favourite_route_id, route_id) values (9,1)
 
 insert into WORKING_HOUR(start, end_time, driver_id) values (TIMESTAMP '2023-08-08 12:20:34.222', TIMESTAMP '2023-08-08 20:20:34.222', 5)
+
+--messages
+insert into MESSAGE(message, ride_id, sending_time, type, reciever_id, sender_id) values ('Cao!', 1, TIMESTAMP '2023-08-23 12:20:34.222', 'RIDE', 5, 2)
+insert into MESSAGE(message, ride_id, sending_time, type, reciever_id, sender_id) values ('Pozdrav!', 1, TIMESTAMP '2023-08-23 12:22:44.222', 'RIDE', 2, 5)
+insert into MESSAGE(message, ride_id, sending_time, type, reciever_id, sender_id) values ('Kako si?', 1, TIMESTAMP '2023-08-23 12:25:34.222', 'RIDE', 5, 2)
+
+--chats
+insert into CHAT(user1_id, user2_id) values (5, 2)
+insert into CHAT_MESSAGES(chat_id, messages_id) values (1, 1)
+insert into CHAT_MESSAGES(chat_id, messages_id) values (1, 2)
+insert into CHAT_MESSAGES(chat_id, messages_id) values (1, 3)
