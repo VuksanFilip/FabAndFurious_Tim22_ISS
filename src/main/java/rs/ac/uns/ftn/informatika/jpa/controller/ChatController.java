@@ -48,8 +48,8 @@ public class ChatController {
         return new ResponseEntity<>(chat.parseToDTO(), HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/{user1}/{user2}")
-//    public ResponseEntity<?> findChatId(@PathVariable("user1") Long user1Id, @PathVariable("user2") Long user2Id){
-//        return new ResponseEntity<>(new MessageDTO("Chat ID is: " + this.chatService.chatForWebsocket(user1Id, user2Id)), HttpStatus.OK);
-//    }
+    @GetMapping(value = "/{user1}/{user2}")
+    public ResponseEntity<?> findChatId(@PathVariable("user1") Long user1Id, @PathVariable("user2") Long user2Id){
+        return new ResponseEntity<>(this.chatService.chatForWebsocket(user1Id, user2Id), HttpStatus.OK);
+    }
 }

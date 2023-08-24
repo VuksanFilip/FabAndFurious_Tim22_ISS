@@ -42,8 +42,6 @@ public class WebSocketController {
         return messageConverted;
     }
 
-    //putanja da bude /chat/{chatId}
-    //pronadjem chat izmedju dva korisnika ako postoji ako ne napravim novi
 
     @SuppressWarnings("unchecked")
     private Map<String, String> parseMessage(String message) {
