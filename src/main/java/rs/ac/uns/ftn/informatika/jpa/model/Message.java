@@ -55,6 +55,6 @@ public class Message {
     }
 
     public ChatMessagesDTO parseToDTO(){
-        return new ChatMessagesDTO(sender.getEmail(), reciever.getEmail(), message, sendingTime, rideId);
+        return new ChatMessagesDTO(sender.getId(), reciever.getId(), message, sendingTime, rideId);
     }
 }

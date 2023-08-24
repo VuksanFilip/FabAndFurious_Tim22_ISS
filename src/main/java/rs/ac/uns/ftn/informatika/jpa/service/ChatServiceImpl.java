@@ -56,4 +56,12 @@ public class ChatServiceImpl implements IChatService {
         return chat.getId();
     }
 
+    @Override
+    public Long getOtherIdInChat(Chat c, Long myId) {
+        if(c.getUser1().getId() != myId){
+            return c.getUser1().getId();
+        }
+        return c.getUser2().getId();
+    }
+
 }

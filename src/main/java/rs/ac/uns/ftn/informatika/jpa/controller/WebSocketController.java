@@ -31,8 +31,8 @@ public class WebSocketController {
 
     @MessageMapping("/send/message")
     public void sendMessageToChat(ChatMessagesDTO messageDTO) {
-        User sender = this.userRepository.findByEmail(messageDTO.getSenderEmail()).get();
-        User receiver = this.userRepository.findByEmail(messageDTO.getReceiverEmail()).get();
+        User sender = this.userRepository.findById(messageDTO.getSenderId()).get();
+        User receiver = this.userRepository.findById(messageDTO.getReceiverId()).get();
         Message message = new Message(sender, receiver, MessageType.RIDE, messageDTO.getMessage(), messageDTO.getSendingTime(), messageDTO.getRideId());
         this.messageRepository.save(message);
         Chat chat = this.chatRepository.findById(this.chatService.chatForWebsocket(sender.getId(), receiver.getId())).get();

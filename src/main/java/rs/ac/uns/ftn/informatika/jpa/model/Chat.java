@@ -36,11 +36,11 @@ public class Chat {
         this.user2 = user2;
     }
 
-    public ResponseChatDTO parseToDTO(){
+    public ResponseChatDTO parseToDTO(Long myId, Long otherId, String otherName){
         List<ChatMessagesDTO> messagesDTOS = new ArrayList<>();
         for (Message m : messages){
             messagesDTOS.add(m.parseToDTO());
         }
-        return new ResponseChatDTO(id, messagesDTOS);
+        return new ResponseChatDTO(id, myId, otherId, otherName, messagesDTOS);
     }
 }

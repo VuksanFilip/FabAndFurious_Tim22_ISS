@@ -10,4 +10,6 @@ public interface IChatService {
     List<Chat> getAllChatsForUser(Long userId);
     Optional<Chat> findChatById(Long chatId);
     Long chatForWebsocket(Long user1Id, Long user2Id);
+
+    Long getOtherIdInChat(Chat c, Long myId);
 }

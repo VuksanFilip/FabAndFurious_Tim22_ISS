@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class ChatMessagesDTO {
 
-    private String senderEmail;
-    private String receiverEmail;
+    private Long senderId;
+    private Long receiverId;
     private String message;
     private Date sendingTime;
     private Long rideId;
@@ -15,28 +15,28 @@ public class ChatMessagesDTO {
     public ChatMessagesDTO() {
     }
 
-    public ChatMessagesDTO(String senderEmail, String receiverEmail, String message, Date sendingTime, Long rideId) {
-        this.senderEmail = senderEmail;
-        this.receiverEmail = receiverEmail;
+    public ChatMessagesDTO(Long senderId, Long receiverId, String message, Date sendingTime, Long rideId) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.message = message;
         this.sendingTime = sendingTime;
         this.rideId = rideId;
     }
 
-    public String getSenderEmail() {
-        return senderEmail;
+    public Long getSenderId() {
+        return senderId;
     }
 
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
-    public String getReceiverEmail() {
-        return receiverEmail;
+    public Long getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiverEmail(String receiverEmail) {
-        this.receiverEmail = receiverEmail;
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getMessage() {

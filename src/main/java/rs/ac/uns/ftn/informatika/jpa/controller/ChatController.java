@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.ResponseChatDTO;
 import rs.ac.uns.ftn.informatika.jpa.model.Chat;
 import rs.ac.uns.ftn.informatika.jpa.model.Passenger;
+import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IChatService;
 
 import java.util.ArrayList;
@@ -21,9 +22,11 @@ import java.util.List;
 public class ChatController {
 
     private final IChatService chatService;
+    private final UserRepository userRepository;
 
-    public ChatController(IChatService chatService){
+    public ChatController(IChatService chatService, UserRepository userRepository){
         this.chatService = chatService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,7 +37,9 @@ public class ChatController {
         }
         List<ResponseChatDTO> chatsDTO = new ArrayList<>();
         for (Chat c : chats){
-            chatsDTO.add(c.parseToDTO());
+            Long otherId = this.chatService.getOtherIdInChat(c, userId);
+            String otherName = this.userRepository.findById(otherId).get().getFirstName() + " " + this.userRepository.findById(otherId).get().getLastName();
+            chatsDTO.add(c.parseToDTO(userId, otherId, otherName));
         }
         return new ResponseEntity<>(chatsDTO, HttpStatus.OK);
     }
@@ -45,7 +50,7 @@ public class ChatController {
             return new ResponseEntity<>(new MessageDTO("Chat does not exist!"), HttpStatus.NOT_FOUND);
         }
         Chat chat = this.chatService.findChatById(chatId).get();
-        return new ResponseEntity<>(chat.parseToDTO(), HttpStatus.OK);
+        return new ResponseEntity<>(chat.parseToDTO(Long.getLong("0"),Long.getLong("0"),""), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{user1}/{user2}")
