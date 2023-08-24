@@ -92,6 +92,20 @@ insert into RIDE_ROUTES(ride_id, routes_id) values (5, 5)
 insert into RIDE_PASSENGER(ride_id, passenger_id) values (5, 2)
 insert into DRIVER_RIDES(driver_id, rides_id) values (5, 5)
 
+--ride 6
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (true, TIMESTAMP '2023-08-22 14:30:00', 30, false, true, TIMESTAMP '2023-08-22 14:00:00', 'FINISHED', 2000, 5, null, 1)
+insert into ROUTE(km, departure_id, destination_id) values (5, 2, 4)
+insert into RIDE_ROUTES(ride_id, routes_id) values (6, 6)
+insert into RIDE_PASSENGER(ride_id, passenger_id) values (6, 2)
+insert into DRIVER_RIDES(driver_id, rides_id) values (5, 6)
+
+--ride 7
+insert into RIDE(baby_transport, end_time, estimated_time_in_minutes, panic, pet_transport, start_time, status, total_cost, driver_id, letter_id, vehicle_id) values (true, TIMESTAMP '2023-08-21 14:30:00', 30, false, true, TIMESTAMP '2023-08-21 14:00:00', 'FINISHED', 1000, 5, null, 1)
+insert into ROUTE(km, departure_id, destination_id) values (16, 1, 3)
+insert into RIDE_ROUTES(ride_id, routes_id) values (7, 7)
+insert into RIDE_PASSENGER(ride_id, passenger_id) values (7, 2)
+insert into DRIVER_RIDES(driver_id, rides_id) values (5, 7)
+
 --review for vehicle
 insert into REVIEW(comment, rating, review_type, passenger_id, ride_id) values ('Vozilo je prljavo', 3.5, 'VEHICLE', 2, 1)
 insert into RIDE_REVIEWS(ride_id, reviews_id) values (1, 1)
