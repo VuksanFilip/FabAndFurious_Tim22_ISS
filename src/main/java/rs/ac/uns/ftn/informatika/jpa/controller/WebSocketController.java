@@ -17,40 +17,12 @@ import java.util.Map;
 
 @Controller
 public class WebSocketController {
-//    @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public WebSocketController(SimpMessagingTemplate simpMessagingTemplate){
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
-    // REST enpoint
-//    @RequestMapping(value="/sendMessageRest", method = RequestMethod.POST)
-//    public ResponseEntity<?> sendMessage(@RequestBody Map<String, String> message) {
-//        if (message.containsKey("message")) {
-//            if (message.containsKey("toId") && message.get("toId") != null && !message.get("toId").equals("")) {
-//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("toId"), message);
-//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("fromId"), message);
-//            } else {
-//                this.simpMessagingTemplate.convertAndSend("/socket-publisher", message);
-//            }
-//            return new ResponseEntity<>(message, new HttpHeaders(), HttpStatus.OK);
-//        }
-//
-//        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
-//    }
-
-    /*
-     * WebSockets endpoint
-     *
-     * Kao sto smo koristili @RequestMapping za RestController, @MessageMapping se koristi za websocket-e
-     *
-     * Poruka ce biti poslata svim klijentima koji su pretplatili na /socket-publisher topic,
-     * a poruka koja im se salje je messageConverted (simpMessagingTemplate.convertAndSend metoda).
-     *
-     * Na ovaj endpoint klijenti salju poruke, ruta na koju klijenti salju poruke je /send/message (parametar @MessageMapping anotacije)
-     *
-     */
     @MessageMapping("/send/message")
     public Map<String, String> broadcastNotification(String message) {
         Map<String, String> messageConverted = parseMessage(message);
@@ -70,13 +42,16 @@ public class WebSocketController {
         return messageConverted;
     }
 
+    //putanja da bude /chat/{chatId}
+    //pronadjem chat izmedju dva korisnika ako postoji ako ne napravim novi
+
     @SuppressWarnings("unchecked")
     private Map<String, String> parseMessage(String message) {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> retVal;
 
         try {
-            retVal = mapper.readValue(message, Map.class); // parsiranje JSON stringa
+            retVal = mapper.readValue(message, Map.class);
         } catch (IOException e) {
             retVal = null;
         }
