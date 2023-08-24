@@ -31,21 +31,6 @@ public class WebSocketController {
 
     @MessageMapping("/send/message")
     public void sendMessageToChat(ChatMessagesDTO messageDTO) {
-//        Map<String, String> messageConverted = parseMessage(message);
-//
-//        if (messageConverted != null) {
-//            if (messageConverted.containsKey("toId") && messageConverted.get("toId") != null
-//                    && !messageConverted.get("toId").equals("")) {
-//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("toId"),
-//                        messageConverted);
-//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("fromId"),
-//                        messageConverted);
-//            } else {
-//                this.simpMessagingTemplate.convertAndSend("/socket-publisher", messageConverted);
-//            }
-//        }
-//
-//        return messageConverted;
         User sender = this.userRepository.findByEmail(messageDTO.getSenderEmail()).get();
         User receiver = this.userRepository.findByEmail(messageDTO.getReceiverEmail()).get();
         Message message = new Message(sender, receiver, MessageType.RIDE, messageDTO.getMessage(), messageDTO.getSendingTime(), messageDTO.getRideId());
@@ -53,21 +38,8 @@ public class WebSocketController {
         Chat chat = this.chatRepository.findById(this.chatService.chatForWebsocket(sender.getId(), receiver.getId())).get();
         chat.getMessages().add(message);
         this.chatRepository.save(chat);
+
+        this.simpMessagingTemplate.convertAndSend("/chat/" + chat.getId(), messageDTO.getMessage());
     }
-
-
-//    @SuppressWarnings("unchecked")
-//    private Map<String, String> parseMessage(String message) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        Map<String, String> retVal;
-//
-//        try {
-//            retVal = mapper.readValue(message, Map.class);
-//        } catch (IOException e) {
-//            retVal = null;
-//        }
-//
-//        return retVal;
-//    }
 
 }
