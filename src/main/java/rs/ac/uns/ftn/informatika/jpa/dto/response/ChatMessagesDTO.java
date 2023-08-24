@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.jpa.dto.response;
 
+import rs.ac.uns.ftn.informatika.jpa.model.Chat;
+
 import java.util.Date;
 
 public class ChatMessagesDTO {
@@ -60,4 +62,5 @@ public class ChatMessagesDTO {
     public void setSendingTime(Date sendingTime) {
         this.sendingTime = sendingTime;
     }
+
 }
