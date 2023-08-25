@@ -30,7 +30,7 @@ public class WebSocketController {
     }
 
     @MessageMapping("/send/message")
-    public void sendMessageToChat(ChatMessagesDTO messageDTO) {
+    public String sendMessageToChat(ChatMessagesDTO messageDTO) {
         User sender = this.userRepository.findById(messageDTO.getSenderId()).get();
         User receiver = this.userRepository.findById(messageDTO.getReceiverId()).get();
         Message message = new Message(sender, receiver, MessageType.RIDE, messageDTO.getMessage(), messageDTO.getSendingTime(), messageDTO.getRideId());
@@ -40,6 +40,7 @@ public class WebSocketController {
         this.chatRepository.save(chat);
 
         this.simpMessagingTemplate.convertAndSend("/chat/" + chat.getId(), messageDTO.getMessage());
+        return messageDTO.getMessage();
     }
 
 }
