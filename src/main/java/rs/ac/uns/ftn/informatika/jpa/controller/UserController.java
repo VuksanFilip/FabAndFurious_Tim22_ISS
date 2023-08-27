@@ -17,6 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import rs.ac.uns.ftn.informatika.jpa.dto.HopInAllMessagesDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.HopInMessageDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.HopInMessageReturnedDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.messages.MessageDTO;
 import rs.ac.uns.ftn.informatika.jpa.dto.request.*;
 import rs.ac.uns.ftn.informatika.jpa.dto.response.*;
@@ -27,6 +31,7 @@ import rs.ac.uns.ftn.informatika.jpa.util.TokenUtils;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -168,7 +173,7 @@ public class UserController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getUsers(Pageable page) {
 
         Page<User> users = userService.findAll(page);
@@ -615,5 +620,28 @@ public class UserController {
         int sum = this.rideService.getSumReport(dates);
         float average = this.rideService.getAverageReport(dates);
         return new ResponseEntity<>(new ResponseReportDTO(sum, average, dates), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "{id}/hopin-message", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getMessages(@PathVariable Long id) {
+        try {
+            HopInAllMessagesDTO all = userService.getMessages(id);
+            System.out.println(all);
+            return new ResponseEntity<HopInAllMessagesDTO>(all, HttpStatus.OK);
+        } catch (ResponseStatusException ex) {
+            return new ResponseEntity<String>(ex.getReason(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(value="{id}/hopin-message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendMessage(@PathVariable @Min(value = 0, message = "Field id must be greater than 0.") Long id, @Valid @RequestBody HopInMessageDTO message) {
+        System.out.println("EVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        try {
+            HopInMessageReturnedDTO mess = userService.sendMessage(id, message);
+            System.out.println(mess);
+            return new ResponseEntity<HopInMessageReturnedDTO>(mess, HttpStatus.OK);
+        } catch (ResponseStatusException ex) {
+            return new ResponseEntity<String>(ex.getReason(), HttpStatus.NOT_FOUND);
+        }
     }
 }

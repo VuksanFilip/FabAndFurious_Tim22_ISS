@@ -26,6 +26,7 @@ import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserActivationService;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -165,5 +166,16 @@ public class PassengerController{
         }
         List<ResponseRideNoStatusDTO> responseRideDTOS = rideService.getResponseRide(id);
         return new ResponseEntity<>(responseRideDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/passengers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getAllPassengers() {
+
+        List<Passenger> results = passengerService.getAll();
+        List<String> passengerDTOS = new ArrayList<>();
+        for (Passenger p : results){
+            passengerDTOS.add(p.getFirstName());
+        }
+        return new ResponseEntity<List<String>>(passengerDTOS, HttpStatus.OK);
     }
 }

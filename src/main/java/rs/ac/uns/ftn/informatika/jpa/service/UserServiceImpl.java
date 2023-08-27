@@ -3,13 +3,19 @@ package rs.ac.uns.ftn.informatika.jpa.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.jpa.dto.HopInAllMessagesDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.HopInMessageDTO;
+import rs.ac.uns.ftn.informatika.jpa.dto.HopInMessageReturnedDTO;
+import rs.ac.uns.ftn.informatika.jpa.model.HopInMessage;
 import rs.ac.uns.ftn.informatika.jpa.model.User;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.Provider;
 import rs.ac.uns.ftn.informatika.jpa.model.enums.Role;
-import rs.ac.uns.ftn.informatika.jpa.repository.MessageRepository;
+import rs.ac.uns.ftn.informatika.jpa.repository.HopInMessageRepository;
 import rs.ac.uns.ftn.informatika.jpa.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.jpa.service.interfaces.IUserService;
 
@@ -20,11 +26,13 @@ import java.util.Optional;
 public class UserServiceImpl implements IUserService {
 
     private UserRepository userRepository;
-    private MessageRepository messageRepository;
+    private HopInMessageRepository hopInMessageRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, HopInMessageRepository hopInMessageRepository) {
+
         this.userRepository = userRepository;
+        this.hopInMessageRepository = hopInMessageRepository;
     }
 
     public List<User> getAll() {
@@ -92,6 +100,12 @@ public class UserServiceImpl implements IUserService {
 //    }
 
     @Override
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return this.findByEmail(auth.getName()).get();
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).get();
         if (user == null) {
@@ -99,5 +113,31 @@ public class UserServiceImpl implements IUserService {
         } else {
             return user;
         }
+    }
+
+    @Override
+    public HopInAllMessagesDTO getMessages(Long userId) {
+        getUser(String.valueOf(userId));
+        List<HopInMessage> messages = hopInMessageRepository.findAllMessagesById(userId);
+        return new HopInAllMessagesDTO(messages);
+    }
+
+    @Override
+    public HopInMessageReturnedDTO sendMessage(Long receiverId, HopInMessageDTO dto) {
+//        rideService.getRide(dto.getRideId());
+        HopInMessage message = new HopInMessage(getCurrentUser().getId(), receiverId, dto);
+        hopInMessageRepository.save(message);
+        System.out.println(message);
+        hopInMessageRepository.flush();
+        return createDetailedMessage(message);
+    }
+
+    private HopInMessageReturnedDTO createDetailedMessage(HopInMessage sentMessage) {
+        return new HopInMessageReturnedDTO(sentMessage.getId(),
+                sentMessage.getSenderId(),
+                sentMessage.getReceiverId(),
+                sentMessage.getTimeOfSending(),
+                sentMessage.getMessage(),
+                sentMessage.getRideId());
     }
 }

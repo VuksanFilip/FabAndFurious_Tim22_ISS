@@ -168,3 +168,7 @@ insert into CHAT(user1_id, user2_id) values (5, 2)
 insert into CHAT_MESSAGES(chat_id, messages_id) values (1, 1)
 insert into CHAT_MESSAGES(chat_id, messages_id) values (1, 2)
 insert into CHAT_MESSAGES(chat_id, messages_id) values (1, 3)
+
+--hopin messages
+insert into HOP_IN_MESSAGE(time_of_sending, sender_id, receiver_id, message, ride_id) values (TIMESTAMP '2023-08-23 12:20:34.222', 2, 5, 'Cao vozac', 5)
+insert into HOP_IN_MESSAGE(time_of_sending, sender_id, receiver_id, message, ride_id) values (TIMESTAMP '2023-08-23 12:20:40.222', 5, 2, 'Cao putnice', 5)
