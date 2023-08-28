@@ -23,10 +23,15 @@ public class ChatController {
 
     private final IChatService chatService;
     private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
+    private final ChatRepository chatRepository;
 
-    public ChatController(IChatService chatService, UserRepository userRepository){
+
+    public ChatController(IChatService chatService, UserRepository userRepository, MessageRepository messageRepository, ChatRepository chatRepository){
         this.chatService = chatService;
         this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
+        this.chatRepository = chatRepository;
     }
 
     @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,5 +61,17 @@ public class ChatController {
     @GetMapping(value = "/{user1}/{user2}")
     public ResponseEntity<?> findChatId(@PathVariable("user1") Long user1Id, @PathVariable("user2") Long user2Id){
         return new ResponseEntity<>(this.chatService.chatForWebsocket(user1Id, user2Id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/sendMessage", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendMessageToChat(@RequestBody ChatMessagesDTO messageDTO){
+        User sender = this.userRepository.findById(messageDTO.getSenderId()).get();
+        User receiver = this.userRepository.findById(messageDTO.getReceiverId()).get();
+        Message message = new Message(sender, receiver, MessageType.RIDE, messageDTO.getMessage(), messageDTO.getSendingTime(), messageDTO.getRideId());
+        this.messageRepository.save(message);
+        Chat chat = this.chatRepository.findById(this.chatService.chatForWebsocket(sender.getId(), receiver.getId())).get();
+        chat.getMessages().add(message);
+        this.chatRepository.save(chat);
+        return new ResponseEntity<>(new MessageDTO("Successfully sent message!"), HttpStatus.OK);
     }
 }
