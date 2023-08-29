@@ -253,6 +253,19 @@ public class RideServiceImpl implements IRideService {
         return responseRideDTOS;
     }
 
+    public List<ResponseRideNoStatusDTO> getResponseRidePendingDriver(String id){
+        List<Ride> rides = getAll();
+        List<ResponseRideNoStatusDTO> responseRideDTOS = new ArrayList<>();
+        for(Ride r: rides) {
+            if (r.getDriver().getId() == Long.parseLong("5") && r.getStatus() == RideStatus.PENDING) {
+                responseRideDTOS.add(r.parseToResponseNoStatus());
+                System.out.println(responseRideDTOS);
+            }
+
+        }
+        return responseRideDTOS;
+    }
+
     public int getNumberOfRidesForPessanger(String id) {
         List<Ride> ridesForSize = getAll();
         int result = 0;

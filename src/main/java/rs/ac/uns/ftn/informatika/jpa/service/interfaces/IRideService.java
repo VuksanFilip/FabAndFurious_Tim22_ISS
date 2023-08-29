@@ -60,6 +60,7 @@ public interface IRideService {
 
     List<ResponseRideNoStatusDTO> getResponseRide(String id);
     List<ResponseRideNoStatusDTO> getResponseRideDriver(String id);
+    List<ResponseRideNoStatusDTO> getResponseRidePendingDriver(String id);
 
     int getNumberOfRidesForPessanger(String id);
 

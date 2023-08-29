@@ -406,6 +406,18 @@ public class DriverController {
 
         return new ResponseEntity<>(responseRideDTOS, HttpStatus.OK);
     }
+    @GetMapping(value = "/{id}/pendingrides", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'PASSENGER')")
+    public ResponseEntity<?> getDriverPendingRides(@PathVariable("id") String id) {
+
+        if(!StringUtils.isNumeric(id)){
+            return new ResponseEntity<>(new MessageDTO("Id is not numeric"), HttpStatus.NOT_FOUND);
+        }
+        List<ResponseRideNoStatusDTO> responseRideDTOS = rideService.getResponseRidePendingDriver(id);
+
+        return new ResponseEntity<>(responseRideDTOS, HttpStatus.OK);
+    }
+
 
     //RADI
     @GetMapping(value = "/working-hour/{working-hour-id}", produces = MediaType.APPLICATION_JSON_VALUE)
